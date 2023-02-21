@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: GoogleFonts.manropeTextTheme(),
         primarySwatch: AppThemes.myColor,
+        unselectedWidgetColor: AppThemes.primaryColor,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: AppThemes.buttonStyle,
         ),

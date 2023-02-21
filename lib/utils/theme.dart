@@ -17,11 +17,21 @@ class AppThemes {
       900: Color(primary),
     },
   );
+  static Color primaryColor = Color(primary);
+  static Color blackColor = const Color(0xff2c2c2c);
+  static Color accentColor = const Color(0xffE04A09);
+  static Color hintColor = const Color(0xff696969);
+  static Color grayColor = const Color(0xffA8A8A8);
+  static Color lightColor = const Color(0xffF3F3F3);
+
   static ButtonStyle buttonStyle = ButtonStyle(
-      padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
+      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, 40)),
+      padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
       backgroundColor: MaterialStatePropertyAll(Color(primary)),
       foregroundColor: const MaterialStatePropertyAll(Colors.white),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(10.0)), side: BorderSide(color: Color(primary)))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: 18)));
+      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: 16)));
+
+  static double gap = 17.0;
 }

@@ -19,58 +19,73 @@ class _IntroductionPageState extends State<IntroductionPage> {
       key: _introKey,
       pages: [
         PageViewModel(
-          titleWidget: const Text(
+          titleWidget: Text(
             "Không có ai muốn khổ đau cho chính mình.",
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 32.0,
+              color: AppThemes.blackColor,
             ),
           ),
-          bodyWidget: const Text(
+          bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(
-              fontSize: 14.0,
-            ),
+            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
           ),
           image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
           decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
         ),
         PageViewModel(
-          titleWidget: const Text(
+          titleWidget: Text(
             "Không có ai muốn khổ đau cho chính mình.",
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 32.0,
+              color: AppThemes.blackColor,
             ),
           ),
-          bodyWidget: const Text(
+          bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(
-              fontSize: 14.0,
-            ),
+            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
           ),
           image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
           decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
         ),
         PageViewModel(
-          titleWidget: const Text(
+          titleWidget: Text(
             "Không có ai muốn khổ đau cho chính mình.",
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 32.0,
+              color: AppThemes.blackColor,
             ),
           ),
-          bodyWidget: const Text(
+          bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
+            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
+          ),
+          image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
+        ),
+        PageViewModel(
+          titleWidget: Text(
+            "Không có ai muốn khổ đau cho chính mình.",
+            textAlign: TextAlign.start,
             style: TextStyle(
-              fontSize: 14.0,
+              fontWeight: FontWeight.w800,
+              fontSize: 32.0,
+              color: AppThemes.blackColor,
             ),
+          ),
+          bodyWidget: Text(
+            "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
+            textAlign: TextAlign.justify,
+            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
           ),
           image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
           decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
@@ -92,7 +107,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
       nextStyle: AppThemes.buttonStyle,
       doneStyle: AppThemes.buttonStyle,
       done: const Text("Bắt đầu"),
-      onDone: () {},
+      onDone: () {
+        Navigator.pushNamed(context, RoutesName.loginPage);
+      },
     );
   }
 }

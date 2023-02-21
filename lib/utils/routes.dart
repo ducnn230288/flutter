@@ -4,7 +4,9 @@ import '/pages.dart';
 // import 'package:flutter_bloc/src/bloc_provider.dart';
 
 class RoutesName {
-  static const String introductionPage = '/forgot_password_page';
+  static const String introductionPage = '/introduction_page';
+  static const String loginPage = '/login_page';
+  static const String registerPage = '/register_page';
 }
 
 class RouteGenerator {
@@ -16,15 +18,24 @@ class RouteGenerator {
     //   _routerName = NAME;
     // }
     switch (routeName) {
-      // case RoutesName.LOGIN_PAGE:
+      // case RoutesName.loginPage:
       //   return _GeneratePageRoute(
       //     widget: BlocProvider<LoginCubit>(
       //       create: (context) => LoginCubit(context),
       //       child: const LoginPage(),
       //     ),
-      //     routeName: NAME,
+      //     routeName: routeName,
       //   );
-
+      case RoutesName.registerPage:
+        return _GeneratePageRoute(
+          widget: const RegisterPage(),
+          routeName: routeName,
+        );
+      case RoutesName.loginPage:
+        return _GeneratePageRoute(
+          widget: const LoginPage(),
+          routeName: routeName,
+        );
       default:
         return _GeneratePageRoute(widget: const IntroductionPage(), routeName: routeName);
     }
