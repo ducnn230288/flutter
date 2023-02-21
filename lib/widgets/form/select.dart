@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import '/models.dart';
 import '/utils.dart';
 
-class WidgetSelect extends StatelessWidget {
+class WidgetSelect extends StatefulWidget {
   final String label;
   final bool space;
   final icon;
@@ -14,56 +14,63 @@ class WidgetSelect extends StatelessWidget {
   final onFind;
   final bool required;
   final bool enabled;
-  final ModelOption? value;
+  ModelOption? value;
+  List<ModelOption>? items;
 
-  WidgetSelect({
-    this.label = '',
-    this.value,
-    this.icon,
-    this.suffix,
-    this.onChanged,
-    this.required = false,
-    this.enabled = true,
-    this.space = false,
-    this.onFind,
-  });
+  WidgetSelect(
+      {this.label = '',
+      this.value,
+      this.icon,
+      this.suffix,
+      this.onChanged,
+      this.required = false,
+      this.enabled = true,
+      this.space = false,
+      this.onFind,
+      this.items});
+
+  @override
+  State<WidgetSelect> createState() => _WidgetSelectState();
+}
+
+class _WidgetSelectState extends State<WidgetSelect> {
+  ModelOption? value;
+
   @override
   Widget build(BuildContext context) {
-    Widget _customDropDown(BuildContext context, ModelOption? item) {
-      return (item != null && item.label != null)
-          ? Text(
-              item.label,
-              style: TextStyle(color: Theme.of(context).primaryColor),
-            )
-          : Text('');
-    }
-
     return Column(
       children: [
         Container(
-          height: 40 + (AppThemes.gap / 4),
           decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(10.0), boxShadow: [
             BoxShadow(color: AppThemes.lightColor, blurRadius: AppThemes.gap / 3, spreadRadius: AppThemes.gap / 4)
           ]),
           child: DropdownSearch<ModelOption>(
-            selectedItem: value,
-            enabled: enabled,
-            onChanged: onChanged,
+            items: widget.items ?? [],
+            selectedItem: widget.value,
+            itemAsString: (ModelOption u) => u.label,
+            enabled: widget.enabled,
+            onChanged: (ModelOption? text) {
+              setState(() {
+                value = text;
+              });
+              widget.onChanged!(text!.value);
+            },
             autoValidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
-              if (required && value == null) return ('Required content');
+              if (widget.required && value == null) return ('Required content');
               return null;
             },
             popupProps: const PopupProps.bottomSheet(),
             dropdownDecoratorProps: DropDownDecoratorProps(
+              baseStyle: TextStyle(color: AppThemes.primaryColor),
               dropdownSearchDecoration: InputDecoration(
-                labelText: label,
-                prefixIcon: icon != ''
+                labelText: widget.label,
+                prefixIcon: widget.icon != ''
                     ? Container(
                         padding: const EdgeInsets.all(10),
                         child: SvgPicture.asset(
-                          icon ?? '',
-                          semanticsLabel: label,
+                          widget.icon ?? '',
+                          semanticsLabel: widget.label,
                           width: 10,
                         ),
                       )
@@ -90,16 +97,15 @@ class WidgetSelect extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   borderSide: BorderSide(color: AppThemes.accentColor.withOpacity(0.5), width: 1.0),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
                 fillColor: Colors.white,
                 filled: true,
               ),
             ),
-            filterFn: (user, filter) => onFind(filter),
-            // dropdownBuilder: _customDropDown,
+            // filterFn: (user, filter) => onFind(filter),
           ),
         ),
-        SizedBox(height: space ? AppThemes.gap : 0),
+        SizedBox(height: widget.space ? AppThemes.gap : 0),
       ],
     );
   }

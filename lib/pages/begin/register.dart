@@ -13,15 +13,17 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMixin {
-  handleLogin(values) async {
-    print(values);
+  final WidgetFormNotifier widgetFormNotifier = WidgetFormNotifier();
+
+  handleRegister() async {
+    if (widgetFormNotifier.formKey.currentState!.validate()) {
+      print(widgetFormNotifier.dataForm);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     ModelForm modelForm = ModelForm.fromJson({
-      "submit": handleLogin,
-      "textSubmit": "LOG IN",
       "items": [
         {
           "name": "fullname",
@@ -60,7 +62,12 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
           "label": 'Loại tài khoản',
           "icon": 'assets/svgs/type-account.svg',
           "required": true,
-          "password": true
+          "items": [
+            {
+              'label': 'label',
+              'value': 'value',
+            }
+          ]
         },
         {
           "type": "select",
@@ -69,21 +76,29 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
           "label": 'Bằng cấp chuyên môn',
           "icon": 'assets/svgs/degree.svg',
           "required": true,
-          "password": true
+          "items": [
+            {
+              'label': 'label',
+              'value': 'value',
+            }
+          ]
         },
       ],
     });
     return Scaffold(
-      appBar: appBar('Đăng ký', AppBar().preferredSize.height, context, MediaQuery.of(context).viewPadding.top - 20),
+      appBar: appBar('Đăng ký', AppBar().preferredSize.height, context, MediaQuery.of(context).viewPadding.top - 15),
       backgroundColor: Colors.white,
       body: SizedBox(
-        height: MediaQuery.of(context).size.height,
         child: Center(
           child: ListView(
             shrinkWrap: true,
             children: [
+              SizedBox(
+                height: AppThemes.gap,
+              ),
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: AppThemes.gap), child: WidgetForm(modelForm: modelForm)),
+                  padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+                  child: WidgetForm(modelForm: modelForm, widgetFormNotifier: widgetFormNotifier)),
               SizedBox(
                 height: AppThemes.gap * 2,
               ),
@@ -91,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
                 padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
                 child: Column(
                   children: [
-                    ElevatedButton(onPressed: () {}, child: Text('Đăng nhập')),
+                    ElevatedButton(onPressed: handleRegister, child: Text('Đăng nhập')),
                     SizedBox(
                       height: AppThemes.gap * 2,
                     ),
@@ -111,7 +126,10 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
                     ),
                   ],
                 ),
-              )
+              ),
+              SizedBox(
+                height: AppThemes.gap,
+              ),
             ],
           ),
         ),

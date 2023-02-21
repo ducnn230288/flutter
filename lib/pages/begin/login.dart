@@ -13,15 +13,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-  handleLogin(values) async {
-    print(values);
+  final WidgetFormNotifier widgetFormNotifier = WidgetFormNotifier();
+  handleLogin() async {
+    if (widgetFormNotifier.formKey.currentState!.validate()) {
+      print(widgetFormNotifier.dataForm);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     ModelForm modelForm = ModelForm.fromJson({
-      "submit": handleLogin,
-      "textSubmit": "LOG IN",
       "items": [
         {
           "name": "loginName",
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       ],
     });
     return Scaffold(
-      appBar: appBar('Đăng nhập', AppBar().preferredSize.height, context, MediaQuery.of(context).viewPadding.top - 20),
+      appBar: appBar('Đăng nhập', AppBar().preferredSize.height, context, MediaQuery.of(context).viewPadding.top - 15),
       backgroundColor: Colors.white,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -50,7 +51,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             shrinkWrap: true,
             children: [
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: AppThemes.gap), child: WidgetForm(modelForm: modelForm)),
+                  padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+                  child: WidgetForm(modelForm: modelForm, widgetFormNotifier: widgetFormNotifier)),
               SizedBox(
                 height: AppThemes.gap / 4,
               ),
@@ -98,7 +100,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     SizedBox(
                       height: AppThemes.gap * 4,
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text('Đăng nhập')),
+                    ElevatedButton(onPressed: handleLogin, child: Text('Đăng nhập')),
                     SizedBox(
                       height: AppThemes.gap * 2,
                     ),

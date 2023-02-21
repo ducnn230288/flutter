@@ -83,7 +83,6 @@ class WidgetInputState extends State<WidgetInput> {
               )
             : Container(),
         Container(
-          height: 40 + (AppThemes.gap / 4),
           decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(10.0), boxShadow: [
             BoxShadow(color: AppThemes.lightColor, blurRadius: AppThemes.gap / 3, spreadRadius: AppThemes.gap / 4)
           ]),
@@ -96,7 +95,6 @@ class WidgetInputState extends State<WidgetInput> {
             controller: _controller,
             readOnly: widget.onTap != null,
             focusNode: focusNode,
-            // initialValue: widget.value,
             textInputAction: TextInputAction.next,
             style: TextStyle(color: AppThemes.primaryColor),
             onChanged: (String text) {
@@ -147,7 +145,7 @@ class WidgetInputState extends State<WidgetInput> {
                 borderSide: BorderSide(color: AppThemes.accentColor.withOpacity(0.5), width: 1.0),
               ),
               fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+              contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
               filled: true,
             ),
             minLines: 1,

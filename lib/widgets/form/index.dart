@@ -6,38 +6,32 @@ import 'select.dart';
 
 class WidgetForm extends StatefulWidget {
   final ModelForm modelForm;
+  final WidgetFormNotifier widgetFormNotifier;
 
-  const WidgetForm({
-    Key? key,
-    required this.modelForm,
-  }) : super(key: key);
+  WidgetForm({Key? key, required this.modelForm, required this.widgetFormNotifier}) : super(key: key);
 
   @override
   WidgetFormState createState() => WidgetFormState();
 }
 
-class WidgetFormState extends State<WidgetForm> {
-  final _formKey = GlobalKey<FormState>();
-  ModelForm modelForm = ModelForm();
+class WidgetFormNotifier extends ChangeNotifier {
   dynamic dataForm = {};
+  final formKey = GlobalKey<FormState>();
+}
+
+class WidgetFormState extends State<WidgetForm> {
+  ModelForm modelForm = ModelForm();
 
   @override
   void initState() {
     modelForm = widget.modelForm;
-
     super.initState();
-  }
-
-  handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      modelForm.submit!(dataForm);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: widget.widgetFormNotifier.formKey,
       child: Column(
         children: <Widget>[
           ...List.generate(modelForm.items.length, (index) {
@@ -54,8 +48,9 @@ class WidgetFormState extends State<WidgetForm> {
                   required: modelForm.items[index].required,
                   enabled: modelForm.items[index].enabled,
                   icon: modelForm.items[index].icon,
+                  items: modelForm.items[index].items,
                   onChanged: (text) {
-                    dataForm[modelForm.items[index].name] = text;
+                    widget.widgetFormNotifier.dataForm[modelForm.items[index].name] = text;
                   },
                 );
               default:
@@ -70,7 +65,7 @@ class WidgetFormState extends State<WidgetForm> {
                   number: modelForm.items[index].number,
                   placeholder: modelForm.items[index].placeholder,
                   onChanged: (text) {
-                    dataForm[modelForm.items[index].name] = text;
+                    widget.widgetFormNotifier.dataForm[modelForm.items[index].name] = text;
                   },
                   onTap: modelForm.items[index].onTap,
                   icon: modelForm.items[index].icon,
@@ -78,7 +73,6 @@ class WidgetFormState extends State<WidgetForm> {
                 );
             }
           }),
-          // WidgetButton(title: modelForm.textSubmit, onClick: () => handleLogin(), color: modelForm.colorSubmit),
         ],
       ),
     );

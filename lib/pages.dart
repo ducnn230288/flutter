@@ -1,3 +1,3 @@
-export 'pages/introduction.dart';
-export 'pages/login.dart';
-export 'pages/register.dart';
+export 'pages/begin/introduction.dart';
+export 'pages/begin/login.dart';
+export 'pages/begin/register.dart';

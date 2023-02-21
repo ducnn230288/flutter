@@ -1,32 +1,15 @@
-import 'package:flutter/material.dart';
-
-import '/utils.dart';
-
 class ModelForm {
   ModelForm({
-    this.submit,
-    this.textSubmit = '',
     items,
-    colorSubmit,
-  })  : items = items ?? [],
-        colorSubmit = colorSubmit ?? AppThemes.primaryColor;
+  }) : items = items ?? [];
 
-  Function? submit;
-  String textSubmit;
-  Color colorSubmit;
   List<ModelFormItem> items;
 
   factory ModelForm.fromJson(Map<String, dynamic> json) => ModelForm(
-        submit: json["submit"],
-        textSubmit: json["textSubmit"] ?? '',
-        colorSubmit: json["colorSubmit"] ?? AppThemes.primaryColor,
         items: List<ModelFormItem>.from(json["items"].map((x) => ModelFormItem.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "submit": submit,
-        "textSubmit": textSubmit,
-        "colorSubmit": colorSubmit,
         "items": List<dynamic>.from(items.map((x) => x.toJson())),
       };
 }
@@ -47,6 +30,7 @@ class ModelFormItem {
     this.onFind,
     this.icon,
     this.suffix,
+    this.items,
   });
 
   String name;
@@ -63,6 +47,7 @@ class ModelFormItem {
   Function? onFind;
   String? icon;
   String? suffix;
+  List<ModelOption>? items;
 
   factory ModelFormItem.fromJson(Map<String, dynamic> json) => ModelFormItem(
         name: json["name"] ?? '',
@@ -79,6 +64,7 @@ class ModelFormItem {
         onFind: json["onFind"] ?? null,
         icon: json["icon"] ?? null,
         suffix: json["suffix"] ?? null,
+        items: json["items"] != null ? List<ModelOption>.from(json["items"].map((x) => ModelOption.fromJson(x))) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -96,6 +82,7 @@ class ModelFormItem {
         "onFind": onFind,
         "icon": icon,
         "suffix": suffix,
+        "items": items != null ? List<dynamic>.from(items!.map((x) => x.toJson())) : null,
       };
 }
 
@@ -107,7 +94,6 @@ class ModelOption {
 
   String label;
   String value;
-
   factory ModelOption.fromJson(Map<String, dynamic> json) => ModelOption(
         label: json["label"] ?? '',
         value: json["value"] ?? '',
