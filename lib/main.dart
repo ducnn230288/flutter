@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: RoutesName.introductionPage,
+      initialRoute: RoutesName.homePage,
     );
   }
 }
