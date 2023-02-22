@@ -104,8 +104,8 @@ class _IntroductionPageState extends State<IntroductionPage> {
       skip: const Text("Bỏ qua"),
       showNextButton: true,
       next: const Text("Tiếp tục"),
-      nextStyle: AppThemes.buttonStyle,
-      doneStyle: AppThemes.buttonStyle,
+      nextStyle: AppThemes.button,
+      doneStyle: AppThemes.button,
       done: const Text("Bắt đầu"),
       onDone: () {
         Navigator.pushNamed(context, RoutesName.loginPage);

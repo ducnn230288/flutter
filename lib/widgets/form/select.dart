@@ -60,7 +60,7 @@ class _WidgetSelectState extends State<WidgetSelect> {
               if (widget.required && value == null) return ('Required content');
               return null;
             },
-            popupProps: const PopupProps.bottomSheet(),
+            // popupProps: const PopupProps.bottomSheet(),
             dropdownDecoratorProps: DropDownDecoratorProps(
               baseStyle: TextStyle(color: AppThemes.primaryColor),
               dropdownSearchDecoration: InputDecoration(

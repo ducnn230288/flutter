@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: AppThemes.myColor,
         unselectedWidgetColor: AppThemes.primaryColor,
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style: AppThemes.buttonStyle,
+          style: AppThemes.button,
         ),
       ),
       onGenerateRoute: RouteGenerator.generateRoute,

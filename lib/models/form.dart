@@ -1,19 +1,3 @@
-class ModelForm {
-  ModelForm({
-    items,
-  }) : items = items ?? [];
-
-  List<ModelFormItem> items;
-
-  factory ModelForm.fromJson(Map<String, dynamic> json) => ModelForm(
-        items: List<ModelFormItem>.from(json["items"].map((x) => ModelFormItem.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "items": List<dynamic>.from(items.map((x) => x.toJson())),
-      };
-}
-
 class ModelFormItem {
   ModelFormItem({
     this.name = '',
@@ -21,13 +5,16 @@ class ModelFormItem {
     this.label = '',
     this.value = '',
     this.maxLines = 1,
-    this.required = false,
+    this.required = true,
+    this.show = true,
     this.enabled = true,
     this.password = false,
     this.number = false,
-    this.placeholder = false,
+    this.email = false,
+    this.placeholder = true,
     this.onTap,
     this.onFind,
+    this.onChange,
     this.icon,
     this.suffix,
     this.items,
@@ -39,12 +26,15 @@ class ModelFormItem {
   dynamic value;
   int maxLines;
   bool required;
+  bool show;
   bool enabled;
   bool password;
   bool number;
+  bool email;
   bool placeholder;
   Function? onTap;
   Function? onFind;
+  Function? onChange;
   String? icon;
   String? suffix;
   List<ModelOption>? items;
@@ -55,13 +45,16 @@ class ModelFormItem {
         label: json["label"] ?? '',
         value: json["value"] ?? '',
         maxLines: json["maxLines"] ?? 1,
-        required: json["required"] ?? false,
+        required: json["required"] ?? true,
+        show: json["show"] ?? true,
         enabled: json["enabled"] ?? true,
         password: json["password"] ?? false,
         number: json["number"] ?? false,
-        placeholder: json["placeholder"] ?? false,
+        email: json["email"] ?? false,
+        placeholder: json["placeholder"] ?? true,
         onTap: json["onTap"] ?? null,
         onFind: json["onFind"] ?? null,
+        onChange: json["onChange"] ?? null,
         icon: json["icon"] ?? null,
         suffix: json["suffix"] ?? null,
         items: json["items"] != null ? List<ModelOption>.from(json["items"].map((x) => ModelOption.fromJson(x))) : null,
@@ -74,12 +67,15 @@ class ModelFormItem {
         "value": value,
         "maxLines": maxLines,
         "required": required,
+        "show": show,
         "enabled": enabled,
         "password": password,
         "number": number,
+        "email": email,
         "placeholder": placeholder,
         "onTap": onTap,
         "onFind": onFind,
+        "onChange": onChange,
         "icon": icon,
         "suffix": suffix,
         "items": items != null ? List<dynamic>.from(items!.map((x) => x.toJson())) : null,

@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -12,6 +13,7 @@ class WidgetInput extends StatefulWidget {
   final bool enabled;
   final bool password;
   final bool number;
+  final bool email;
   final bool placeholder;
   final bool stackedLabel;
   final ValueChanged<String>? onChanged;
@@ -24,11 +26,12 @@ class WidgetInput extends StatefulWidget {
     this.label = '',
     this.value = '',
     this.maxLines = 1,
-    this.required = false,
+    this.required = true,
     this.enabled = true,
     this.password = false,
     this.number = false,
-    this.placeholder = false,
+    this.email = false,
+    this.placeholder = true,
     this.stackedLabel = false,
     this.onChanged,
     this.onTap,
@@ -102,8 +105,11 @@ class WidgetInputState extends State<WidgetInput> {
               widget.onChanged!(text);
             },
             validator: (value) {
-              if (widget.required && value == '') return ('Required content');
-              // else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) return "Email format incorrect";
+              if (widget.required && value == '') {
+                return 'Required content';
+              } else if (widget.email && !EmailValidator.validate(value ?? '')) {
+                return "Email format incorrect";
+              }
               return null;
             },
             obscureText: widget.password,
@@ -117,7 +123,7 @@ class WidgetInputState extends State<WidgetInput> {
                       child: SvgPicture.asset(
                         widget.icon ?? '',
                         semanticsLabel: widget.label,
-                        width: 10,
+                        width: 0,
                         color: focusNode.hasFocus ? AppThemes.primaryColor : AppThemes.hintColor,
                       ),
                     )
@@ -145,7 +151,7 @@ class WidgetInputState extends State<WidgetInput> {
                 borderSide: BorderSide(color: AppThemes.accentColor.withOpacity(0.5), width: 1.0),
               ),
               fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
+              contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
               filled: true,
             ),
             minLines: 1,

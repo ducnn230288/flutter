@@ -5,10 +5,10 @@ import 'input.dart';
 import 'select.dart';
 
 class WidgetForm extends StatefulWidget {
-  final ModelForm modelForm;
-  final WidgetFormNotifier widgetFormNotifier;
+  final List<ModelFormItem> list;
+  final WidgetFormNotifier notifier;
 
-  WidgetForm({Key? key, required this.modelForm, required this.widgetFormNotifier}) : super(key: key);
+  WidgetForm({Key? key, required this.list, required this.notifier}) : super(key: key);
 
   @override
   WidgetFormState createState() => WidgetFormState();
@@ -20,57 +20,61 @@ class WidgetFormNotifier extends ChangeNotifier {
 }
 
 class WidgetFormState extends State<WidgetForm> {
-  ModelForm modelForm = ModelForm();
-
-  @override
-  void initState() {
-    modelForm = widget.modelForm;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: widget.widgetFormNotifier.formKey,
+      key: widget.notifier.formKey,
       child: Column(
         children: <Widget>[
-          ...List.generate(modelForm.items.length, (index) {
-            switch (modelForm.items[index].type) {
+          ...List.generate(widget.list.length, (index) {
+            ModelFormItem item = widget.list[index];
+            switch (item.type) {
               // case 'upload':
               //   return WidgetUpload(
-              //     label: modelForm.items[index].label,
+              //     label: item.label,
               //   );
               case 'select':
-                return WidgetSelect(
-                  label: modelForm.items[index].label,
-                  value: modelForm.items[index].value != '' ? modelForm.items[index].value : null,
-                  space: index != modelForm.items.length - 1,
-                  required: modelForm.items[index].required,
-                  enabled: modelForm.items[index].enabled,
-                  icon: modelForm.items[index].icon,
-                  items: modelForm.items[index].items,
-                  onChanged: (text) {
-                    widget.widgetFormNotifier.dataForm[modelForm.items[index].name] = text;
-                  },
-                );
+                return item.show
+                    ? WidgetSelect(
+                        label: item.label,
+                        value: item.value != '' ? item.value : null,
+                        space: index != widget.list.length - 1,
+                        required: item.required,
+                        enabled: item.enabled,
+                        icon: item.icon,
+                        items: item.items,
+                        onChanged: (text) {
+                          widget.notifier.dataForm[item.name] = text;
+                          if (item.onChange != null) {
+                            item.onChange!(text);
+                          }
+                        },
+                      )
+                    : Container();
               default:
-                return WidgetInput(
-                  label: modelForm.items[index].label,
-                  value: modelForm.items[index].value,
-                  space: index != modelForm.items.length - 1,
-                  maxLines: modelForm.items[index].maxLines,
-                  required: modelForm.items[index].required,
-                  enabled: modelForm.items[index].enabled,
-                  password: modelForm.items[index].password,
-                  number: modelForm.items[index].number,
-                  placeholder: modelForm.items[index].placeholder,
-                  onChanged: (text) {
-                    widget.widgetFormNotifier.dataForm[modelForm.items[index].name] = text;
-                  },
-                  onTap: modelForm.items[index].onTap,
-                  icon: modelForm.items[index].icon,
-                  suffix: modelForm.items[index].suffix,
-                );
+                return item.show
+                    ? WidgetInput(
+                        label: item.label,
+                        value: item.value,
+                        space: index != widget.list.length - 1,
+                        maxLines: item.maxLines,
+                        required: item.required,
+                        enabled: item.enabled,
+                        password: item.password,
+                        number: item.number,
+                        placeholder: item.placeholder,
+                        onChanged: (text) {
+                          widget.notifier.dataForm[item.name] = text;
+                          if (item.onChange != null) {
+                            item.onChange!(text);
+                          }
+                        },
+                        email: item.email,
+                        onTap: item.onTap,
+                        icon: item.icon,
+                        suffix: item.suffix,
+                      )
+                    : Container();
             }
           }),
         ],

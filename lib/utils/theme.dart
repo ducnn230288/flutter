@@ -24,14 +24,23 @@ class AppThemes {
   static Color grayColor = const Color(0xffA8A8A8);
   static Color lightColor = const Color(0xffF3F3F3);
 
-  static ButtonStyle buttonStyle = ButtonStyle(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, 40)),
+  static double gap = 17.0;
+
+  static TextStyle titleStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800, color: blackColor);
+  static ButtonStyle button = ButtonStyle(
+      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, 48)),
       padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
-      backgroundColor: MaterialStatePropertyAll(Color(primary)),
+      backgroundColor: MaterialStatePropertyAll(primaryColor),
       foregroundColor: const MaterialStatePropertyAll(Colors.white),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)), side: BorderSide(color: Color(primary)))),
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)), side: BorderSide(color: primaryColor))),
       textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: 16)));
-
-  static double gap = 17.0;
+  static ButtonStyle buttonWhite = button.copyWith(
+    elevation: const MaterialStatePropertyAll(5),
+    shadowColor: MaterialStatePropertyAll(lightColor),
+    backgroundColor: const MaterialStatePropertyAll(Colors.white),
+    foregroundColor: MaterialStatePropertyAll(blackColor),
+    shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)), side: BorderSide(color: Colors.transparent))),
+  );
 }

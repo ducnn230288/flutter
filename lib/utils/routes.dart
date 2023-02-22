@@ -4,19 +4,18 @@ import '/pages.dart';
 // import 'package:flutter_bloc/src/bloc_provider.dart';
 
 class RoutesName {
-  static const String introductionPage = '/introduction_page';
-  static const String loginPage = '/login_page';
-  static const String registerPage = '/register_page';
+  static const String homePage = '/home-page';
+
+  static const String introductionPage = '/introduction-page';
+  static const String loginPage = '/login-page';
+  static const String registerPage = '/register-page';
+  static const String otpVerificationPage = '/otp-verification-page';
 }
 
 class RouteGenerator {
   static Route generateRoute(RouteSettings settings) {
     String routeName = settings.name!;
-    // final dynamic ARGUMENTS = settings.arguments;
-    //
-    // if (NAME.contains('/drawer')) {
-    //   _routerName = NAME;
-    // }
+    final dynamic arguments = settings.arguments;
     switch (routeName) {
       // case RoutesName.loginPage:
       //   return _GeneratePageRoute(
@@ -26,6 +25,18 @@ class RouteGenerator {
       //     ),
       //     routeName: routeName,
       //   );
+      case RoutesName.homePage:
+        return _GeneratePageRoute(
+          widget: const HomePage(),
+          routeName: routeName,
+        );
+      case RoutesName.otpVerificationPage:
+        return _GeneratePageRoute(
+          widget: OTPVerificationPage(
+            status: arguments,
+          ),
+          routeName: routeName,
+        );
       case RoutesName.registerPage:
         return _GeneratePageRoute(
           widget: const RegisterPage(),
@@ -57,8 +68,8 @@ class _GeneratePageRoute extends PageRouteBuilder {
             return WillPopScope(
               onWillPop: () async {
                 if (exitApp) {
-                  // Utils.exitApp(context);
-                  return false;
+                  print('exitApp');
+                  // return false;
                 }
                 return true;
               },
