@@ -81,8 +81,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ],
                         )),
                     TextButton(
-                        onPressed: () =>
-                            Dialogs(context).showForm(title: 'Quên mật khẩu', formItem: listEmail, submit: handleEmail),
+                        onPressed: () => Dialogs(context).showForm(
+                            title: 'Quên mật khẩu',
+                            formItem: listEmail,
+                            submit: handleEmail,
+                            textButton: 'Cấp lại mật khẩu'),
                         child: const Text('Quên mật khẩu?'))
                   ],
                 ),

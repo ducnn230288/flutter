@@ -52,7 +52,11 @@ class Dialogs {
     ).show();
   }
 
-  Future<void> showForm({required String title, required List<ModelFormItem> formItem, required submit}) async {
+  Future<void> showForm(
+      {required String title,
+      required List<ModelFormItem> formItem,
+      required submit,
+      String textButton = 'Xác nhận'}) async {
     final WidgetFormNotifier formNotifier = WidgetFormNotifier();
 
     late AwesomeDialog dialog;
@@ -84,7 +88,7 @@ class Dialogs {
                     submit(formNotifier.dataForm);
                   }
                 },
-                child: const Text('Đăng nhập'))
+                child: Text(textButton))
           ],
         ),
       ),
