@@ -2,8 +2,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '/constants.dart';
-import '/models.dart';
+import '../../constants/index.dart';
+import '../../models/index.dart';
 
 class WidgetSelect extends StatefulWidget {
   final String label;

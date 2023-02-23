@@ -2,9 +2,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '/constants.dart';
-import '/models.dart';
-import '/widgets.dart';
+import '../constants/index.dart';
+import '../models/index.dart';
+import '../widgets/index.dart';
 
 class Dialogs {
   late BuildContext context;

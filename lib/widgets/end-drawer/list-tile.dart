@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '/constants.dart';
+import '../../constants/index.dart';
 
 itemDrawer({required String svg, required String name, onTap, bool isBorder = true}) => ListTile(
       minLeadingWidth: 0,

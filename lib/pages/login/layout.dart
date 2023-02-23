@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/widgets.dart';
+import '../../widgets/index.dart';
 
 class LoginLayout extends StatelessWidget {
   const LoginLayout({super.key, required this.child, this.extra});

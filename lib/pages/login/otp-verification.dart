@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
-import '/constants.dart';
-import '/utils.dart';
-import '/widgets.dart';
+import '../../constants/index.dart';
+import '../../utils/index.dart';
+import '../../widgets/index.dart';
 
 class OTPVerificationPage extends StatefulWidget {
   final Object? extra;
