@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '/bloc/index.dart';
 import '/constants.dart';
 import '/pages.dart';
 
@@ -14,20 +15,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Template',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        textTheme: GoogleFonts.manropeTextTheme(),
-        primarySwatch: ColorName.primary,
-        unselectedWidgetColor: ColorName.primary,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: Style.button,
+    return BlocWidget(
+      child: MaterialApp.router(
+        title: 'Flutter Template',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          textTheme: GoogleFonts.manropeTextTheme(),
+          primarySwatch: ColorName.primary,
+          unselectedWidgetColor: ColorName.primary,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: Style.button,
+          ),
         ),
+        routeInformationProvider: _router.routeInformationProvider,
+        routeInformationParser: _router.routeInformationParser,
+        routerDelegate: _router.routerDelegate,
       ),
-      routeInformationProvider: _router.routeInformationProvider,
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
     );
   }
 

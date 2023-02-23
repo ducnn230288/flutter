@@ -45,6 +45,8 @@ dependencies:
   lottie: ^2.2.0
   awesome_dialog: ^3.0.2
   go_router: ^6.0.10
+  http: ^0.13.5
+  flutter_bloc: ^8.1.2
 
 
 dev_dependencies:
