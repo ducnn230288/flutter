@@ -2,10 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '/constants.dart';
-import '/models.dart';
-import '/utils.dart';
-import '/widgets.dart';
+import '../../constants/index.dart';
+import '../../models/index.dart';
+import '../../utils/index.dart';
+import '../../widgets/index.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

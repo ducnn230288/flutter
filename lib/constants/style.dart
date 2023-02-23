@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/constants.dart';
+import 'index.dart';
 
 class Style {
   Style._();

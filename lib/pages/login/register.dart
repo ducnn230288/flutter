@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '/constants.dart';
-import '/models.dart';
-import '/widgets.dart';
+import '../../constants/index.dart';
+import '../../models/index.dart';
+import '../../widgets/index.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
