@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
-import '/utils.dart';
+import '/constants.dart';
 import '/widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,12 +18,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       backgroundColor: Colors.white,
       endDrawer: endDrawer(context: context),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+        padding: const EdgeInsets.symmetric(horizontal: Space.large),
         child: ListView(
           shrinkWrap: true,
           children: [
-            SizedBox(
-              height: AppThemes.gap / 4,
+            const SizedBox(
+              height: Space.large / 4,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,13 +37,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               onPressed: () {
                                 Scaffold.of(context).openEndDrawer();
                               },
-                              style: AppThemes.buttonWhite,
-                              child: SvgPicture.asset(
-                                'assets/svgs/menu-right.svg',
-                                semanticsLabel: 'Menu',
-                                width: 24,
-                                color: AppThemes.blackColor,
-                              ),
+                              style: Style.buttonWhite,
+                              child: AppIcons.menuRight,
                             ))),
               ],
             )

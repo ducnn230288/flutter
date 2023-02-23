@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+import '/constants.dart';
 import '/utils.dart';
 
 class IntroductionPage extends StatefulWidget {
@@ -24,17 +24,17 @@ class _IntroductionPageState extends State<IntroductionPage> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 32.0,
-              color: AppThemes.blackColor,
+              fontSize: FontSizes.headline1,
+              color: ColorName.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
+            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
           ),
-          image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
+          image: AppIcons.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
         ),
         PageViewModel(
           titleWidget: Text(
@@ -42,17 +42,17 @@ class _IntroductionPageState extends State<IntroductionPage> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 32.0,
-              color: AppThemes.blackColor,
+              fontSize: FontSizes.headline1,
+              color: ColorName.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
+            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
           ),
-          image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
+          image: AppIcons.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
         ),
         PageViewModel(
           titleWidget: Text(
@@ -60,17 +60,17 @@ class _IntroductionPageState extends State<IntroductionPage> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 32.0,
-              color: AppThemes.blackColor,
+              fontSize: FontSizes.headline1,
+              color: ColorName.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
+            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
           ),
-          image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
+          image: AppIcons.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
         ),
         PageViewModel(
           titleWidget: Text(
@@ -78,34 +78,34 @@ class _IntroductionPageState extends State<IntroductionPage> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 32.0,
-              color: AppThemes.blackColor,
+              fontSize: FontSizes.headline1,
+              color: ColorName.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: 14.0, color: AppThemes.blackColor),
+            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
           ),
-          image: SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo'),
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: 24.0)),
+          image: AppIcons.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
         ),
       ],
       isTopSafeArea: true,
       dotsDecorator: DotsDecorator(
-        size: const Size.square(10.0),
-        activeSize: const Size(20.0, 10.0),
+        size: const Size.square(Space.mediumSmall),
+        activeSize: const Size(Space.large, Space.mediumSmall),
         activeColor: Theme.of(context).colorScheme.secondary,
-        color: Colors.grey.shade300,
-        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+        color: ColorName.black.shade100,
+        spacing: const EdgeInsets.symmetric(horizontal: Space.superSmall),
+        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Space.large)),
       ),
       showSkipButton: true,
       skip: const Text("Bỏ qua"),
       showNextButton: true,
       next: const Text("Tiếp tục"),
-      nextStyle: AppThemes.button,
-      doneStyle: AppThemes.button,
+      nextStyle: Style.button,
+      doneStyle: Style.button,
       done: const Text("Bắt đầu"),
       onDone: () {
         Navigator.pushNamed(context, RoutesName.loginPage);

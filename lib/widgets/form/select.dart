@@ -2,8 +2,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '/constants.dart';
 import '/models.dart';
-import '/utils.dart';
 
 class WidgetSelect extends StatefulWidget {
   final String label;
@@ -14,11 +14,12 @@ class WidgetSelect extends StatefulWidget {
   final onFind;
   final bool required;
   final bool enabled;
-  ModelOption? value;
-  List<ModelOption>? items;
+  final ModelOption? value;
+  final List<ModelOption>? items;
 
-  WidgetSelect(
-      {this.label = '',
+  const WidgetSelect(
+      {super.key,
+      this.label = '',
       this.value,
       this.icon,
       this.suffix,
@@ -41,9 +42,12 @@ class _WidgetSelectState extends State<WidgetSelect> {
     return Column(
       children: [
         Container(
-          decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(10.0), boxShadow: [
-            BoxShadow(color: AppThemes.lightColor, blurRadius: AppThemes.gap / 3, spreadRadius: AppThemes.gap / 4)
-          ]),
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(Space.medium),
+              boxShadow: [
+                BoxShadow(color: ColorName.black.shade50, blurRadius: Space.large / 3, spreadRadius: Space.large / 4)
+              ]),
           child: DropdownSearch<ModelOption>(
             items: widget.items ?? [],
             selectedItem: widget.value,
@@ -62,40 +66,39 @@ class _WidgetSelectState extends State<WidgetSelect> {
             },
             // popupProps: const PopupProps.bottomSheet(),
             dropdownDecoratorProps: DropDownDecoratorProps(
-              baseStyle: TextStyle(color: AppThemes.primaryColor),
+              baseStyle: TextStyle(color: ColorName.primary),
               dropdownSearchDecoration: InputDecoration(
                 labelText: widget.label,
+                labelStyle: TextStyle(color: ColorName.black.shade400, fontSize: FontSizes.paragraph1),
                 prefixIcon: widget.icon != ''
                     ? Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(Space.medium),
                         child: SvgPicture.asset(
                           widget.icon ?? '',
                           semanticsLabel: widget.label,
-                          width: 10,
+                          width: 0,
                         ),
                       )
                     : null,
-                labelStyle: TextStyle(color: AppThemes.hintColor, fontSize: 14),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(color: AppThemes.primaryColor, width: 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                  borderSide: BorderSide(color: ColorName.primary, width: 0),
                 ),
                 disabledBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(color: AppThemes.primaryColor.withOpacity(0.0), width: 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                  borderSide: BorderSide(color: ColorName.primary.withOpacity(0.0), width: 0),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  borderSide:
-                      BorderSide(color: AppThemes.primaryColor.withOpacity(value != null ? 0.3 : 0), width: 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                  borderSide: BorderSide(color: ColorName.primary.withOpacity(value != null ? 0.3 : 0), width: 0),
                 ),
                 errorBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(color: AppThemes.accentColor, width: 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                  borderSide: BorderSide(color: ColorName.danger, width: 0),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(color: AppThemes.accentColor.withOpacity(0.5), width: 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                  borderSide: BorderSide(color: ColorName.danger.withOpacity(0.5), width: 0),
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
                 fillColor: Colors.white,
@@ -105,7 +108,7 @@ class _WidgetSelectState extends State<WidgetSelect> {
             // filterFn: (user, filter) => onFind(filter),
           ),
         ),
-        SizedBox(height: widget.space ? AppThemes.gap : 0),
+        SizedBox(height: widget.space ? Space.large : 0),
       ],
     );
   }

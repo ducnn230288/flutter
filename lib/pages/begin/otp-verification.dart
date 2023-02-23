@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
+import '/constants.dart';
 import '/utils.dart';
 import '/widgets.dart';
 
@@ -36,7 +37,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerPr
       appBar: appBar(title: 'Xác nhận OTP', context: context),
       backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+        padding: const EdgeInsets.symmetric(horizontal: Space.large),
         child: Center(
           child: ListView(
             shrinkWrap: true,
@@ -44,10 +45,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerPr
               Text(
                 'Kiểm tra email đã đăng ký của bạn. Chúng tôi đã gửi cho bạn mã PIN ******',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppThemes.hintColor),
+                style: TextStyle(color: ColorName.black.shade300),
               ),
-              SizedBox(
-                height: AppThemes.gap * 2,
+              const SizedBox(
+                height: Space.large * 2,
               ),
               Pinput(
                 length: 6,
@@ -55,10 +56,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerPr
                 controller: controller,
                 defaultPinTheme: defaultPinTheme,
                 submittedPinTheme: defaultPinTheme.copyWith(
-                  textStyle: TextStyle(color: AppThemes.primaryColor, fontSize: 18.0),
+                  textStyle: TextStyle(color: ColorName.primary, fontSize: 18.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(width: 3, color: AppThemes.primaryColor),
+                    border: Border.all(width: 3, color: ColorName.primary),
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: const [
                       BoxShadow(
@@ -76,7 +77,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerPr
                     Container(
                       height: 3,
                       decoration: BoxDecoration(
-                        color: AppThemes.primaryColor,
+                        color: ColorName.primary,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -88,19 +89,19 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerPr
                     Container(
                       height: 3,
                       decoration: BoxDecoration(
-                        color: AppThemes.lightColor,
+                        color: ColorName.black.shade50,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: AppThemes.gap * 4,
+              const SizedBox(
+                height: Space.large * 4,
               ),
-              ElevatedButton(onPressed: handleSubmit, child: Text('Xác nhận')),
-              SizedBox(
-                height: AppThemes.gap,
+              ElevatedButton(onPressed: handleSubmit, child: const Text('Xác nhận')),
+              const SizedBox(
+                height: Space.large,
               ),
             ],
           ),

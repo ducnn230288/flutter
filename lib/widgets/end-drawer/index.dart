@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
-import '/utils.dart';
+import '/constants.dart';
 import 'list-tile.dart';
 
 endDrawer({context}) {
@@ -10,7 +9,7 @@ endDrawer({context}) {
     child: Stack(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+          padding: const EdgeInsets.symmetric(horizontal: Space.large),
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -29,8 +28,8 @@ endDrawer({context}) {
           ),
         ),
         Positioned(
-          top: AppThemes.gap + h,
-          right: AppThemes.gap,
+          top: Space.large + h,
+          right: Space.large,
           width: 40,
           height: 40,
           child: Builder(
@@ -38,12 +37,7 @@ endDrawer({context}) {
                     onPressed: () {
                       Scaffold.of(context).closeEndDrawer();
                     },
-                    child: SvgPicture.asset(
-                      'assets/svgs/close.svg',
-                      semanticsLabel: 'Close',
-                      width: 12,
-                      color: Colors.white,
-                    ),
+                    child: AppIcons.close,
                   )),
         ),
       ],

@@ -2,8 +2,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '/constants.dart';
 import '/models.dart';
-import '/utils.dart';
 import '/widgets.dart';
 
 class Dialogs {
@@ -46,7 +46,7 @@ class Dialogs {
       animType: AnimType.leftSlide,
       headerAnimationLoop: false,
       dialogType: DialogType.success,
-      titleTextStyle: AppThemes.titleStyle,
+      titleTextStyle: Style.title,
       title: title,
       desc: text,
     ).show();
@@ -72,14 +72,14 @@ class Dialogs {
           children: <Widget>[
             Text(
               title,
-              style: AppThemes.titleStyle,
+              style: Style.title,
             ),
-            SizedBox(
-              height: AppThemes.gap,
+            const SizedBox(
+              height: Space.large,
             ),
             WidgetForm(list: formItem, notifier: formNotifier),
-            SizedBox(
-              height: AppThemes.gap,
+            const SizedBox(
+              height: Space.large,
             ),
             ElevatedButton(
                 onPressed: () {

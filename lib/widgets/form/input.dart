@@ -2,7 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '/utils.dart';
+import '/constants.dart';
 
 class WidgetInput extends StatefulWidget {
   final String label;
@@ -77,18 +77,21 @@ class WidgetInputState extends State<WidgetInput> {
                   Text(widget.label,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: FontSizes.paragraph1,
                       )),
                   const SizedBox(
-                    height: 10,
+                    height: Space.mediumSmall,
                   ),
                 ],
               )
             : Container(),
         Container(
-          decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(10.0), boxShadow: [
-            BoxShadow(color: AppThemes.lightColor, blurRadius: AppThemes.gap / 3, spreadRadius: AppThemes.gap / 4)
-          ]),
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(Space.medium),
+              boxShadow: [
+                BoxShadow(color: ColorName.black.shade50, blurRadius: Space.large / 3, spreadRadius: Space.large / 4)
+              ]),
           child: TextFormField(
             onTap: () {
               if (widget.onTap != null) {
@@ -99,7 +102,7 @@ class WidgetInputState extends State<WidgetInput> {
             readOnly: widget.onTap != null,
             focusNode: focusNode,
             textInputAction: TextInputAction.next,
-            style: TextStyle(color: AppThemes.primaryColor),
+            style: TextStyle(color: ColorName.primary),
             onChanged: (String text) {
               value = text;
               widget.onChanged!(text);
@@ -116,49 +119,49 @@ class WidgetInputState extends State<WidgetInput> {
             keyboardType: widget.number ? TextInputType.number : null,
             decoration: InputDecoration(
               labelText: widget.label,
-              labelStyle: TextStyle(color: AppThemes.hintColor, fontSize: 14),
+              labelStyle: TextStyle(color: ColorName.black.shade400, fontSize: FontSizes.paragraph1),
               prefixIcon: widget.icon != ''
                   ? Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(Space.medium),
                       child: SvgPicture.asset(
                         widget.icon ?? '',
                         semanticsLabel: widget.label,
                         width: 0,
-                        color: focusNode.hasFocus ? AppThemes.primaryColor : AppThemes.hintColor,
+                        color: focusNode.hasFocus ? ColorName.primary : ColorName.black.shade400,
                       ),
                     )
                   : null,
               suffixText: widget.suffix,
               enabled: widget.enabled,
               focusedBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: AppThemes.primaryColor, width: 1.0),
+                borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                borderSide: BorderSide(color: ColorName.primary, width: 0),
               ),
               disabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: AppThemes.primaryColor.withOpacity(0.0), width: 1.0),
+                borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                borderSide: BorderSide(color: ColorName.primary.withOpacity(0.0), width: 0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: AppThemes.primaryColor.withOpacity(value != '' ? 0.3 : 0), width: 1.0),
+                borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                borderSide: BorderSide(color: ColorName.primary.withOpacity(value != '' ? 0.3 : 0), width: 0),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: AppThemes.accentColor, width: 1.0),
+                borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                borderSide: BorderSide(color: ColorName.danger, width: 0),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: AppThemes.accentColor.withOpacity(0.5), width: 1.0),
+                borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
+                borderSide: BorderSide(color: ColorName.danger.withOpacity(0.5), width: 0),
               ),
               fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               filled: true,
             ),
             minLines: 1,
             maxLines: widget.maxLines,
           ),
         ),
-        SizedBox(height: widget.space ? AppThemes.gap : 0),
+        SizedBox(height: widget.space ? Space.large : 0),
       ],
     );
   }

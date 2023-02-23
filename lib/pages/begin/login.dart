@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '/constants.dart';
 import '/models.dart';
 import '/utils.dart';
 import '/widgets.dart';
@@ -15,8 +16,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final WidgetFormNotifier formNotifier = WidgetFormNotifier();
   List<ModelFormItem> listFormItem = [
-    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/svgs/mail.svg', email: true),
-    ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/svgs/password.svg', password: true)
+    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg', email: true),
+    ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
   ];
   bool rememberMe = false;
   handleSubmit() async {
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   List<ModelFormItem> listEmail = [
-    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/svgs/mail.svg', email: true),
+    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg', email: true),
   ];
   handleEmail(data) async {
     print(data);
@@ -48,13 +49,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             shrinkWrap: true,
             children: [
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+                  padding: const EdgeInsets.symmetric(horizontal: Space.large),
                   child: WidgetForm(list: listFormItem, notifier: formNotifier)),
-              SizedBox(
-                height: AppThemes.gap / 4,
+              const SizedBox(
+                height: Space.large / 4,
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: AppThemes.gap / 2.5),
+                padding: const EdgeInsets.symmetric(horizontal: Space.large / 2.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               width: 20,
                               height: 20,
                               child: Checkbox(
-                                side: BorderSide(width: 1, color: AppThemes.primaryColor),
+                                side: BorderSide(width: 1, color: ColorName.primary),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                                 value: rememberMe,
                                 onChanged: (bool? value) {},
@@ -90,24 +91,24 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              SizedBox(
-                height: AppThemes.gap * 2,
+              const SizedBox(
+                height: Space.large * 2,
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+                padding: const EdgeInsets.symmetric(horizontal: Space.large),
                 child: Column(
                   children: [
                     Text(
                       'Bằng cách đăng nhập, bạn đã đồng ý với các điều khoản dịch vụ và điều kiện bảo mật của ứng dụng',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: AppThemes.hintColor),
+                      style: TextStyle(color: ColorName.black.shade300),
                     ),
-                    SizedBox(
-                      height: AppThemes.gap * 4,
+                    const SizedBox(
+                      height: Space.large * 4,
                     ),
                     ElevatedButton(onPressed: handleSubmit, child: const Text('Đăng nhập')),
-                    SizedBox(
-                      height: AppThemes.gap * 2,
+                    const SizedBox(
+                      height: Space.large * 2,
                     ),
                     RichText(
                       textAlign: TextAlign.center,
@@ -116,11 +117,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           children: [
                             TextSpan(
                                 text: "Đăng ký",
-                                style: TextStyle(color: AppThemes.primaryColor),
+                                style: TextStyle(color: ColorName.primary),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => {Navigator.pushNamed(context, RoutesName.registerPage)})
                           ],
-                          style: TextStyle(color: AppThemes.grayColor)),
+                          style: TextStyle(color: ColorName.black.shade300)),
                     ),
                   ],
                 ),

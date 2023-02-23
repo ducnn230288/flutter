@@ -46,6 +46,7 @@ dependencies:
   awesome_dialog: ^3.0.2
   email_validator: ^2.1.17
 
+
 dev_dependencies:
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -54,7 +55,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -70,6 +70,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svgs/
+    - assets/form/
     - assets/json/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

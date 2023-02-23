@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '/constants.dart';
 import '/models.dart';
 import '/utils.dart';
 import '/widgets.dart';
@@ -15,17 +16,17 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMixin {
   final WidgetFormNotifier widgetFormNotifier = WidgetFormNotifier();
   List<ModelFormItem> listFormItem = [
-    ModelFormItem(name: 'fullname', placeholder: true, label: 'Họ và tên', icon: 'assets/svgs/fullname.svg'),
+    ModelFormItem(name: 'fullname', placeholder: true, label: 'Họ và tên', icon: 'assets/form/fullname.svg'),
     ModelFormItem(
       name: 'email',
       label: 'Địa chỉ email',
-      icon: 'assets/svgs/mail.svg',
+      icon: 'assets/form/mail.svg',
       email: true,
     ),
-    ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/svgs/password.svg', password: true),
+    ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true),
     ModelFormItem(
-        name: 'confirmPassword', label: 'Nhập lại mật khẩu', icon: 'assets/svgs/password.svg', password: true),
-    ModelFormItem(type: "select", name: 'type', label: 'Loại tài khoản', icon: 'assets/svgs/type-account.svg', items: [
+        name: 'confirmPassword', label: 'Nhập lại mật khẩu', icon: 'assets/form/password.svg', password: true),
+    ModelFormItem(type: "select", name: 'type', label: 'Loại tài khoản', icon: 'assets/form/type-account.svg', items: [
       ModelOption(label: 'Order Side', value: 'value1'),
       ModelOption(label: 'Farmer Side', value: 'value2'),
     ]),
@@ -33,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
         type: "select",
         name: 'degree',
         label: 'Bằng cấp chuyên môn',
-        icon: 'assets/svgs/degree.svg',
+        icon: 'assets/form/degree.svg',
         show: false,
         items: [
           ModelOption(label: 'Bằng điều dưỡng', value: 'value1'),
@@ -71,22 +72,22 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
           child: ListView(
             shrinkWrap: true,
             children: [
-              SizedBox(
-                height: AppThemes.gap,
+              const SizedBox(
+                height: Space.large,
               ),
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+                  padding: const EdgeInsets.symmetric(horizontal: Space.large),
                   child: WidgetForm(list: listFormItem, notifier: widgetFormNotifier)),
-              SizedBox(
-                height: AppThemes.gap * 2,
+              const SizedBox(
+                height: Space.large * 2,
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: AppThemes.gap),
+                padding: const EdgeInsets.symmetric(horizontal: Space.large),
                 child: Column(
                   children: [
                     ElevatedButton(onPressed: handleSubmit, child: Text('Đăng nhập')),
-                    SizedBox(
-                      height: AppThemes.gap * 2,
+                    const SizedBox(
+                      height: Space.large * 2,
                     ),
                     RichText(
                       textAlign: TextAlign.center,
@@ -95,18 +96,18 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
                           children: [
                             TextSpan(
                                 text: "Đăng ký",
-                                style: TextStyle(color: AppThemes.primaryColor),
+                                style: TextStyle(color: ColorName.primary),
                                 recognizer: TapGestureRecognizer()..onTap = () => {Navigator.pop(context)})
                           ],
                           style: TextStyle(
-                            color: AppThemes.grayColor,
+                            color: ColorName.black.shade300,
                           )),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: AppThemes.gap,
+              const SizedBox(
+                height: Space.large,
               ),
             ],
           ),

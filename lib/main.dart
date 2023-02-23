@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '/constants.dart';
 import '/utils.dart';
 
 void main() {
@@ -17,14 +18,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.manropeTextTheme(),
-        primarySwatch: AppThemes.myColor,
-        unselectedWidgetColor: AppThemes.primaryColor,
+        primarySwatch: ColorName.primary,
+        unselectedWidgetColor: ColorName.primary,
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style: AppThemes.button,
+          style: Style.button,
         ),
       ),
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: RoutesName.homePage,
+      initialRoute: RoutesName.introductionPage,
     );
   }
 }
