@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -13,7 +12,6 @@ class WidgetInput extends StatefulWidget {
   final bool enabled;
   final bool password;
   final bool number;
-  final bool email;
   final bool placeholder;
   final bool stackedLabel;
   final ValueChanged<String>? onChanged;
@@ -30,7 +28,6 @@ class WidgetInput extends StatefulWidget {
     this.enabled = true,
     this.password = false,
     this.number = false,
-    this.email = false,
     this.placeholder = true,
     this.stackedLabel = false,
     this.onChanged,
@@ -110,8 +107,6 @@ class WidgetInputState extends State<WidgetInput> {
             validator: (value) {
               if (widget.required && value == '') {
                 return 'Required content';
-              } else if (widget.email && !EmailValidator.validate(value ?? '')) {
-                return "Email format incorrect";
               }
               return null;
             },

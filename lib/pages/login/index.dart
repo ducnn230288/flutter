@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '/constants.dart';
 import '/models.dart';
@@ -16,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final WidgetFormNotifier formNotifier = WidgetFormNotifier();
   List<ModelFormItem> listFormItem = [
-    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg', email: true),
+    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
     ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
   ];
   bool rememberMe = false;
@@ -30,18 +31,17 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   List<ModelFormItem> listEmail = [
-    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg', email: true),
+    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
   ];
   handleEmail(data) async {
-    print(data);
-    Navigator.pushNamed(context, RoutesName.otpVerificationPage, arguments: 'Email');
+    context.pushNamed(RoutesName.otpVerification, extra: 'Email');
+    // , arguments: 'Email'
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'Đăng nhập', context: context),
-      backgroundColor: Colors.white,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Center(
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 text: "Đăng ký",
                                 style: TextStyle(color: ColorName.primary),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => {Navigator.pushNamed(context, RoutesName.registerPage)})
+                                  ..onTap = () => context.pushNamed(RoutesName.register))
                           ],
                           style: TextStyle(color: ColorName.black.shade300)),
                     ),

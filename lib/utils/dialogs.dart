@@ -38,18 +38,22 @@ class Dialogs {
     Navigator.of(context).pop();
   }
 
-  Future<void> showSuccess({String? text, String? title}) async {
+  Future<void> showSuccess({String? text, String? title, Function? onDismiss}) async {
     return AwesomeDialog(
-      padding: const EdgeInsets.all(0),
-      context: context,
-      autoHide: const Duration(seconds: 2),
-      animType: AnimType.leftSlide,
-      headerAnimationLoop: false,
-      dialogType: DialogType.success,
-      titleTextStyle: Style.title,
-      title: title,
-      desc: text,
-    ).show();
+        padding: const EdgeInsets.all(0),
+        context: context,
+        autoHide: const Duration(seconds: 2),
+        animType: AnimType.leftSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.success,
+        titleTextStyle: Style.title,
+        title: title,
+        desc: text,
+        onDismissCallback: (DismissType type) {
+          if (onDismiss != null) {
+            onDismiss(context);
+          }
+        }).show();
   }
 
   Future<void> showForm(
@@ -65,6 +69,7 @@ class Dialogs {
       context: context,
       animType: AnimType.scale,
       dialogType: DialogType.question,
+      headerAnimationLoop: false,
       keyboardAware: true,
       body: Padding(
         padding: const EdgeInsets.all(8.0),

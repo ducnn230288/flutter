@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
 import '/constants.dart';
@@ -6,8 +7,8 @@ import '/utils.dart';
 import '/widgets.dart';
 
 class OTPVerificationPage extends StatefulWidget {
-  final String status;
-  const OTPVerificationPage({Key? key, required this.status}) : super(key: key);
+  final Object? extra;
+  const OTPVerificationPage({Key? key, required this.extra}) : super(key: key);
 
   @override
   State<OTPVerificationPage> createState() => _OTPVerificationPageState();
@@ -18,9 +19,16 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerPr
 
   handleSubmit() async {
     if (controller.value.text.length == 6) {
-      Navigator.pushNamed(context, RoutesName.loginPage);
-      Dialogs(context)
-          .showSuccess(title: widget.status == 'Register' ? 'Đăng ký thành công' : 'Đổi mật khẩu thành công');
+      Dialogs(context).showSuccess(
+          title: widget.extra == 'Register' ? 'Đăng ký thành công' : 'Đổi mật khẩu thành công',
+          onDismiss: (context) {
+            if (widget.extra == 'Register') {
+              GoRouter.of(context).pop();
+              GoRouter.of(context).pop();
+            } else {
+              GoRouter.of(context).pop();
+            }
+          });
     }
   }
 
@@ -35,7 +43,6 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerPr
 
     return Scaffold(
       appBar: appBar(title: 'Xác nhận OTP', context: context),
-      backgroundColor: Colors.white,
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: Space.large),
         child: Center(

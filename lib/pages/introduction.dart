@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '/constants.dart';
-import '/utils.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage({Key? key}) : super(key: key);
@@ -108,7 +108,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       doneStyle: Style.button,
       done: const Text("Bắt đầu"),
       onDone: () {
-        Navigator.pushNamed(context, RoutesName.loginPage);
+        context.pushNamed('/login');
       },
     );
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '/constants.dart';
 import '/models.dart';
-import '/utils.dart';
 import '/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -21,7 +21,6 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
       name: 'email',
       label: 'Địa chỉ email',
       icon: 'assets/form/mail.svg',
-      email: true,
     ),
     ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true),
     ModelFormItem(
@@ -56,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
   handleSubmit() async {
     if (widgetFormNotifier.formKey.currentState!.validate()) {
       print(widgetFormNotifier.dataForm);
-      Navigator.pushNamed(context, RoutesName.otpVerificationPage, arguments: 'Register');
+      context.pushNamed(RoutesName.otpVerification, extra: 'Register');
     }
   }
 
@@ -66,7 +65,6 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
 
     return Scaffold(
       appBar: appBar(title: 'Đăng ký', context: context),
-      backgroundColor: Colors.white,
       body: SizedBox(
         child: Center(
           child: ListView(

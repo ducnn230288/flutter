@@ -69,7 +69,6 @@ class WidgetFormState extends State<WidgetForm> {
                             item.onChange!(text);
                           }
                         },
-                        email: item.email,
                         onTap: item.onTap,
                         icon: item.icon,
                         suffix: item.suffix,

@@ -10,7 +10,6 @@ class ModelFormItem {
     this.enabled = true,
     this.password = false,
     this.number = false,
-    this.email = false,
     this.placeholder = true,
     this.onTap,
     this.onFind,
@@ -30,7 +29,6 @@ class ModelFormItem {
   bool enabled;
   bool password;
   bool number;
-  bool email;
   bool placeholder;
   Function? onTap;
   Function? onFind;
@@ -50,7 +48,6 @@ class ModelFormItem {
         enabled: json["enabled"] ?? true,
         password: json["password"] ?? false,
         number: json["number"] ?? false,
-        email: json["email"] ?? false,
         placeholder: json["placeholder"] ?? true,
         onTap: json["onTap"] ?? null,
         onFind: json["onFind"] ?? null,
@@ -71,7 +68,6 @@ class ModelFormItem {
         "enabled": enabled,
         "password": password,
         "number": number,
-        "email": email,
         "placeholder": placeholder,
         "onTap": onTap,
         "onFind": onFind,

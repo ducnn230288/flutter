@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '/constants.dart';
 
-appBar({title, context}) {
+appBar({required title, required BuildContext context}) {
   double height = AppBar().preferredSize.height;
   double h = MediaQuery.of(context).viewPadding.top - Space.large;
   return PreferredSize(
@@ -32,7 +33,11 @@ appBar({title, context}) {
               child: ElevatedButton(
                 style: Style.buttonIcon,
                 child: AppIcons.arrowLeft,
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  if (GoRouter.of(context).canPop()) {
+                    GoRouter.of(context).pop();
+                  }
+                },
               ),
             ),
             primary: false,
