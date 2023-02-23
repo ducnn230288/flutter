@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '/models.dart';
+import '/models/index.dart';
 
 class Repository {
   final Api _client = Api();

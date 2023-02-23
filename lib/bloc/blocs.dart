@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '/cubit/index.dart';
-import '/utils.dart';
+import '/utils/index.dart';
 
 class BlocWidget extends StatelessWidget {
   BlocWidget({super.key, required this.child});

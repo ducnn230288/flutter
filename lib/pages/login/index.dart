@@ -1,45 +1,40 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants/index.dart';
-import '../../models/index.dart';
-import '../../utils/index.dart';
+import '../../cubit/index.dart';
+import '../../models/form.dart';
 import '../../widgets/index.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-  final WidgetFormNotifier formNotifier = WidgetFormNotifier();
-  List<ModelFormItem> listFormItem = [
-    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
-    ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
-  ];
-  bool rememberMe = false;
-  handleSubmit() async {
-    if (formNotifier.formKey.currentState!.validate()) {
-      // Dialogs(context).startLoading();
-      formNotifier.dataForm['rememberMe'] = rememberMe;
-      print(formNotifier.dataForm);
-      // Navigator.pushNamed(context, RoutesName.registerPage);
-    }
-  }
-
-  List<ModelFormItem> listEmail = [
-    ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
-  ];
-  handleEmail(data) async {
-    context.pushNamed(RoutesName.otpVerification, extra: 'Email');
-    // , arguments: 'Email'
-  }
-
+  // bool rememberMe = false;
+  // handleSubmit() async {
+  //   if (formNotifier.formKey.currentState!.validate()) {
+  //     // Dialogs(context).startLoading();
+  //     formNotifier.dataForm['rememberMe'] = rememberMe;
+  //     print(formNotifier.dataForm);
+  //     // Navigator.pushNamed(context, RoutesName.registerPage);
+  //   }
+  // }
+  //
+  // List<ModelFormItem> listEmail = [
+  //   ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
+  // ];
+  // handleEmail(data) async {
+  //   context.pushNamed(RoutesName.otpVerification, extra: 'Email');
+  //   // , arguments: 'Email'
+  // }
   @override
   Widget build(BuildContext context) {
+    List<ModelFormItem> listFormItem = [
+      ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
+      ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
+    ];
+
     return Scaffold(
       appBar: appBar(title: 'Đăng nhập', context: context),
       body: SizedBox(
@@ -49,8 +44,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             shrinkWrap: true,
             children: [
               Container(
-                  padding: const EdgeInsets.symmetric(horizontal: Space.large),
-                  child: WidgetForm(list: listFormItem, notifier: formNotifier)),
+                  padding: const EdgeInsets.symmetric(horizontal: Space.large), child: WidgetForm(list: listFormItem)),
               const SizedBox(
                 height: Space.large / 4,
               ),
@@ -59,35 +53,35 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton(
-                        onPressed: () => setState(() {
-                              rememberMe = !rememberMe;
-                            }),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: Checkbox(
-                                side: BorderSide(width: 1, color: ColorName.primary),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                                value: rememberMe,
-                                onChanged: (bool? value) {},
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text('Lưu mật khẩu'),
-                          ],
-                        )),
-                    TextButton(
-                        onPressed: () => Dialogs(context).showForm(
-                            title: 'Quên mật khẩu',
-                            formItem: listEmail,
-                            submit: handleEmail,
-                            textButton: 'Cấp lại mật khẩu'),
-                        child: const Text('Quên mật khẩu?'))
+                    // TextButton(
+                    //     onPressed: () => setState(() {
+                    //           rememberMe = !rememberMe;
+                    //         }),
+                    //     child: Row(
+                    //       children: [
+                    //         SizedBox(
+                    //           width: 20,
+                    //           height: 20,
+                    //           child: Checkbox(
+                    //             side: BorderSide(width: 1, color: ColorName.primary),
+                    //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                    //             value: rememberMe,
+                    //             onChanged: (bool? value) {},
+                    //           ),
+                    //         ),
+                    //         const SizedBox(
+                    //           width: 10,
+                    //         ),
+                    //         const Text('Lưu mật khẩu'),
+                    //       ],
+                    //     )),
+                    // TextButton(
+                    //     onPressed: () => Dialogs(context).showForm(
+                    //         title: 'Quên mật khẩu',
+                    //         formItem: listEmail,
+                    //         submit: handleEmail,
+                    //         textButton: 'Cấp lại mật khẩu'),
+                    //     child: const Text('Quên mật khẩu?'))
                   ],
                 ),
               ),
@@ -106,7 +100,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     const SizedBox(
                       height: Space.large * 4,
                     ),
-                    ElevatedButton(onPressed: handleSubmit, child: const Text('Đăng nhập')),
+                    ElevatedButton(
+                        onPressed: () => context.read<AppFormCubit>().onSubmitTap(), child: const Text('Đăng nhập')),
                     const SizedBox(
                       height: Space.large * 2,
                     ),

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorState = GlobalKey<NavigatorState>();
 
   late final GoRouter _router = GoRouter(
-    initialLocation: RoutesName.home,
+    initialLocation: RoutesName.introduction,
     navigatorKey: _navigatorState,
     routes: [
       GoRoute(

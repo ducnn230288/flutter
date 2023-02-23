@@ -61,8 +61,6 @@ class Dialogs {
       required List<ModelFormItem> formItem,
       required submit,
       String textButton = 'Xác nhận'}) async {
-    final WidgetFormNotifier formNotifier = WidgetFormNotifier();
-
     late AwesomeDialog dialog;
     dialog = AwesomeDialog(
       padding: const EdgeInsets.all(0),
@@ -82,16 +80,16 @@ class Dialogs {
             const SizedBox(
               height: Space.large,
             ),
-            WidgetForm(list: formItem, notifier: formNotifier),
+            // WidgetForm(list: formItem),
             const SizedBox(
               height: Space.large,
             ),
             ElevatedButton(
                 onPressed: () {
-                  if (formNotifier.formKey.currentState!.validate()) {
-                    dialog.dismiss();
-                    submit(formNotifier.dataForm);
-                  }
+                  // if (formNotifier.formKey.currentState!.validate()) {
+                  //   dialog.dismiss();
+                  //   submit(formNotifier.dataForm);
+                  // }
                 },
                 child: Text(textButton))
           ],

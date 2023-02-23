@@ -4,19 +4,12 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 import '../constants/index.dart';
 
-class IntroductionPage extends StatefulWidget {
+class IntroductionPage extends StatelessWidget {
   const IntroductionPage({Key? key}) : super(key: key);
 
   @override
-  State<IntroductionPage> createState() => _IntroductionPageState();
-}
-
-class _IntroductionPageState extends State<IntroductionPage> {
-  final _introKey = GlobalKey<IntroductionScreenState>();
-  @override
   Widget build(BuildContext context) {
     return IntroductionScreen(
-      key: _introKey,
       pages: [
         PageViewModel(
           titleWidget: Text(

@@ -73,9 +73,8 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
               const SizedBox(
                 height: Space.large,
               ),
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: Space.large),
-                  child: WidgetForm(list: listFormItem, notifier: widgetFormNotifier)),
+              // Container(
+              //     padding: const EdgeInsets.symmetric(horizontal: Space.large), child: WidgetForm(list: listFormItem)),
               const SizedBox(
                 height: Space.large * 2,
               ),
