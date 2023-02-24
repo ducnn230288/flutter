@@ -1,7 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
+import '/cubit/index.dart';
 import '../constants/index.dart';
 import '../models/index.dart';
 import '../widgets/index.dart';
@@ -69,30 +71,41 @@ class Dialogs {
       dialogType: DialogType.question,
       headerAnimationLoop: false,
       keyboardAware: true,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-              title,
-              style: Style.title,
-            ),
-            const SizedBox(
-              height: Space.large,
-            ),
-            // WidgetForm(list: formItem),
-            const SizedBox(
-              height: Space.large,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  // if (formNotifier.formKey.currentState!.validate()) {
-                  //   dialog.dismiss();
-                  //   submit(formNotifier.dataForm);
-                  // }
+      body: BlocProvider(
+        create: (context) => AppFormCubit(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                title,
+                style: Style.title,
+              ),
+              const SizedBox(
+                height: Space.large,
+              ),
+              WidgetForm(list: formItem),
+              const SizedBox(
+                height: Space.large,
+              ),
+              BlocBuilder<AppFormCubit, AppFormState>(
+                builder: (context, state) {
+                  return BlocListener<AppFormCubit, AppFormState>(
+                    listenWhen: (context, state) => state.status == AppStatus.success,
+                    listener: (context, state) {
+                      dialog.dismiss();
+                      submit();
+                    },
+                    child: ElevatedButton(
+                        onPressed: () {
+                          context.read<AppFormCubit>().submit();
+                        },
+                        child: Text(textButton)),
+                  );
                 },
-                child: Text(textButton))
-          ],
+              )
+            ],
+          ),
         ),
       ),
     )..show();

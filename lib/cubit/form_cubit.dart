@@ -1,31 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'form_state.dart';
+import '../models/form.dart';
+import 'cubit.dart';
 
 class AppFormCubit extends Cubit<AppFormState> {
-  AppFormCubit() : super(AppFormState(key: GlobalKey<FormState>(), formData: {}));
-  final Map<String, String> _formData = {};
+  AppFormCubit() : super(AppFormState(key: GlobalKey<FormState>(), data: {}, list: []));
 
-  String? validateEmail(String? value) {
-    if (value != null && value.isEmpty) {
-      return "Please write your email";
-    }
-
-    return null;
+  void setList({required List<ModelFormItem> list}) {
+    emit(state.copyWith(list: list));
+    print(state.list[0].name);
   }
 
-  void onSaved({String? value, required String name}) {
-    if (value != null) {
-      print(_formData);
-      _formData[name] = value;
-    }
+  void saved({String? value, required String name}) {
+    state.data[name] = value;
   }
 
-  void onSubmitTap() {
+  void savedBool({required String name}) {
+    state.data[name] = state.data[name] != null ? !state.data[name] : true;
+    emit(state.copyWith(data: state.data));
+  }
+
+  void submit() {
     if (state.formKey.currentState?.validate() == true) {
       state.formKey.currentState?.save();
-      emit(state.copyWith(status: AppFormStatus.success, formData: _formData));
+      emit(state.copyWith(status: AppStatus.success, data: state.data));
+      print(state.data);
     }
+  }
+}
+
+class AppFormState {
+  final AppStatus status;
+  final GlobalKey<FormState> formKey;
+  final Map<String, dynamic> data;
+  final List<ModelFormItem> list;
+
+  AppFormState({
+    this.status = AppStatus.inProgress,
+    required GlobalKey<FormState> key,
+    required this.data,
+    required this.list,
+  }) : formKey = key;
+
+  AppFormState copyWith(
+      {AppStatus? status, GlobalKey<FormState>? key, Map<String, dynamic>? data, List<ModelFormItem>? list}) {
+    return AppFormState(
+      status: status ?? this.status,
+      data: data ?? this.data,
+      list: list ?? this.list,
+      key: key ?? formKey,
+    );
   }
 }

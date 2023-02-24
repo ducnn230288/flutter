@@ -17,13 +17,14 @@ class WidgetForm extends StatelessWidget {
   const WidgetForm({Key? key, required this.list}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    context.read<AppFormCubit>().setList(list: list);
     return BlocBuilder<AppFormCubit, AppFormState>(builder: (context, state) {
       return Form(
         key: state.formKey,
         child: Column(
           children: <Widget>[
-            ...List.generate(list.length, (index) {
-              ModelFormItem item = list[index];
+            ...List.generate(state.list.length, (index) {
+              ModelFormItem item = state.list[index];
               switch (item.type) {
                 // case 'upload':
                 //   return WidgetUpload(
@@ -34,17 +35,17 @@ class WidgetForm extends StatelessWidget {
                       ? WidgetSelect(
                           label: item.label,
                           value: item.value != '' ? item.value : null,
-                          space: index != list.length - 1,
+                          space: index != state.list.length - 1,
                           required: item.required,
                           enabled: item.enabled,
                           icon: item.icon,
                           items: item.items,
                           onChanged: (value) {
-                            context.read<AppFormCubit>().onSaved(value: value, name: item.name);
+                            if (item.onChange != null) {
+                              item.onChange!(value);
+                            }
+                            context.read<AppFormCubit>().saved(value: value, name: item.name);
                             // notifier.dataForm[item.name] = value;
-                            // if (item.onChange != null) {
-                            //   item.onChange!(value);
-                            // }
                           },
                         )
                       : Container();
@@ -53,7 +54,7 @@ class WidgetForm extends StatelessWidget {
                       ? WidgetInput(
                           label: item.label,
                           value: item.value,
-                          space: index != list.length - 1,
+                          space: index != state.list.length - 1,
                           maxLines: item.maxLines,
                           required: item.required,
                           enabled: item.enabled,
@@ -61,11 +62,11 @@ class WidgetForm extends StatelessWidget {
                           number: item.number,
                           placeholder: item.placeholder,
                           onChanged: (value) {
-                            context.read<AppFormCubit>().onSaved(value: value, name: item.name);
+                            if (item.onChange != null) {
+                              item.onChange!(value);
+                            }
+                            context.read<AppFormCubit>().saved(value: value, name: item.name);
                             // notifier.dataForm[item.name] = text;
-                            // if (item.onChange != null) {
-                            //   item.onChange!(value);
-                            // }
                           },
                           onTap: item.onTap,
                           icon: item.icon,

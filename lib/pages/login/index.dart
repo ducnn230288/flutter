@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../constants/index.dart';
 import '../../cubit/index.dart';
 import '../../models/form.dart';
+import '../../utils/index.dart';
 import '../../widgets/index.dart';
 
 class LoginPage extends StatelessWidget {
@@ -21,19 +22,19 @@ class LoginPage extends StatelessWidget {
   //   }
   // }
   //
-  // List<ModelFormItem> listEmail = [
-  //   ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
-  // ];
-  // handleEmail(data) async {
-  //   context.pushNamed(RoutesName.otpVerification, extra: 'Email');
-  //   // , arguments: 'Email'
-  // }
+
   @override
   Widget build(BuildContext context) {
     List<ModelFormItem> listFormItem = [
       ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
       ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
     ];
+    List<ModelFormItem> listEmail = [
+      ModelFormItem(name: 'email', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
+    ];
+    handleEmail() async {
+      GoRouter.of(context).pushNamed(RoutesName.otpVerification, extra: 'Email');
+    }
 
     return Scaffold(
       appBar: appBar(title: 'Đăng nhập', context: context),
@@ -53,35 +54,37 @@ class LoginPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // TextButton(
-                    //     onPressed: () => setState(() {
-                    //           rememberMe = !rememberMe;
-                    //         }),
-                    //     child: Row(
-                    //       children: [
-                    //         SizedBox(
-                    //           width: 20,
-                    //           height: 20,
-                    //           child: Checkbox(
-                    //             side: BorderSide(width: 1, color: ColorName.primary),
-                    //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                    //             value: rememberMe,
-                    //             onChanged: (bool? value) {},
-                    //           ),
-                    //         ),
-                    //         const SizedBox(
-                    //           width: 10,
-                    //         ),
-                    //         const Text('Lưu mật khẩu'),
-                    //       ],
-                    //     )),
-                    // TextButton(
-                    //     onPressed: () => Dialogs(context).showForm(
-                    //         title: 'Quên mật khẩu',
-                    //         formItem: listEmail,
-                    //         submit: handleEmail,
-                    //         textButton: 'Cấp lại mật khẩu'),
-                    //     child: const Text('Quên mật khẩu?'))
+                    BlocBuilder<AppFormCubit, AppFormState>(
+                      builder: (context, state) {
+                        return TextButton(
+                            onPressed: () => context.read<AppFormCubit>().savedBool(name: 'rememberMe'),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: Checkbox(
+                                    side: BorderSide(width: 1, color: ColorName.primary),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                                    value: state.data['rememberMe'] != null && state.data['rememberMe'],
+                                    onChanged: (bool? value) {},
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text('Lưu mật khẩu'),
+                              ],
+                            ));
+                      },
+                    ),
+                    TextButton(
+                        onPressed: () => Dialogs(context).showForm(
+                            title: 'Quên mật khẩu',
+                            formItem: listEmail,
+                            submit: handleEmail,
+                            textButton: 'Cấp lại mật khẩu'),
+                        child: const Text('Quên mật khẩu?'))
                   ],
                 ),
               ),
@@ -100,8 +103,12 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(
                       height: Space.large * 4,
                     ),
-                    ElevatedButton(
-                        onPressed: () => context.read<AppFormCubit>().onSubmitTap(), child: const Text('Đăng nhập')),
+                    BlocBuilder<AppFormCubit, AppFormState>(
+                      builder: (context, state) {
+                        return ElevatedButton(
+                            onPressed: () => context.read<AppFormCubit>().submit(), child: const Text('Đăng nhập'));
+                      },
+                    ),
                     const SizedBox(
                       height: Space.large * 2,
                     ),

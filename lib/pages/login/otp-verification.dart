@@ -6,34 +6,29 @@ import '../../constants/index.dart';
 import '../../utils/index.dart';
 import '../../widgets/index.dart';
 
-class OTPVerificationPage extends StatefulWidget {
+class OTPVerificationPage extends StatelessWidget {
   final Object? extra;
   const OTPVerificationPage({Key? key, required this.extra}) : super(key: key);
 
   @override
-  State<OTPVerificationPage> createState() => _OTPVerificationPageState();
-}
-
-class _OTPVerificationPageState extends State<OTPVerificationPage> with TickerProviderStateMixin {
-  final controller = TextEditingController();
-
-  handleSubmit() async {
-    if (controller.value.text.length == 6) {
-      Dialogs(context).showSuccess(
-          title: widget.extra == 'Register' ? 'Đăng ký thành công' : 'Đổi mật khẩu thành công',
-          onDismiss: (context) {
-            if (widget.extra == 'Register') {
-              GoRouter.of(context).pop();
-              GoRouter.of(context).pop();
-            } else {
-              GoRouter.of(context).pop();
-            }
-          });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
+
+    handleSubmit() async {
+      if (controller.value.text.length == 6) {
+        Dialogs(context).showSuccess(
+            title: extra == 'Register' ? 'Đăng ký thành công' : 'Đổi mật khẩu thành công',
+            onDismiss: (context) {
+              if (extra == 'Register') {
+                GoRouter.of(context).pop();
+                GoRouter.of(context).pop();
+              } else {
+                GoRouter.of(context).pop();
+              }
+            });
+      }
+    }
+
     const defaultPinTheme = PinTheme(
       width: 54,
       height: 54,
