@@ -1,6 +1,6 @@
-export '/pages/home.dart';
-export '/pages/introduction.dart';
-export '/pages/login/index.dart';
-export '/pages/login/otp-verification.dart';
-export '/pages/login/register.dart';
-export '/pages/login/layout.dart';
+export 'home.dart';
+export 'introduction.dart';
+export 'login/index.dart';
+export 'login/layout.dart';
+export 'login/otp-verification.dart';
+export 'login/register.dart';

@@ -1,5 +1,5 @@
-export '/constants/colors.dart';
-export '/constants/dimens.dart';
-export '/constants/icons.dart';
-export '/constants/routes.dart';
-export '/constants/style.dart';
+export 'colors.dart';
+export 'dimens.dart';
+export 'icons.dart';
+export 'routes.dart';
+export 'style.dart';

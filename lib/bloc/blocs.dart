@@ -9,16 +9,16 @@ class BlocWidget extends StatelessWidget {
 
   final Widget child;
 
-  final Repository _repository = Repository();
+  final Api _api = Api();
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: _repository,
+      value: _api,
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AppFormCubit>(
-            create: (BuildContext context) => AppFormCubit(),
+            create: (BuildContext context) => AppFormCubit(api: _api),
           ),
         ],
         child: child,

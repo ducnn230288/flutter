@@ -3,30 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../constants/index.dart';
-import '../../cubit/index.dart';
-import '../../models/form.dart';
-import '../../utils/index.dart';
-import '../../widgets/index.dart';
+import '/constants/index.dart';
+import '/cubit/index.dart';
+import '/models/form.dart';
+import '/utils/index.dart';
+import '/widgets/index.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
-
-  // bool rememberMe = false;
-  // handleSubmit() async {
-  //   if (formNotifier.formKey.currentState!.validate()) {
-  //     // Dialogs(context).startLoading();
-  //     formNotifier.dataForm['rememberMe'] = rememberMe;
-  //     print(formNotifier.dataForm);
-  //     // Navigator.pushNamed(context, RoutesName.registerPage);
-  //   }
-  // }
-  //
-
   @override
   Widget build(BuildContext context) {
     List<ModelFormItem> listFormItem = [
-      ModelFormItem(name: 'loginName', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
+      ModelFormItem(name: 'username', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
       ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
     ];
     List<ModelFormItem> listEmail = [
@@ -103,10 +91,15 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(
                       height: Space.large * 4,
                     ),
-                    BlocBuilder<AppFormCubit, AppFormState>(
+                    BlocConsumer<AppFormCubit, AppFormState>(
+                      listenWhen: (context, state) => state.status == AppStatus.success,
+                      listener: (context, state) => GoRouter.of(context).go(
+                        RoutesName.home,
+                      ),
                       builder: (context, state) {
                         return ElevatedButton(
-                            onPressed: () => context.read<AppFormCubit>().submit(), child: const Text('Đăng nhập'));
+                            onPressed: () => context.read<AppFormCubit>().submit(context: context),
+                            child: const Text('Đăng nhập'));
                       },
                     ),
                     const SizedBox(

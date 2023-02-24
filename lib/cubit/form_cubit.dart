@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../models/form.dart';
+import '/models/index.dart';
+import '/utils/index.dart';
 import 'cubit.dart';
 
 class AppFormCubit extends Cubit<AppFormState> {
-  AppFormCubit() : super(AppFormState(key: GlobalKey<FormState>(), data: {}, list: []));
+  AppFormCubit({required this.api}) : super(AppFormState(key: GlobalKey<FormState>(), data: {}, list: []));
+  final Api api;
 
   void setList({required List<ModelFormItem> list}) {
     emit(state.copyWith(list: list));
-    print(state.list[0].name);
   }
 
   void saved({String? value, required String name}) {
@@ -21,11 +22,21 @@ class AppFormCubit extends Cubit<AppFormState> {
     emit(state.copyWith(data: state.data));
   }
 
-  void submit() {
+  void submit({required BuildContext context}) async {
     if (state.formKey.currentState?.validate() == true) {
-      state.formKey.currentState?.save();
-      emit(state.copyWith(status: AppStatus.success, data: state.data));
-      print(state.data);
+      Dialogs dialogs = Dialogs(context);
+      dialogs.startLoading();
+      ModelApi result = await api.login(body: state.data);
+      dialogs.stopLoading();
+      if (result.isSuccess) {
+        dialogs.showSuccess(
+            title: result.message,
+            onDismiss: (context) {
+              emit(state.copyWith(status: AppStatus.success, data: {}, key: GlobalKey<FormState>()));
+            });
+      } else {
+        dialogs.showError(text: result.message);
+      }
     }
   }
 }

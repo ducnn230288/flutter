@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:uberentaltest/constants/index.dart';
+
+import '/constants/index.dart';
 
 class AppIcons {
   AppIcons._();

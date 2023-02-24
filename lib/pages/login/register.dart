@@ -2,10 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../constants/index.dart';
-import '../../cubit/index.dart';
-import '../../models/index.dart';
-import '../../widgets/index.dart';
+import '/constants/index.dart';
+import '/cubit/index.dart';
+import '/models/index.dart';
+import '/utils/api.dart';
+import '/widgets/index.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -58,12 +59,13 @@ class RegisterPage extends StatelessWidget {
     }
 
     listFormItem[4].onChange = onChangeType;
+    final Api api = Api();
 
     return Scaffold(
       appBar: appBar(title: 'Đăng ký', context: context),
       body: SizedBox(
         child: BlocProvider(
-          create: (context) => AppFormCubit(),
+          create: (context) => AppFormCubit(api: api),
           child: Center(
             child: ListView(
               shrinkWrap: true,
@@ -90,7 +92,8 @@ class RegisterPage extends StatelessWidget {
                         builder: (context, state) {
                           cubit = context.read<AppFormCubit>();
                           return ElevatedButton(
-                              onPressed: () => context.read<AppFormCubit>().submit(), child: Text('Đăng nhập'));
+                              onPressed: () => context.read<AppFormCubit>().submit(context: context),
+                              child: Text('Đăng nhập'));
                         },
                       ),
                       const SizedBox(

@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
+import '/constants/index.dart';
 import '/cubit/index.dart';
-import '../constants/index.dart';
-import '../models/index.dart';
-import '../widgets/index.dart';
+import '/models/index.dart';
+import '/utils/api.dart';
+import '/widgets/index.dart';
 
 class Dialogs {
   late BuildContext context;
+  final Api api = Api();
 
   Dialogs(this.context);
 
@@ -40,9 +42,20 @@ class Dialogs {
     Navigator.of(context).pop();
   }
 
+  Future<void> showError({String? text, String? title}) async {
+    return AwesomeDialog(
+      context: context,
+      animType: AnimType.leftSlide,
+      headerAnimationLoop: false,
+      dialogType: DialogType.error,
+      titleTextStyle: Style.title,
+      title: title,
+      desc: text,
+    ).show();
+  }
+
   Future<void> showSuccess({String? text, String? title, Function? onDismiss}) async {
     return AwesomeDialog(
-        padding: const EdgeInsets.all(0),
         context: context,
         autoHide: const Duration(seconds: 2),
         animType: AnimType.leftSlide,
@@ -72,7 +85,7 @@ class Dialogs {
       headerAnimationLoop: false,
       keyboardAware: true,
       body: BlocProvider(
-        create: (context) => AppFormCubit(),
+        create: (context) => AppFormCubit(api: api),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -98,7 +111,7 @@ class Dialogs {
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          context.read<AppFormCubit>().submit();
+                          context.read<AppFormCubit>().submit(context: context);
                         },
                         child: Text(textButton)),
                   );

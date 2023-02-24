@@ -2,16 +2,15 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../constants/index.dart';
-import '../../models/index.dart';
+import '/constants/index.dart';
+import '/models/index.dart';
 
-class WidgetSelect extends StatefulWidget {
+class WidgetSelect extends StatelessWidget {
   final String label;
   final bool space;
-  final icon;
-  final suffix;
-  final onChanged;
-  final onFind;
+  final String? icon;
+  final Function? onChanged;
+  final Function? onFind;
   final bool required;
   final bool enabled;
   final ModelOption? value;
@@ -22,20 +21,12 @@ class WidgetSelect extends StatefulWidget {
       this.label = '',
       this.value,
       this.icon,
-      this.suffix,
       this.onChanged,
       this.required = false,
       this.enabled = true,
       this.space = false,
       this.onFind,
       this.items});
-
-  @override
-  State<WidgetSelect> createState() => _WidgetSelectState();
-}
-
-class _WidgetSelectState extends State<WidgetSelect> {
-  ModelOption? value;
 
   @override
   Widget build(BuildContext context) {
@@ -49,33 +40,30 @@ class _WidgetSelectState extends State<WidgetSelect> {
                 BoxShadow(color: ColorName.black.shade50, blurRadius: Space.large / 3, spreadRadius: Space.large / 4)
               ]),
           child: DropdownSearch<ModelOption>(
-            items: widget.items ?? [],
-            selectedItem: widget.value,
+            items: items ?? [],
+            selectedItem: value,
             itemAsString: (ModelOption u) => u.label,
-            enabled: widget.enabled,
+            enabled: enabled,
             onChanged: (ModelOption? text) {
-              setState(() {
-                value = text;
-              });
-              widget.onChanged!(text!.value);
+              onChanged!(text!.value);
             },
             autoValidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
-              if (widget.required && value == null) return ('Required content');
+              if (required && value == null) return ('Required content');
               return null;
             },
             // popupProps: const PopupProps.bottomSheet(),
             dropdownDecoratorProps: DropDownDecoratorProps(
               baseStyle: TextStyle(color: ColorName.primary),
               dropdownSearchDecoration: InputDecoration(
-                labelText: widget.label,
+                labelText: label,
                 labelStyle: TextStyle(color: ColorName.black.shade400, fontSize: FontSizes.paragraph1),
-                prefixIcon: widget.icon != ''
+                prefixIcon: icon != ''
                     ? Container(
                         padding: const EdgeInsets.all(Space.medium),
                         child: SvgPicture.asset(
-                          widget.icon ?? '',
-                          semanticsLabel: widget.label,
+                          icon ?? '',
+                          semanticsLabel: label,
                           width: 0,
                         ),
                       )
@@ -108,7 +96,7 @@ class _WidgetSelectState extends State<WidgetSelect> {
             // filterFn: (user, filter) => onFind(filter),
           ),
         ),
-        SizedBox(height: widget.space ? Space.large : 0),
+        SizedBox(height: space ? Space.large : 0),
       ],
     );
   }

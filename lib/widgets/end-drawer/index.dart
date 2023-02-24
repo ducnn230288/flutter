@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/index.dart';
+import '/constants/index.dart';
 import 'list-tile.dart';
 
 endDrawer({context}) {

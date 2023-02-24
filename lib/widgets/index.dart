@@ -1,3 +1,3 @@
-export '/widgets/appbar.dart';
-export '/widgets/end-drawer/index.dart';
-export '/widgets/form/index.dart';
+export 'appbar.dart';
+export 'end-drawer/index.dart';
+export 'form/index.dart';

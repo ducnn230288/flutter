@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../constants/index.dart';
+import '/constants/index.dart';
 
 appBar({required title, required BuildContext context}) {
   double height = AppBar().preferredSize.height;

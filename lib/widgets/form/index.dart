@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubit/index.dart';
-import '../../models/index.dart';
+import '/cubit/index.dart';
+import '/models/index.dart';
 import 'input.dart';
 import 'select.dart';
 
