@@ -1,6 +1,6 @@
 export 'home.dart';
-export 'introduction.dart';
-export 'login/index.dart';
-export 'login/layout.dart';
-export 'login/otp-verification.dart';
+export 'login/introduction.dart';
+export 'login/login.dart';
+export 'login/otp_verification.dart';
 export 'login/register.dart';
+export 'splash.dart';

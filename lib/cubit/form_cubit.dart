@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uberentaltest/cubit/auth_cubit.dart';
 
 import '/models/index.dart';
 import '/utils/index.dart';
 import 'cubit.dart';
 
 class AppFormCubit extends Cubit<AppFormState> {
-  AppFormCubit({required this.api}) : super(AppFormState(key: GlobalKey<FormState>(), data: {}, list: []));
-  final Api api;
+  AppFormCubit() : super(AppFormState(key: GlobalKey<FormState>(), data: {}, list: []));
 
   void setList({required List<ModelFormItem> list}) {
     emit(state.copyWith(list: list));
@@ -24,14 +24,17 @@ class AppFormCubit extends Cubit<AppFormState> {
 
   void submit({required BuildContext context}) async {
     if (state.formKey.currentState?.validate() == true) {
+      AppAuthCubit cubit = context.read<AppAuthCubit>();
       Dialogs dialogs = Dialogs(context);
       dialogs.startLoading();
-      ModelApi result = await api.login(body: state.data);
+
+      ModelApi result = await RepositoryProvider.of<Api>(context).login(body: state.data);
       dialogs.stopLoading();
       if (result.isSuccess) {
         dialogs.showSuccess(
             title: result.message,
             onDismiss: (context) {
+              cubit.save(data: result.data);
               emit(state.copyWith(status: AppStatus.success, data: {}, key: GlobalKey<FormState>()));
             });
       } else {
@@ -48,7 +51,7 @@ class AppFormState {
   final List<ModelFormItem> list;
 
   AppFormState({
-    this.status = AppStatus.inProgress,
+    this.status = AppStatus.init,
     required GlobalKey<FormState> key,
     required this.data,
     required this.list,

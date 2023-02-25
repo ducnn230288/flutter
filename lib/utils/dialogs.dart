@@ -6,12 +6,10 @@ import 'package:lottie/lottie.dart';
 import '/constants/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
-import '/utils/api.dart';
 import '/widgets/index.dart';
 
 class Dialogs {
   late BuildContext context;
-  final Api api = Api();
 
   Dialogs(this.context);
 
@@ -85,7 +83,7 @@ class Dialogs {
       headerAnimationLoop: false,
       keyboardAware: true,
       body: BlocProvider(
-        create: (context) => AppFormCubit(api: api),
+        create: (context) => AppFormCubit(),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

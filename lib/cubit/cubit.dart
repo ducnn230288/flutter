@@ -1,1 +1,1 @@
-enum AppStatus { inProgress, success }
+enum AppStatus { init, success, fails }

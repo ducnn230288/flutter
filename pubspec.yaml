@@ -47,6 +47,7 @@ dependencies:
   go_router: ^6.0.10
   http: ^0.13.5
   flutter_bloc: ^8.1.2
+  shared_preferences: ^2.0.18
 
 
 dev_dependencies:

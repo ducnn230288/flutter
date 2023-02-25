@@ -49,11 +49,11 @@ class ModelFormItem {
         password: json["password"] ?? false,
         number: json["number"] ?? false,
         placeholder: json["placeholder"] ?? true,
-        onTap: json["onTap"] ?? null,
-        onFind: json["onFind"] ?? null,
-        onChange: json["onChange"] ?? null,
-        icon: json["icon"] ?? null,
-        suffix: json["suffix"] ?? null,
+        onTap: json["onTap"],
+        onFind: json["onFind"],
+        onChange: json["onChange"],
+        icon: json["icon"],
+        suffix: json["suffix"],
         items: json["items"] != null ? List<ModelOption>.from(json["items"].map((x) => ModelOption.fromJson(x))) : null,
       );
 

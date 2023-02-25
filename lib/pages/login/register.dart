@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/constants/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
-import '/utils/api.dart';
 import '/widgets/index.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -17,7 +16,9 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ModelFormItem> listFormItem = [
+    AppFormCubit cubit = context.read<AppFormCubit>();
+
+    final List<ModelFormItem> listFormItem = [
       ModelFormItem(name: 'fullname', placeholder: true, label: 'Họ và tên', icon: 'assets/form/fullname.svg'),
       ModelFormItem(
         name: 'email',
@@ -46,7 +47,6 @@ class RegisterPage extends StatelessWidget {
             ModelOption(label: 'Bằng điều dưỡng', value: 'value1'),
           ])
     ];
-    AppFormCubit cubit = context.read<AppFormCubit>();
     onChangeType(String text) async {
       if (text == 'value2' && !listFormItem[5].show) {
         listFormItem[5].show = true;
@@ -59,68 +59,57 @@ class RegisterPage extends StatelessWidget {
     }
 
     listFormItem[4].onChange = onChangeType;
-    final Api api = Api();
 
     return Scaffold(
       appBar: appBar(title: 'Đăng ký', context: context),
       body: SizedBox(
-        child: BlocProvider(
-          create: (context) => AppFormCubit(api: api),
-          child: Center(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                const SizedBox(
-                  height: Space.large,
+        child: Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              const SizedBox(
+                height: Space.large,
+              ),
+              BlocListener<AppFormCubit, AppFormState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: Space.large),
+                    child: WidgetForm(list: listFormItem)),
+              ),
+              const SizedBox(
+                height: Space.large * 2,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: Space.large),
+                child: Column(
+                  children: [
+                    ElevatedButton(onPressed: () => cubit.submit(context: context), child: const Text('Đăng ký')),
+                    const SizedBox(
+                      height: Space.large * 2,
+                    ),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text: "Ban đã có tài khoản? ",
+                          children: [
+                            TextSpan(
+                                text: "Đăng ký",
+                                style: TextStyle(color: ColorName.primary),
+                                recognizer: TapGestureRecognizer()..onTap = () => {Navigator.pop(context)})
+                          ],
+                          style: TextStyle(
+                            color: ColorName.black.shade300,
+                          )),
+                    ),
+                  ],
                 ),
-                BlocListener<AppFormCubit, AppFormState>(
-                  listener: (context, state) {
-                    // TODO: implement listener
-                  },
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: Space.large),
-                      child: WidgetForm(list: listFormItem)),
-                ),
-                const SizedBox(
-                  height: Space.large * 2,
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: Space.large),
-                  child: Column(
-                    children: [
-                      BlocBuilder<AppFormCubit, AppFormState>(
-                        builder: (context, state) {
-                          cubit = context.read<AppFormCubit>();
-                          return ElevatedButton(
-                              onPressed: () => context.read<AppFormCubit>().submit(context: context),
-                              child: Text('Đăng nhập'));
-                        },
-                      ),
-                      const SizedBox(
-                        height: Space.large * 2,
-                      ),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            text: "Ban đã có tài khoản? ",
-                            children: [
-                              TextSpan(
-                                  text: "Đăng ký",
-                                  style: TextStyle(color: ColorName.primary),
-                                  recognizer: TapGestureRecognizer()..onTap = () => {Navigator.pop(context)})
-                            ],
-                            style: TextStyle(
-                              color: ColorName.black.shade300,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: Space.large,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: Space.large,
+              ),
+            ],
           ),
         ),
       ),
