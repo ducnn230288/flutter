@@ -19,8 +19,18 @@ class Api {
   // }
 
   Future<ModelApi> login({required body}) async {
-    dynamic result =
+    http.Response result =
         await http.post(Uri.parse('$endpoint/authentication/jwt/login'), body: jsonEncode(body), headers: headers);
     return ModelApi.fromJson(jsonDecode(result.body));
+  }
+
+  Future<ModelApi?> info({required String token}) async {
+    headers['Authorization'] = 'Bearer $token';
+    http.Response result =
+        await http.post(Uri.parse('$endpoint/authentication/jwt/info'), body: jsonEncode({}), headers: headers);
+    if (result.statusCode != 401) {
+      return ModelApi.fromJson(jsonDecode(result.body));
+    }
+    return null;
   }
 }

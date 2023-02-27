@@ -13,7 +13,7 @@ class ModelApi {
   String message;
   int totalTime;
   String? errorDetail;
-  Object? data;
+  Map? data;
 
   factory ModelApi.fromJson(Map<String, dynamic> json) => ModelApi(
         code: json["code"] ?? 400,

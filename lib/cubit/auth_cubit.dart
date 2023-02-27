@@ -1,44 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uberentaltest/models/user.dart';
 
 import '/constants/index.dart';
 import '/models/index.dart';
-import 'cubit.dart';
+import '/utils/api.dart';
+import 'index.dart';
 
 class AppAuthCubit extends Cubit<AppAuthState> {
   AppAuthCubit() : super(AppAuthState());
 
-  void check() async {
+  void check(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString(Prefs.token);
+    String token = prefs.getString(Prefs.token) ?? '';
 
-    if ((token ?? "").isEmpty) {
+    if ((token).isEmpty) {
       emit(state.copyWith(status: AppStatus.fails));
-    } else {}
+    } else {
+      if (context.mounted) {
+        ModelApi? result = await RepositoryProvider.of<Api>(context).info(token: token);
+        if (result != null && result.isSuccess) {
+          final ModelUser user = ModelUser.fromJson(result.data!['userModel']);
+          emit(state.copyWith(status: AppStatus.success, user: user));
+        } else {
+          prefs.remove(Prefs.token);
+          emit(state.copyWith(status: AppStatus.fails));
+        }
+      }
+    }
   }
 
   void save({required data}) async {
-    print(data);
-    // final prefs = await SharedPreferences.getInstance();
-    // prefs.setString(Prefs.token, 'value');
+    final ModelUser user = ModelUser.fromJson(data['userModel']);
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(Prefs.token, data['tokenString']);
+    emit(state.copyWith(status: AppStatus.success, user: user));
   }
 }
 
 class AppAuthState {
   final AppStatus status;
-  final Map<String, dynamic>? data;
+  final ModelUser? user;
 
   AppAuthState({
     this.status = AppStatus.init,
-    this.data,
+    this.user,
   });
 
-  AppAuthState copyWith(
-      {AppStatus? status, GlobalKey<FormState>? key, Map<String, dynamic>? data, List<ModelFormItem>? list}) {
+  AppAuthState copyWith({AppStatus? status, GlobalKey<FormState>? key, ModelUser? user}) {
     return AppAuthState(
       status: status ?? this.status,
-      data: data ?? this.data,
+      user: user ?? this.user,
     );
   }
 }
