@@ -6,6 +6,7 @@ import '/constants/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/widgets/index.dart';
+import '../../utils/index.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -19,27 +20,31 @@ class RegisterPage extends StatelessWidget {
     AppFormCubit cubit = context.read<AppFormCubit>();
 
     final List<ModelFormItem> listFormItem = [
-      ModelFormItem(name: 'fullname', placeholder: true, label: 'Họ và tên', icon: 'assets/form/fullname.svg'),
+      ModelFormItem(name: 'name', placeholder: true, label: 'Họ và tên', icon: 'assets/form/full-name.svg'),
       ModelFormItem(
         name: 'email',
         label: 'Địa chỉ email',
         icon: 'assets/form/mail.svg',
       ),
+      ModelFormItem(type: "select", name: 'gender', label: 'Giới tính', icon: 'assets/form/gender.svg', items: [
+        ModelOption(label: 'Nam', value: 'MALE'),
+        ModelOption(label: 'Nữ', value: 'FEMALE'),
+      ]),
       ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true),
       ModelFormItem(
           name: 'confirmPassword', label: 'Nhập lại mật khẩu', icon: 'assets/form/password.svg', password: true),
       ModelFormItem(
           type: "select",
-          name: 'type',
+          name: 'role',
           label: 'Loại tài khoản',
           icon: 'assets/form/type-account.svg',
           items: [
-            ModelOption(label: 'Order Side', value: 'value1'),
-            ModelOption(label: 'Farmer Side', value: 'value2'),
+            ModelOption(label: 'Order Side', value: 'ORDER_SIDE'),
+            ModelOption(label: 'Farmer Side', value: 'FARMER_SIDE'),
           ]),
       ModelFormItem(
           type: "select",
-          name: 'degree',
+          name: 'professionalDegree',
           label: 'Bằng cấp chuyên môn',
           icon: 'assets/form/degree.svg',
           show: false,
@@ -48,17 +53,17 @@ class RegisterPage extends StatelessWidget {
           ])
     ];
     onChangeType(String text) async {
-      if (text == 'value2' && !listFormItem[5].show) {
-        listFormItem[5].show = true;
+      if (text == 'FARMER_SIDE' && !listFormItem[6].show) {
+        listFormItem[6].show = true;
         cubit.setList(list: listFormItem);
-      } else if (text != 'value2' && listFormItem[5].show) {
-        listFormItem[5].show = false;
+      } else if (text != 'FARMER_SIDE' && listFormItem[6].show) {
+        listFormItem[6].show = false;
         cubit.saved(name: 'degree', value: null);
         cubit.setList(list: listFormItem);
       }
     }
 
-    listFormItem[4].onChange = onChangeType;
+    listFormItem[5].onChange = onChangeType;
 
     return Scaffold(
       appBar: appBar(title: 'Đăng ký', context: context),
@@ -85,7 +90,15 @@ class RegisterPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: Space.large),
                 child: Column(
                   children: [
-                    ElevatedButton(onPressed: () => cubit.submit(context: context), child: const Text('Đăng ký')),
+                    BlocConsumer<AppFormCubit, AppFormState>(
+                      listenWhen: (context, state) => state.status == AppStatus.success,
+                      listener: (context, state) => Navigator.pop(context),
+                      builder: (context, state) => ElevatedButton(
+                          onPressed: () => cubit.submit(
+                              context: context,
+                              api: (body) => RepositoryProvider.of<Api>(context).register(body: body)),
+                          child: const Text('Đăng ký')),
+                    ),
                     const SizedBox(
                       height: Space.large * 2,
                     ),

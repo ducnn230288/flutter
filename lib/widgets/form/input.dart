@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '/constants/index.dart';
 
-class WidgetInput extends StatefulWidget {
+class WidgetInput extends StatelessWidget {
   final String label;
   final bool space;
   final String value;
@@ -38,40 +38,14 @@ class WidgetInput extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  WidgetInputState createState() => WidgetInputState();
-}
-
-class WidgetInputState extends State<WidgetInput> {
-  FocusNode focusNode = FocusNode();
-  String value = '';
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void initState() {
-    _controller.text = widget.value;
-    value = widget.value;
-    focusNode.addListener(() {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  setValue(String text) {
-    setState(() {
-      _controller.text = text;
-      value = text;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.stackedLabel
+        stackedLabel
             ? Column(
                 children: [
-                  Text(widget.label,
+                  Text(label,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: FontSizes.paragraph1,
@@ -91,43 +65,40 @@ class WidgetInputState extends State<WidgetInput> {
               ]),
           child: TextFormField(
             onTap: () {
-              if (widget.onTap != null) {
-                widget.onTap!();
+              if (onTap != null) {
+                onTap!();
               }
             },
-            controller: _controller,
-            readOnly: widget.onTap != null,
-            focusNode: focusNode,
+            readOnly: onTap != null,
             textInputAction: TextInputAction.next,
             style: TextStyle(color: ColorName.primary),
             onChanged: (String text) {
-              value = text;
-              widget.onChanged!(text);
+              onChanged!(text);
             },
             validator: (value) {
-              if (widget.required && value == '') {
+              if (required && value == '') {
                 return 'Required content';
               }
               return null;
             },
-            obscureText: widget.password,
-            keyboardType: widget.number ? TextInputType.number : null,
+            obscureText: password,
+            keyboardType: number ? TextInputType.number : null,
             decoration: InputDecoration(
-              labelText: widget.label,
+              labelText: label,
               labelStyle: TextStyle(color: ColorName.black.shade400, fontSize: FontSizes.paragraph1),
-              prefixIcon: widget.icon != ''
+              prefixIcon: icon != ''
                   ? Container(
                       padding: const EdgeInsets.all(Space.medium),
                       child: SvgPicture.asset(
-                        widget.icon ?? '',
-                        semanticsLabel: widget.label,
+                        icon ?? '',
+                        semanticsLabel: label,
                         width: 0,
-                        color: focusNode.hasFocus ? ColorName.primary : ColorName.black.shade400,
+                        color: ColorName.black.shade400,
                       ),
                     )
                   : null,
-              suffixText: widget.suffix,
-              enabled: widget.enabled,
+              suffixText: suffix,
+              enabled: enabled,
               focusedBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
                 borderSide: BorderSide(color: ColorName.primary, width: 0),
@@ -153,10 +124,10 @@ class WidgetInputState extends State<WidgetInput> {
               filled: true,
             ),
             minLines: 1,
-            maxLines: widget.maxLines,
+            maxLines: maxLines,
           ),
         ),
-        SizedBox(height: widget.space ? Space.large : 0),
+        SizedBox(height: space ? Space.large : 0),
       ],
     );
   }

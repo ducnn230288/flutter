@@ -65,6 +65,7 @@ class WidgetSelect extends StatelessWidget {
                           icon ?? '',
                           semanticsLabel: label,
                           width: 0,
+                          color: ColorName.black.shade400,
                         ),
                       )
                     : null,

@@ -7,7 +7,7 @@ class ModelUser {
   // final String? contractSigningDate;
   final Country? country;
   final String? countryCode;
-  final String currency;
+  final String? currency;
   // final String? currentTotalLeaveDay;
   final String? designation;
   final String email;
@@ -15,7 +15,6 @@ class ModelUser {
   final String? gtsNumber;
   final String id;
   final String? identificationNumber;
-  final String industryString;
   final bool isLockedOut;
   final String language;
   final String lastActivityDate;
@@ -28,10 +27,6 @@ class ModelUser {
   final String name;
   // final String partner;
   final String phoneNumber;
-  final List<PreferredIndustryList> preferredIndustryList;
-  final List<String> preferredIndustryListCode;
-  final List<PreferredLocationList> preferredLocationList;
-  final List<String> preferredLocationListCode;
   final String recentPaymentString;
   final String? timeZone;
   final int type;
@@ -45,13 +40,12 @@ class ModelUser {
     this.company,
     this.country,
     this.countryCode,
-    required this.currency,
+    this.currency,
     this.designation,
     required this.email,
     this.gtsNumber,
     required this.id,
     this.identificationNumber,
-    required this.industryString,
     required this.isLockedOut,
     required this.language,
     required this.lastActivityDate,
@@ -62,10 +56,6 @@ class ModelUser {
     required this.locationString,
     required this.name,
     required this.phoneNumber,
-    required this.preferredIndustryList,
-    required this.preferredIndustryListCode,
-    required this.preferredLocationList,
-    required this.preferredLocationListCode,
     required this.recentPaymentString,
     this.timeZone,
     required this.type,
@@ -84,12 +74,6 @@ class ModelUser {
         designation = json['designation'] as String?,
         gtsNumber = json['gtsNumber'] as String?,
         identificationNumber = json['identificationNumber'] as String?,
-        industryString = json['industryString'] as String,
-        preferredIndustryListCode =
-            (json['preferredIndustryListCode'] as List).map((dynamic e) => e as String).toList(),
-        preferredIndustryList = (json['preferredIndustryList'] as List)
-            .map((dynamic e) => PreferredIndustryList.fromJson(e as Map<String, dynamic>))
-            .toList(),
         countryCode = json['countryCode'] as String?,
         country = (json['country'] as Map<String, dynamic>?) != null
             ? Country.fromJson(json['country'] as Map<String, dynamic>)
@@ -100,13 +84,8 @@ class ModelUser {
         location = (json['location'] as Map<String, dynamic>?) != null
             ? Location.fromJson(json['location'] as Map<String, dynamic>)
             : null,
-        preferredLocationList = (json['preferredLocationList'] as List)
-            .map((dynamic e) => PreferredLocationList.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        preferredLocationListCode =
-            (json['preferredLocationListCode'] as List).map((dynamic e) => e as String).toList(),
         timeZone = json['timeZone'] as String?,
-        currency = json['currency'] as String,
+        currency = json['currency'] as String?,
         language = json['language'] as String,
         type = json['type'] as int,
         recentPaymentString = json['recentPaymentString'] as String,
@@ -128,16 +107,11 @@ class ModelUser {
         'designation': designation,
         'gtsNumber': gtsNumber,
         'identificationNumber': identificationNumber,
-        'industryString': industryString,
-        'preferredIndustryListCode': preferredIndustryListCode,
-        'preferredIndustryList': preferredIndustryList.map((e) => e.toJson()).toList(),
         'countryCode': countryCode,
         'country': country?.toJson(),
         'locationString': locationString,
         'locationCode': locationCode,
         'location': location?.toJson(),
-        'preferredLocationList': preferredLocationList.map((e) => e.toJson()).toList(),
-        'preferredLocationListCode': preferredLocationListCode,
         'timeZone': timeZone,
         'currency': currency,
         'language': language,

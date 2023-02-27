@@ -20,9 +20,6 @@ class LoginPage extends StatelessWidget {
     List<ModelFormItem> listEmail = [
       ModelFormItem(name: 'email', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
     ];
-    handleEmail() async {
-      GoRouter.of(context).pushNamed(RoutesName.otpVerification, extra: 'Email');
-    }
 
     return Scaffold(
       appBar: appBar(title: 'Đăng nhập', context: context),
@@ -43,34 +40,32 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     BlocBuilder<AppFormCubit, AppFormState>(
-                      builder: (context, state) {
-                        return TextButton(
-                            onPressed: () => context.read<AppFormCubit>().savedBool(name: 'rememberMe'),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: Checkbox(
-                                    side: BorderSide(width: 1, color: ColorName.primary),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                                    value: state.data['rememberMe'] != null && state.data['rememberMe'],
-                                    onChanged: (bool? value) {},
-                                  ),
+                      builder: (context, state) => TextButton(
+                          onPressed: () => context.read<AppFormCubit>().savedBool(name: 'rememberMe'),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: Checkbox(
+                                  side: BorderSide(width: 1, color: ColorName.primary),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                                  value: state.data['rememberMe'] != null && state.data['rememberMe'],
+                                  onChanged: (bool? value) {},
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text('Lưu mật khẩu'),
-                              ],
-                            ));
-                      },
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text('Lưu mật khẩu'),
+                            ],
+                          )),
                     ),
                     TextButton(
                         onPressed: () => Dialogs(context).showForm(
                             title: 'Quên mật khẩu',
                             formItem: listEmail,
-                            submit: handleEmail,
+                            api: (body) => RepositoryProvider.of<Api>(context).forgotPassword(email: body['email']),
                             textButton: 'Cấp lại mật khẩu'),
                         child: const Text('Quên mật khẩu?'))
                   ],
@@ -92,16 +87,16 @@ class LoginPage extends StatelessWidget {
                       height: Space.large * 4,
                     ),
                     BlocConsumer<AppFormCubit, AppFormState>(
-                      listenWhen: (context, state) => state.status == AppStatus.success,
-                      listener: (context, state) => GoRouter.of(context).go(
-                        RoutesName.home,
-                      ),
-                      builder: (context, state) {
-                        return ElevatedButton(
-                            onPressed: () => context.read<AppFormCubit>().submit(context: context),
-                            child: const Text('Đăng nhập'));
-                      },
-                    ),
+                        listenWhen: (context, state) => state.status == AppStatus.success,
+                        listener: (context, state) => GoRouter.of(context).go(
+                              RoutesName.home,
+                            ),
+                        builder: (context, state) => ElevatedButton(
+                            onPressed: () => context.read<AppFormCubit>().submit(
+                                context: context,
+                                api: (body) => RepositoryProvider.of<Api>(context).login(body: body),
+                                submit: (data) => context.read<AppAuthCubit>().save(data: data)),
+                            child: const Text('Đăng nhập'))),
                     const SizedBox(
                       height: Space.large * 2,
                     ),

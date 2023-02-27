@@ -72,7 +72,8 @@ class Dialogs {
   Future<void> showForm(
       {required String title,
       required List<ModelFormItem> formItem,
-      required submit,
+      required Function api,
+      submit,
       String textButton = 'Xác nhận'}) async {
     late AwesomeDialog dialog;
     dialog = AwesomeDialog(
@@ -105,11 +106,13 @@ class Dialogs {
                     listenWhen: (context, state) => state.status == AppStatus.success,
                     listener: (context, state) {
                       dialog.dismiss();
-                      submit();
+                      if (submit != null) {
+                        submit();
+                      }
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          context.read<AppFormCubit>().submit(context: context);
+                          context.read<AppFormCubit>().submit(context: context, api: api);
                         },
                         child: Text(textButton)),
                   );

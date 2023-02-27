@@ -21,19 +21,20 @@ class AppFormCubit extends Cubit<AppFormState> {
     emit(state.copyWith(data: state.data));
   }
 
-  void submit({required BuildContext context}) async {
+  void submit({required BuildContext context, Function? submit, required Function api}) async {
     if (state.formKey.currentState?.validate() == true) {
-      AppAuthCubit cubit = context.read<AppAuthCubit>();
       Dialogs dialogs = Dialogs(context);
       dialogs.startLoading();
 
-      ModelApi result = await RepositoryProvider.of<Api>(context).login(body: state.data);
+      ModelApi result = await api(state.data);
       dialogs.stopLoading();
       if (result.isSuccess) {
         dialogs.showSuccess(
             title: result.message,
             onDismiss: (context) {
-              cubit.save(data: result.data);
+              if (submit != null) {
+                submit(result.data);
+              }
               emit(state.copyWith(status: AppStatus.success, data: {}, key: GlobalKey<FormState>()));
             });
       } else {
