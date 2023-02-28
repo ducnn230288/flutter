@@ -1,0 +1,35 @@
+class ModelList {
+  ModelList({
+    this.page = 1,
+    this.totalPages = 1,
+    this.size = 20,
+    this.numberOfElements = 1,
+    this.totalElements = 1,
+    this.content,
+  });
+
+  int page;
+  int totalPages;
+  int size;
+  int numberOfElements;
+  int totalElements;
+  List? content;
+
+  factory ModelList.fromJson(Map<String, dynamic> json) => ModelList(
+        page: json["page"] ?? 1,
+        totalPages: json["totalPages"] ?? 1,
+        size: json["size"] ?? 1,
+        numberOfElements: json["numberOfElements"] ?? 20,
+        totalElements: json["totalElements"] ?? 1,
+        content: json["content"] ?? [],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "page": page,
+        "totalPages": totalPages,
+        "size": size,
+        "numberOfElements": numberOfElements,
+        "totalElements": totalElements,
+        "data": content,
+      };
+}

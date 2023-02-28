@@ -5,7 +5,7 @@ import '/constants/index.dart';
 
 itemDrawer({required String svg, required String name, onTap, bool isBorder = true}) => ListTile(
       minLeadingWidth: 0,
-      contentPadding: const EdgeInsets.only(right: Space.large),
+      contentPadding: const EdgeInsets.only(right: 0),
       leading: SvgPicture.asset(
         svg,
         semanticsLabel: name,
@@ -13,7 +13,7 @@ itemDrawer({required String svg, required String name, onTap, bool isBorder = tr
         color: ColorName.black,
       ),
       shape: Border(
-        bottom: BorderSide(width: 0, color: isBorder ? ColorName.black.shade200 : Colors.transparent),
+        bottom: BorderSide(width: 0, color: isBorder ? ColorName.black.shade100 : Colors.transparent),
       ),
       title: Text(
         name,

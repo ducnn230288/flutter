@@ -11,10 +11,17 @@ class Api {
 
   final headers = {"Content-Type": "application/json"};
 
+  Future<ModelApi?> checkAuth({required http.Response result, required logout}) async {
+    if (result.statusCode < 400) {
+      return ModelApi.fromJson(jsonDecode(result.body));
+    } else if (result.statusCode == 401 && logout != null) {
+      logout();
+    }
+    return null;
+  }
+
   // Future<List<Map<String, dynamic>>> login({required body}) async {
   //   var result = await http.post(Uri.parse('$endpoint/authentication/jwt/login'), body: jsonEncode(body));
-  //   print('result');
-  //   print(result);
   //   return List.castFrom<dynamic, Map<String, dynamic>>(jsonDecode(result.body)['results']);
   // }
 
@@ -45,4 +52,7 @@ class Api {
     }
     return null;
   }
+
+  Future<ModelApi?> getUser({required logout}) async =>
+      checkAuth(result: await http.get(Uri.parse('$endpoint/idm/users'), headers: headers), logout: logout);
 }

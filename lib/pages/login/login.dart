@@ -13,6 +13,8 @@ class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    AppAuthCubit auth = context.read<AppAuthCubit>();
+
     List<ModelFormItem> listFormItem = [
       ModelFormItem(name: 'username', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
       ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
@@ -65,7 +67,8 @@ class LoginPage extends StatelessWidget {
                         onPressed: () => Dialogs(context).showForm(
                             title: 'Quên mật khẩu',
                             formItem: listEmail,
-                            api: (body) => RepositoryProvider.of<Api>(context).forgotPassword(email: body['email']),
+                            api: (body, logout) =>
+                                RepositoryProvider.of<Api>(context).forgotPassword(email: body['email']),
                             textButton: 'Cấp lại mật khẩu'),
                         child: const Text('Quên mật khẩu?'))
                   ],
@@ -94,7 +97,8 @@ class LoginPage extends StatelessWidget {
                         builder: (context, state) => ElevatedButton(
                             onPressed: () => context.read<AppFormCubit>().submit(
                                 context: context,
-                                api: (body) => RepositoryProvider.of<Api>(context).login(body: body),
+                                auth: auth,
+                                api: (body, logout) => RepositoryProvider.of<Api>(context).login(body: body),
                                 submit: (data) => context.read<AppAuthCubit>().save(data: data)),
                             child: const Text('Đăng nhập'))),
                     const SizedBox(

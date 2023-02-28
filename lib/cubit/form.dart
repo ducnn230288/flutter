@@ -21,24 +21,38 @@ class AppFormCubit extends Cubit<AppFormState> {
     emit(state.copyWith(data: state.data));
   }
 
-  void submit({required BuildContext context, Function? submit, required Function api}) async {
+  void submit(
+      {required BuildContext context,
+      Function? submit,
+      required Function api,
+      required AppAuthCubit auth,
+      bool getData = false}) async {
     if (state.formKey.currentState?.validate() == true) {
       Dialogs dialogs = Dialogs(context);
       dialogs.startLoading();
 
-      ModelApi result = await api(state.data);
+      ModelApi? result = await api(state.data, auth.logout);
       dialogs.stopLoading();
-      if (result.isSuccess) {
-        dialogs.showSuccess(
-            title: result.message,
-            onDismiss: (context) {
-              if (submit != null) {
-                submit(result.data);
-              }
-              emit(state.copyWith(status: AppStatus.success, data: {}, key: GlobalKey<FormState>()));
-            });
-      } else {
-        dialogs.showError(text: result.message);
+      if (result != null) {
+        if (result.isSuccess) {
+          if (!getData) {
+            dialogs.showSuccess(
+                title: result.message,
+                onDismiss: (context) {
+                  if (submit != null) {
+                    submit(result.data);
+                  }
+                  emit(state.copyWith(status: AppStatus.success, data: {}, key: GlobalKey<FormState>()));
+                });
+          } else {
+            if (submit != null) {
+              submit(ModelList.fromJson(result.data));
+            }
+            emit(state.copyWith(status: AppStatus.success, data: {}));
+          }
+        } else {
+          dialogs.showError(text: result.message);
+        }
       }
     }
   }

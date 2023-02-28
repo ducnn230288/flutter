@@ -57,5 +57,8 @@ GoRoute homeRoute() => GoRoute(
 GoRoute userRoute() => GoRoute(
       name: RoutesName.user,
       path: RoutesName.user,
-      builder: (BuildContext context, GoRouterState state) => const UserPage(),
+      builder: (BuildContext context, GoRouterState state) => BlocProvider(
+        create: (context) => AppListCubit(),
+        child: const UserPage(),
+      ),
     );

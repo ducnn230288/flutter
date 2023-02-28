@@ -112,7 +112,8 @@ class Dialogs {
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          context.read<AppFormCubit>().submit(context: context, api: api);
+                          AppAuthCubit auth = context.read<AppAuthCubit>();
+                          context.read<AppFormCubit>().submit(auth: auth, context: context, api: api);
                         },
                         child: Text(textButton)),
                   );

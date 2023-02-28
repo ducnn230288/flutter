@@ -35,4 +35,8 @@ class AppIcons {
     width: FontSizes.paragraph2,
     color: Colors.white,
   );
+
+  static final placeholderImage = Image.asset(
+    'assets/images/placeholder.jpeg',
+  );
 }

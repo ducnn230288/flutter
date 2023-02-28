@@ -18,6 +18,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppFormCubit cubit = context.read<AppFormCubit>();
+    AppAuthCubit auth = context.read<AppAuthCubit>();
 
     final List<ModelFormItem> listFormItem = [
       ModelFormItem(name: 'name', label: 'Họ và tên', icon: 'assets/form/full-name.svg'),
@@ -96,7 +97,8 @@ class RegisterPage extends StatelessWidget {
                       builder: (context, state) => ElevatedButton(
                           onPressed: () => cubit.submit(
                               context: context,
-                              api: (body) => RepositoryProvider.of<Api>(context).register(body: body)),
+                              auth: auth,
+                              api: (body, logout) => RepositoryProvider.of<Api>(context).register(body: body)),
                           child: const Text('Đăng ký')),
                     ),
                     const SizedBox(

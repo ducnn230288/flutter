@@ -23,11 +23,11 @@ class ModelUser {
   final String localTime;
   final Location? location;
   final String? locationCode;
-  final String locationString;
+  final String? locationString;
   final String name;
   // final String partner;
-  final String phoneNumber;
-  final String recentPaymentString;
+  final String? phoneNumber;
+  final String? recentPaymentString;
   final String? timeZone;
   final int type;
   final String? userName;
@@ -53,10 +53,10 @@ class ModelUser {
     required this.localTime,
     this.location,
     this.locationCode,
-    required this.locationString,
+    this.locationString,
     required this.name,
-    required this.phoneNumber,
-    required this.recentPaymentString,
+    this.phoneNumber,
+    this.recentPaymentString,
     this.timeZone,
     required this.type,
     this.userName,
@@ -68,7 +68,7 @@ class ModelUser {
         name = json['name'] as String,
         email = json['email'] as String,
         avatarUrl = json['avatarUrl'] as String?,
-        phoneNumber = json['phoneNumber'] as String,
+        phoneNumber = json['phoneNumber'] as String?,
         address = json['address'] as String?,
         company = json['company'] as String?,
         designation = json['designation'] as String?,
@@ -78,7 +78,7 @@ class ModelUser {
         country = (json['country'] as Map<String, dynamic>?) != null
             ? Country.fromJson(json['country'] as Map<String, dynamic>)
             : Country.fromJson({}),
-        locationString = json['locationString'] as String,
+        locationString = json['locationString'] as String?,
         localTime = json['localTime'] as String,
         locationCode = json['locationCode'] as String?,
         location = (json['location'] as Map<String, dynamic>?) != null
@@ -88,7 +88,7 @@ class ModelUser {
         currency = json['currency'] as String?,
         language = json['language'] as String,
         type = json['type'] as int,
-        recentPaymentString = json['recentPaymentString'] as String,
+        recentPaymentString = json['recentPaymentString'] as String?,
         birthdate = json['birthdate'] as String?,
         lastActivityDate = json['lastActivityDate'] as String,
         applicationId = json['applicationId'] as String,

@@ -5,7 +5,7 @@ class ModelApi {
     this.message = '',
     this.totalTime = 0,
     this.errorDetail,
-    this.data,
+    required this.data,
   });
 
   int code;
@@ -13,7 +13,7 @@ class ModelApi {
   String message;
   int totalTime;
   String? errorDetail;
-  Map? data;
+  Map<String, dynamic> data;
 
   factory ModelApi.fromJson(Map<String, dynamic> json) => ModelApi(
         code: json["code"] ?? 400,
