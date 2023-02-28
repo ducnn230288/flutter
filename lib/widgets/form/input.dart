@@ -12,7 +12,6 @@ class WidgetInput extends StatelessWidget {
   final bool enabled;
   final bool password;
   final bool number;
-  final bool placeholder;
   final bool stackedLabel;
   final ValueChanged<String>? onChanged;
   final Function? onTap;
@@ -28,7 +27,6 @@ class WidgetInput extends StatelessWidget {
     this.enabled = true,
     this.password = false,
     this.number = false,
-    this.placeholder = true,
     this.stackedLabel = false,
     this.onChanged,
     this.onTap,

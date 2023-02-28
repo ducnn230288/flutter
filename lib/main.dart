@@ -12,12 +12,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final Api _api = Api();
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-        value: Api(),
+        value: _api,
         child: MultiBlocProvider(
           providers: [
             BlocProvider<AppAuthCubit>(

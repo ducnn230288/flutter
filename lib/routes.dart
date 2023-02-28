@@ -17,6 +17,7 @@ final GoRouter routes = GoRouter(
     registerRoute(),
     otpVerificationRoute(),
     homeRoute(),
+    userRoute(),
   ],
 );
 GoRoute splashRoute() => GoRoute(
@@ -52,4 +53,9 @@ GoRoute homeRoute() => GoRoute(
       name: RoutesName.home,
       path: RoutesName.home,
       builder: (BuildContext context, GoRouterState state) => const HomePage(),
+    );
+GoRoute userRoute() => GoRoute(
+      name: RoutesName.user,
+      path: RoutesName.user,
+      builder: (BuildContext context, GoRouterState state) => const UserPage(),
     );

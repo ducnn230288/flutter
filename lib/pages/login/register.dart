@@ -20,7 +20,7 @@ class RegisterPage extends StatelessWidget {
     AppFormCubit cubit = context.read<AppFormCubit>();
 
     final List<ModelFormItem> listFormItem = [
-      ModelFormItem(name: 'name', placeholder: true, label: 'Họ và tên', icon: 'assets/form/full-name.svg'),
+      ModelFormItem(name: 'name', label: 'Họ và tên', icon: 'assets/form/full-name.svg'),
       ModelFormItem(
         name: 'email',
         label: 'Địa chỉ email',

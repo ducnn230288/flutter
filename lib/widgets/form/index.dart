@@ -60,7 +60,6 @@ class WidgetForm extends StatelessWidget {
                           enabled: item.enabled,
                           password: item.password,
                           number: item.number,
-                          placeholder: item.placeholder,
                           onChanged: (value) {
                             if (item.onChange != null) {
                               item.onChange!(value);

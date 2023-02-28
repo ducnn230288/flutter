@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '/constants/index.dart';
 import 'list_tile.dart';
@@ -16,14 +17,12 @@ endDrawer({context}) {
               const SizedBox(
                 height: 70,
               ),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Order', onTap: () {}),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Đặt cọc'),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Hoa hồng'),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Kết nối'),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Phòng khám'),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Phản hồi'),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Farmmer'),
-              itemDrawer(svg: 'assets/svgs/menu-right.svg', name: 'Cá nhân', isBorder: false),
+              itemDrawer(
+                  svg: 'assets/form/full-name.svg',
+                  name: 'Users',
+                  onTap: () => GoRouter.of(context).pushNamed(
+                        RoutesName.user,
+                      )),
             ],
           ),
         ),
