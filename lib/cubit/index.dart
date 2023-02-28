@@ -1,4 +1,4 @@
-export 'auth_cubit.dart';
-export 'form_cubit.dart';
+export 'auth.dart';
+export 'form.dart';
 
 enum AppStatus { init, success, fails }
