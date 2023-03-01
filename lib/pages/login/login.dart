@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
                                 child: Checkbox(
                                   side: BorderSide(width: 1, color: ColorName.primary),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                                  value: state.data['rememberMe'] != null && state.data['rememberMe'],
+                                  value: state.value['rememberMe'] != null && state.value['rememberMe'],
                                   onChanged: (bool? value) {},
                                 ),
                               ),

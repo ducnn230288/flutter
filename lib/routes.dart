@@ -49,16 +49,21 @@ GoRoute otpVerificationRoute() => GoRoute(
     name: RoutesName.otpVerification,
     path: RoutesName.otpVerification,
     builder: (BuildContext context, GoRouterState state) => OTPVerificationPage(extra: state.extra));
+
+blocForm({required Widget child}) => BlocListener<AppAuthCubit, AppAuthState>(
+    listenWhen: (oldState, newState) => newState.status == AppStatus.fails,
+    listener: (context, state) => GoRouter.of(context).goNamed(RoutesName.introduction),
+    child: BlocProvider(
+      create: (context) => AppFormCubit(),
+      child: child,
+    ));
 GoRoute homeRoute() => GoRoute(
       name: RoutesName.home,
       path: RoutesName.home,
-      builder: (BuildContext context, GoRouterState state) => const HomePage(),
+      builder: (BuildContext context, GoRouterState state) => blocForm(child: const HomePage()),
     );
 GoRoute userRoute() => GoRoute(
       name: RoutesName.user,
       path: RoutesName.user,
-      builder: (BuildContext context, GoRouterState state) => BlocProvider(
-        create: (context) => AppListCubit(),
-        child: const UserPage(),
-      ),
+      builder: (BuildContext context, GoRouterState state) => blocForm(child: const UserPage()),
     );

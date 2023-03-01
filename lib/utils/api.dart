@@ -53,6 +53,16 @@ class Api {
     return null;
   }
 
-  Future<ModelApi?> getUser({required logout}) async =>
-      checkAuth(result: await http.get(Uri.parse('$endpoint/idm/users'), headers: headers), logout: logout);
+  Future<ModelApi?> getUser(
+      {required logout, Map<String, dynamic> filter = const {}, int page = 1, int size = 20}) async {
+    return checkAuth(
+        result: await http.get(
+            Uri.parse('$endpoint/idm/users').replace(queryParameters: {
+              'filter': jsonEncode(filter),
+              'page': page.toString(),
+              'size': size.toString(),
+            }),
+            headers: headers),
+        logout: logout);
+  }
 }
