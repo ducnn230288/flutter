@@ -35,20 +35,16 @@ class UserPage extends StatelessWidget {
                       ),
                       SizedBox(
                         width: Height.medium,
-                        child: BlocBuilder<AppFormCubit, AppFormState>(
-                          builder: (context, state) => Expanded(
-                            child: ElevatedButton(
-                                onPressed: () => context.read<AppFormCubit>().submit(
-                                    context: context,
-                                    auth: auth,
-                                    api: (filter, logout, page, size, sort) => RepositoryProvider.of<Api>(context)
-                                        .getUser(logout: logout, filter: filter, page: page, size: size),
-                                    getData: true,
-                                    format: ModelUser.fromJson),
-                                child: AppIcons.search),
-                          ),
-                        ),
-                      )
+                        child: ElevatedButton(
+                            onPressed: () => context.read<AppFormCubit>().submit(
+                                context: context,
+                                auth: auth,
+                                api: (filter, logout, page, size, sort) => RepositoryProvider.of<Api>(context)
+                                    .getUser(logout: logout, filter: filter, page: page, size: size),
+                                getData: true,
+                                format: ModelUser.fromJson),
+                            child: AppIcons.search),
+                      ),
                     ],
                   ),
                 ),

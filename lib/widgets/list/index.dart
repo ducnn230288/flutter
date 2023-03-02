@@ -56,7 +56,7 @@ class _WidgetListState extends State<WidgetList> {
                 return Column(
                   children: [
                     (index == 0) ? widget.top : const SizedBox(),
-                    widget.item(state.data.content[index]),
+                    state.data.content.isNotEmpty ? widget.item(state.data.content[index]) : const SizedBox(),
                     (index == state.data.content.length - 1 && state.status == AppStatus.inProcess)
                         ? Column(
                             children: const [
@@ -73,7 +73,7 @@ class _WidgetListState extends State<WidgetList> {
                   ],
                 );
               },
-              itemCount: state.data.content.length,
+              itemCount: state.data.content.isNotEmpty ? state.data.content.length : 1,
             ));
   }
 }
