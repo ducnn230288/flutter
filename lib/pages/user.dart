@@ -56,7 +56,7 @@ class UserPage extends StatelessWidget {
             ),
             item: (ModelUser item) => Container(
                 padding: const EdgeInsets.symmetric(horizontal: Space.large),
-                child: listTile(
+                child: itemList(
                   leading: AppIcons.placeholderImage,
                   title: Text(item.name, style: TextStyle(color: ColorName.primary, fontSize: FontSizes.paragraph1)),
                   content: Text(

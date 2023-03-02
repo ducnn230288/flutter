@@ -67,8 +67,8 @@ class LoginPage extends StatelessWidget {
                         onPressed: () => Dialogs(context).showForm(
                             title: 'Quên mật khẩu',
                             formItem: listEmail,
-                            api: (body, logout) =>
-                                RepositoryProvider.of<Api>(context).forgotPassword(email: body['email']),
+                            api: (value, logout, page, size, sort) =>
+                                RepositoryProvider.of<Api>(context).forgotPassword(email: value['email']),
                             textButton: 'Cấp lại mật khẩu'),
                         child: const Text('Quên mật khẩu?'))
                   ],
@@ -98,8 +98,9 @@ class LoginPage extends StatelessWidget {
                             onPressed: () => context.read<AppFormCubit>().submit(
                                 context: context,
                                 auth: auth,
-                                api: (body, logout) => RepositoryProvider.of<Api>(context).login(body: body),
-                                submit: (data) => context.read<AppAuthCubit>().save(data: data)),
+                                api: (value, logout, page, size, sort) =>
+                                    RepositoryProvider.of<Api>(context).login(body: value),
+                                submit: (data) => context.read<AppAuthCubit>().save(data: data, context: context)),
                             child: const Text('Đăng nhập'))),
                     const SizedBox(
                       height: Space.large * 2,

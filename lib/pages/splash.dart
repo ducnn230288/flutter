@@ -16,7 +16,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    context.read<AppAuthCubit>().check(context);
+    context.read<AppAuthCubit>().check(context: context);
   }
 
   @override

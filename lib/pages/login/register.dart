@@ -98,7 +98,8 @@ class RegisterPage extends StatelessWidget {
                           onPressed: () => cubit.submit(
                               context: context,
                               auth: auth,
-                              api: (body, logout) => RepositoryProvider.of<Api>(context).register(body: body)),
+                              api: (value, logout, page, size, sort) =>
+                                  RepositoryProvider.of<Api>(context).register(body: value)),
                           child: const Text('Đăng ký')),
                     ),
                     const SizedBox(

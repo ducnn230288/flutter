@@ -10,7 +10,7 @@ import 'index.dart';
 class AppAuthCubit extends Cubit<AppAuthState> {
   AppAuthCubit() : super(AppAuthState());
 
-  void check(BuildContext context) async {
+  void check({required BuildContext context}) async {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Prefs.token) ?? '';
 
@@ -36,10 +36,14 @@ class AppAuthCubit extends Cubit<AppAuthState> {
     emit(state.copyWith(status: AppStatus.fails));
   }
 
-  void save({required data}) async {
+  void save({required data, required BuildContext context}) async {
     final ModelUser user = ModelUser.fromJson(data['userModel']);
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(Prefs.token, data['tokenString']);
+    if (context.mounted) {
+      await RepositoryProvider.of<Api>(context).setToken(token: data['tokenString']);
+    }
+
     emit(state.copyWith(status: AppStatus.success, user: user));
   }
 }

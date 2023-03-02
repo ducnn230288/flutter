@@ -20,6 +20,10 @@ class Api {
     return null;
   }
 
+  Future setToken({required String token}) async {
+    headers['Authorization'] = 'Bearer $token';
+  }
+
   // Future<List<Map<String, dynamic>>> login({required body}) async {
   //   var result = await http.post(Uri.parse('$endpoint/authentication/jwt/login'), body: jsonEncode(body));
   //   return List.castFrom<dynamic, Map<String, dynamic>>(jsonDecode(result.body)['results']);
