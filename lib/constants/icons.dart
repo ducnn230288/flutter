@@ -9,7 +9,7 @@ class AppIcons {
   static final logo = SvgPicture.asset('assets/svgs/logo.svg', semanticsLabel: 'Logo');
   static final logoWhite = Image.asset(
     'assets/images/splash.png',
-    width: 200,
+    width: 175,
   );
   static final arrowLeft = SvgPicture.asset(
     'assets/svgs/arrow-left.svg',
@@ -35,7 +35,12 @@ class AppIcons {
     width: FontSizes.paragraph2,
     color: Colors.white,
   );
-
+  static final search = SvgPicture.asset(
+    'assets/svgs/search.svg',
+    semanticsLabel: 'Search',
+    width: FontSizes.headline3,
+    color: Colors.white,
+  );
   static final placeholderImage = Image.asset(
     'assets/images/placeholder.jpeg',
   );

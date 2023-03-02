@@ -84,7 +84,7 @@ class WidgetInput extends StatelessWidget {
             decoration: InputDecoration(
               labelText: label,
               labelStyle: TextStyle(color: ColorName.black.shade400, fontSize: FontSizes.paragraph1),
-              prefixIcon: icon != ''
+              prefixIcon: icon != null
                   ? Container(
                       padding: const EdgeInsets.all(Space.medium),
                       child: SvgPicture.asset(
@@ -118,7 +118,7 @@ class WidgetInput extends StatelessWidget {
                 borderSide: BorderSide(color: ColorName.danger.withOpacity(0.5), width: 0),
               ),
               fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: icon != null ? 0 : 20),
               filled: true,
             ),
             minLines: 1,
