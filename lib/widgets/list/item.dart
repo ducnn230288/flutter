@@ -24,16 +24,16 @@ itemList(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: Height.mediumSmall * 1.8,
-              child: leading != null
-                  ? ClipRRect(
+            leading != null
+                ? SizedBox(
+                    width: Height.mediumSmall * 1.8,
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(Space.small), // Image border
                       child: leading,
-                    )
-                  : const SizedBox(),
-            ),
-            const SizedBox(width: Space.medium),
+                    ),
+                  )
+                : const SizedBox(),
+            leading != null ? const SizedBox(width: Space.medium) : const SizedBox(),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -3,13 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '/cubit/index.dart';
 import '/models/index.dart';
+import 'date.dart';
 import 'input.dart';
 import 'select.dart';
-
-class WidgetFormNotifier extends ChangeNotifier {
-  dynamic dataForm = {};
-  final formKey = GlobalKey<FormState>();
-}
 
 class WidgetForm extends StatelessWidget {
   final List<ModelFormItem> list;
@@ -17,6 +13,8 @@ class WidgetForm extends StatelessWidget {
   const WidgetForm({Key? key, required this.list}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final Map<String, TextEditingController> listController = {};
+    list.forEach((item) => listController[item.name] = TextEditingController());
     context.read<AppFormCubit>().setList(list: list);
     return BlocBuilder<AppFormCubit, AppFormState>(builder: (context, state) {
       return Form(
@@ -33,20 +31,46 @@ class WidgetForm extends StatelessWidget {
                 case 'select':
                   return item.show
                       ? WidgetSelect(
+                          controller: listController[item.name] ?? TextEditingController(),
                           label: item.label,
-                          value: item.value != '' ? item.value : null,
+                          value: item.value,
                           space: index != state.list.length - 1,
+                          maxLines: item.maxLines,
                           required: item.required,
                           enabled: item.enabled,
-                          icon: item.icon,
-                          items: item.items,
                           onChanged: (value) {
                             if (item.onChange != null) {
                               item.onChange!(value);
                             }
                             context.read<AppFormCubit>().saved(value: value, name: item.name);
-                            // notifier.dataForm[item.name] = value;
                           },
+                          icon: item.icon,
+                          format: item.format ?? () {},
+                          api: item.api ?? () {},
+                          itemSelect: item.itemSelect ?? () {},
+                          showSearch: item.showSearch ?? true,
+                          selectLabel: item.selectLabel ?? () {},
+                          selectValue: item.selectValue ?? () {},
+                          items: item.items,
+                        )
+                      : Container();
+                case 'date':
+                  return item.show
+                      ? WidgetDate(
+                          controller: listController[item.name] ?? TextEditingController(),
+                          label: item.label,
+                          value: item.value,
+                          space: index != state.list.length - 1,
+                          maxLines: item.maxLines,
+                          required: item.required,
+                          enabled: item.enabled,
+                          onChanged: (value) {
+                            if (item.onChange != null) {
+                              item.onChange!(value);
+                            }
+                            context.read<AppFormCubit>().saved(value: value, name: item.name);
+                          },
+                          icon: item.icon,
                         )
                       : Container();
                 default:
@@ -65,7 +89,6 @@ class WidgetForm extends StatelessWidget {
                               item.onChange!(value);
                             }
                             context.read<AppFormCubit>().saved(value: value, name: item.name);
-                            // notifier.dataForm[item.name] = text;
                           },
                           onTap: item.onTap,
                           icon: item.icon,

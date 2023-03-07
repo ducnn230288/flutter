@@ -13,7 +13,18 @@ class Api {
 
   Future<ModelApi?> checkAuth({required http.Response result, required logout}) async {
     if (result.statusCode < 400) {
-      return ModelApi.fromJson(jsonDecode(result.body));
+      ModelApi response = ModelApi.fromJson(jsonDecode(result.body));
+      if (response.data is List) {
+        response.data = {
+          'page': 1,
+          'totalPages': response.data.length,
+          'size': response.data.length,
+          'numberOfElements': response.data.length,
+          'totalElements': response.data.length,
+          'content': response.data
+        };
+      }
+      return response;
     } else if (result.statusCode == 401 && logout != null) {
       logout();
     }

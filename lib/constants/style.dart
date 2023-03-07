@@ -28,5 +28,5 @@ class Style {
           RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(Space.mediumSmall)))));
 
   static TextStyle title =
-      TextStyle(fontSize: FontSizes.headline3, fontWeight: FontWeight.w800, color: ColorName.black);
+      TextStyle(fontSize: FontSizes.headline3, fontWeight: FontWeight.w600, color: ColorName.black);
 }

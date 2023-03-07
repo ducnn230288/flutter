@@ -41,6 +41,12 @@ class AppIcons {
     width: FontSizes.headline3,
     color: Colors.white,
   );
+  static final arrowDown = SvgPicture.asset(
+    'assets/svgs/arrow-down.svg',
+    semanticsLabel: 'Arrow down',
+    color: ColorName.black.shade200,
+    width: 0,
+  );
   static final placeholderImage = Image.asset(
     'assets/images/placeholder.jpeg',
   );

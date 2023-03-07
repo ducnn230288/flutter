@@ -5,8 +5,8 @@ import '/constants/index.dart';
 
 class WidgetInput extends StatelessWidget {
   final String label;
-  final bool space;
   final String value;
+  final bool space;
   final int maxLines;
   final bool required;
   final bool enabled;
@@ -16,7 +16,8 @@ class WidgetInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final Function? onTap;
   final String? icon;
-  final String? suffix;
+  final Widget? suffix;
+  final TextEditingController? controller;
 
   const WidgetInput({
     Key? key,
@@ -33,6 +34,7 @@ class WidgetInput extends StatelessWidget {
     this.icon,
     this.suffix,
     this.space = false,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -62,6 +64,7 @@ class WidgetInput extends StatelessWidget {
                 BoxShadow(color: ColorName.black.shade50, blurRadius: Space.large / 3, spreadRadius: Space.large / 4)
               ]),
           child: TextFormField(
+            controller: controller,
             onTap: () {
               if (onTap != null) {
                 onTap!();
@@ -95,7 +98,7 @@ class WidgetInput extends StatelessWidget {
                       ),
                     )
                   : null,
-              suffixText: suffix,
+              suffixIcon: suffix,
               enabled: enabled,
               focusedBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),

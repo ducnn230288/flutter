@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
+
 class ModelFormItem {
   ModelFormItem({
-    this.name = '',
+    required this.name,
     this.type = '',
     this.label = '',
     this.value = '',
@@ -16,6 +18,12 @@ class ModelFormItem {
     this.icon,
     this.suffix,
     this.items,
+    this.format,
+    this.api,
+    this.itemSelect,
+    this.showSearch = true,
+    this.selectLabel,
+    this.selectValue,
   });
 
   String name;
@@ -32,8 +40,14 @@ class ModelFormItem {
   Function? onFind;
   Function? onChange;
   String? icon;
-  String? suffix;
-  List<ModelOption>? items;
+  Widget? suffix;
+  List? items;
+  Function? format;
+  Function? api;
+  Function? itemSelect;
+  bool? showSearch;
+  Function? selectLabel;
+  Function? selectValue;
 
   factory ModelFormItem.fromJson(Map<String, dynamic> json) => ModelFormItem(
         name: json["name"] ?? '',
@@ -52,6 +66,12 @@ class ModelFormItem {
         icon: json["icon"],
         suffix: json["suffix"],
         items: json["items"] != null ? List<ModelOption>.from(json["items"].map((x) => ModelOption.fromJson(x))) : null,
+        format: json["format"],
+        api: json["api"],
+        itemSelect: json["itemSelect"],
+        showSearch: json["showSearch"] ?? true,
+        selectLabel: json["selectLabel"],
+        selectValue: json["selectValue"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -71,6 +91,12 @@ class ModelFormItem {
         "icon": icon,
         "suffix": suffix,
         "items": items != null ? List<dynamic>.from(items!.map((x) => x.toJson())) : null,
+        "format": format,
+        "api": api,
+        "itemSelect": itemSelect,
+        "showSearch": showSearch,
+        "selectLabel": selectLabel,
+        "selectValue": selectValue,
       };
 }
 

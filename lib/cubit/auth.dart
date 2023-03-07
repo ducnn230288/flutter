@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '/constants/index.dart';
 import '/models/index.dart';
-import '/utils/api.dart';
+import '/utils/index.dart';
 import 'index.dart';
 
 class AppAuthCubit extends Cubit<AppAuthState> {
@@ -18,13 +18,17 @@ class AppAuthCubit extends Cubit<AppAuthState> {
       emit(state.copyWith(status: AppStatus.fails));
     } else {
       if (context.mounted) {
-        ModelApi? result = await RepositoryProvider.of<Api>(context).info(token: token);
-        if (result != null && result.isSuccess) {
-          final ModelUser user = ModelUser.fromJson(result.data['userModel']);
-          emit(state.copyWith(status: AppStatus.success, user: user));
-        } else {
-          prefs.remove(Prefs.token);
-          emit(state.copyWith(status: AppStatus.fails));
+        try {
+          ModelApi? result = await RepositoryProvider.of<Api>(context).info(token: token);
+          if (result != null && result.isSuccess) {
+            final ModelUser user = ModelUser.fromJson(result.data['userModel']);
+            emit(state.copyWith(status: AppStatus.success, user: user));
+          } else {
+            prefs.remove(Prefs.token);
+            emit(state.copyWith(status: AppStatus.fails));
+          }
+        } catch (e) {
+          Dialogs(context).showError(text: e.toString());
         }
       }
     }

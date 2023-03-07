@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/constants/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
+import '/utils/index.dart';
 import '/widgets/index.dart';
-import '../../utils/index.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -28,8 +28,8 @@ class RegisterPage extends StatelessWidget {
         icon: 'assets/form/mail.svg',
       ),
       ModelFormItem(type: "select", name: 'gender', label: 'Giới tính', icon: 'assets/form/gender.svg', items: [
-        ModelOption(label: 'Nam', value: 'MALE'),
-        ModelOption(label: 'Nữ', value: 'FEMALE'),
+        {'label': 'Nam', 'value': 'MALE'},
+        {'label': 'Nữ', 'value': 'FEMALE'},
       ]),
       ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true),
       ModelFormItem(
@@ -40,8 +40,8 @@ class RegisterPage extends StatelessWidget {
           label: 'Loại tài khoản',
           icon: 'assets/form/type-account.svg',
           items: [
-            ModelOption(label: 'Order Side', value: 'ORDER_SIDE'),
-            ModelOption(label: 'Farmer Side', value: 'FARMER_SIDE'),
+            {'label': 'Order Side', 'value': 'ORDER_SIDE'},
+            {'label': 'Farmer Side', 'value': 'FARMER_SIDE'},
           ]),
       ModelFormItem(
           type: "select",
@@ -50,7 +50,7 @@ class RegisterPage extends StatelessWidget {
           icon: 'assets/form/degree.svg',
           show: false,
           items: [
-            ModelOption(label: 'Bằng điều dưỡng', value: 'value1'),
+            {'label': 'Bằng điều dưỡng', 'value': 'value1'},
           ])
     ];
     onChangeType(String text) async {

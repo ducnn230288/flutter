@@ -50,7 +50,7 @@ class UserPage extends StatelessWidget {
                 ),
               ],
             ),
-            item: (ModelUser item) => Container(
+            item: (ModelUser item, Function onTap) => Container(
                 padding: const EdgeInsets.symmetric(horizontal: Space.large),
                 child: itemList(
                   leading: AppIcons.placeholderImage,

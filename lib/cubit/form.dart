@@ -29,41 +29,52 @@ class AppFormCubit extends Cubit<AppFormState> {
   }
 
   void setSize({required int size, required Function api, required AppAuthCubit auth, required Function format}) async {
-    emit(state.copyWith(size: size));
-    ModelApi? result = await api(
-      state.value,
-      auth.logout,
-      state.page,
-      state.size,
-      state.sort,
-    );
+    final int oldSize = state.size;
+    try {
+      emit(state.copyWith(size: size));
+      ModelApi? result = await api(
+        state.value,
+        auth.logout,
+        state.page,
+        state.size,
+        state.sort,
+      );
 
-    if (result != null) {
-      ModelData data = ModelData.fromJson(result.data, format);
-      emit(state.copyWith(data: data));
+      if (result != null) {
+        ModelData data = ModelData.fromJson(result.data, format);
+        emit(state.copyWith(data: data));
+      }
+    } catch (e) {
+      emit(state.copyWith(size: oldSize));
+      print(e.toString());
     }
   }
 
   void increasePage({required Function api, required AppAuthCubit auth, required Function format}) async {
     emit(state.copyWith(status: AppStatus.init, page: state.page + 1));
-    ModelApi? result = await api(
-      state.value,
-      auth.logout,
-      state.page,
-      state.size,
-      state.sort,
-    );
+    try {
+      ModelApi? result = await api(
+        state.value,
+        auth.logout,
+        state.page,
+        state.size,
+        state.sort,
+      );
 
-    if (result != null) {
-      ModelData data = ModelData.fromJson(result.data, format);
-      if (data.content.isNotEmpty) {
-        for (var i = 0; i < data.content.length; i++) {
-          state.data.content.add(data.content[i]);
+      if (result != null) {
+        ModelData data = ModelData.fromJson(result.data, format);
+        if (data.content.isNotEmpty) {
+          for (var i = 0; i < data.content.length; i++) {
+            state.data.content.add(data.content[i]);
+          }
+          emit(state.copyWith(status: AppStatus.success, data: state.data));
+        } else {
+          emit(state.copyWith(status: AppStatus.success, page: state.page - 1));
         }
-        emit(state.copyWith(status: AppStatus.success, data: state.data));
-      } else {
-        emit(state.copyWith(status: AppStatus.success, page: state.page - 1));
       }
+    } catch (e) {
+      emit(state.copyWith(status: AppStatus.success, page: state.page - 1));
+      print(e.toString());
     }
   }
 
@@ -86,32 +97,37 @@ class AppFormCubit extends Cubit<AppFormState> {
     if (getData || state.formKey.currentState?.validate() == true) {
       emit(state.copyWith(page: 1));
       Dialogs dialogs = Dialogs(context);
-      dialogs.startLoading();
-      ModelApi? result = await api(
-        state.value,
-        auth.logout,
-        state.page,
-        state.size,
-        state.sort,
-      );
-      dialogs.stopLoading();
-      if (result != null) {
-        if (result.isSuccess) {
-          if (!getData) {
-            dialogs.showSuccess(
-                title: result.message,
-                onDismiss: (context) {
-                  if (submit != null) submit(result.data);
-                  emit(state.copyWith(status: AppStatus.success, value: {}, key: GlobalKey<FormState>()));
-                });
-          } else if (format != null) {
-            ModelData data = ModelData.fromJson(result.data, format);
-            if (submit != null) submit(data);
-            emit(state.copyWith(status: AppStatus.success, data: data));
+      try {
+        dialogs.startLoading();
+        ModelApi? result = await api(
+          state.value,
+          auth.logout,
+          state.page,
+          state.size,
+          state.sort,
+        );
+        dialogs.stopLoading();
+        if (result != null) {
+          if (result.isSuccess) {
+            if (!getData) {
+              dialogs.showSuccess(
+                  title: result.message,
+                  onDismiss: (context) {
+                    if (submit != null) submit(result.data);
+                    emit(state.copyWith(status: AppStatus.success, value: {}, key: GlobalKey<FormState>()));
+                  });
+            } else if (format != null) {
+              ModelData data = ModelData.fromJson(result.data, format);
+              if (submit != null) submit(data);
+              emit(state.copyWith(status: AppStatus.success, data: data));
+            }
+          } else {
+            dialogs.showError(text: result.message);
           }
-        } else {
-          dialogs.showError(text: result.message);
         }
+      } catch (e) {
+        dialogs.stopLoading();
+        dialogs.showError(text: e.toString());
       }
     }
   }

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '/constants/index.dart';
 import '/cubit/index.dart';
-import '/models/form.dart';
+import '/models/index.dart';
 import '/utils/index.dart';
 import '/widgets/index.dart';
 
