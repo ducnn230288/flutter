@@ -2,31 +2,51 @@ import 'package:flutter/material.dart';
 
 import 'index.dart';
 
-class Style {
-  Style._();
+class CStyle {
+  CStyle._();
   static ButtonStyle button = ButtonStyle(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, Height.medium)),
+      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.medium)),
       padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
-      backgroundColor: MaterialStatePropertyAll(ColorName.primary),
+      backgroundColor: MaterialStatePropertyAll(CColor.primary),
       foregroundColor: const MaterialStatePropertyAll(Colors.white),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
-          side: BorderSide(color: ColorName.primary))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: FontSizes.headline4)));
+          borderRadius: const BorderRadius.all(Radius.circular(CSpace.medium)),
+          side: BorderSide(color: CColor.primary))),
+      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.headline4)));
 
   static ButtonStyle buttonWhite = button.copyWith(
     elevation: const MaterialStatePropertyAll(5),
-    shadowColor: MaterialStatePropertyAll(ColorName.black.shade50),
+    shadowColor: MaterialStatePropertyAll(CColor.black.shade50),
     backgroundColor: const MaterialStatePropertyAll(Colors.white),
-    foregroundColor: MaterialStatePropertyAll(ColorName.black),
+    foregroundColor: MaterialStatePropertyAll(CColor.black),
     shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(Space.medium)), side: BorderSide(color: Colors.transparent))),
+        borderRadius: BorderRadius.all(Radius.circular(CSpace.medium)), side: BorderSide(color: Colors.transparent))),
+  );
+
+  static ButtonStyle buttonOutline = ButtonStyle(
+      side: MaterialStatePropertyAll(BorderSide(width: 1.0, color: CColor.primary)),
+      padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
+      shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(CSpace.medium)),
+      )));
+
+  static ButtonStyle buttonOutlinePrimary = buttonOutline.copyWith(
+    backgroundColor: MaterialStatePropertyAll(CColor.primary),
+  );
+
+  static ButtonStyle buttonDanger = button.copyWith(
+    elevation: const MaterialStatePropertyAll(5),
+    shadowColor: MaterialStatePropertyAll(CColor.black.shade50),
+    backgroundColor: MaterialStatePropertyAll(CColor.danger),
+    foregroundColor: const MaterialStatePropertyAll(Colors.white),
+    shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(CSpace.medium)), side: BorderSide(color: Colors.transparent))),
   );
 
   static ButtonStyle buttonIcon = button.copyWith(
       shape: const MaterialStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(Space.mediumSmall)))));
+          RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(CSpace.mediumSmall)))));
 
-  static TextStyle title =
-      TextStyle(fontSize: FontSizes.headline3, fontWeight: FontWeight.w800, color: ColorName.black);
+  static TextStyle title = TextStyle(fontSize: CFontSize.headline3, fontWeight: FontWeight.w600, color: CColor.black);
+  static TextStyle padding1 = TextStyle(fontSize: CFontSize.paragraph1, color: CColor.black);
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ColorName {
-  ColorName._();
+class CColor {
+  CColor._();
 
   static MaterialColor primary = const MaterialColor(
     0xFF0C8720,
@@ -65,4 +65,52 @@ class ColorName {
       900: Color(0xFF2F1002),
     },
   ); // 12 - 9 - 0
+
+  static Color statusColor(String status) {
+    switch (status) {
+      case 'DRAFT':
+      case 'CANCELED':
+      case 'TRANSFER_UNCONFIRMED':
+        return black.shade200;
+
+      case 'ADMIN_REJECTED':
+      case 'REJECT':
+      case 'ADMIN_REJECT':
+      case 'REJECTED':
+      case 'USED':
+      case 'CLOSED':
+      case 'SOLD':
+      case 'END':
+      case 'CLOSE_PROPOSAL':
+      case 'NO_KYC_VERIFY':
+      case 'EXPIRED':
+        return danger;
+
+      case 'PUBLISHED':
+      case 'ACTIVE':
+      case 'RECEIVE':
+      case 'RECEIVED':
+      case 'POST':
+        return Colors.lightBlue;
+
+      case 'UN_USED':
+      case 'WAIT_CONFIRM':
+      case 'WFA':
+      case 'WAIT_TRANSFER':
+      case 'CUSTOMER':
+        return Colors.green;
+
+      case 'APPROVE':
+      case 'APPROVED':
+      case 'COMPLETED':
+      case 'TRANSFER_CONFIRMED':
+      case 'VERIFIED':
+        return Colors.blue;
+
+      case 'LOCKED':
+      case 'LOCK_PROPOSAL':
+        return Colors.teal;
+    }
+    return primary;
+  }
 }

@@ -4,3 +4,4 @@ export 'login/login.dart';
 export 'login/otp_verification.dart';
 export 'login/register.dart';
 export 'splash.dart';
+export 'user.dart';

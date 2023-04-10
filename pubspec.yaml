@@ -1,6 +1,5 @@
-name: uberentaltest
-description: A Flutter uberental project.
-
+name: uberental
+description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -11,7 +10,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# Read more about Android versioning at https://developer.android.com/studio/fpublish/versioning
 # In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
@@ -20,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: '>=2.19.2 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -40,7 +39,6 @@ dependencies:
   introduction_screen: ^3.1.4
   flutter_svg: ^1.1.6
   google_fonts: ^4.0.3
-  dropdown_search: ^5.0.5
   pinput: ^2.2.21
   lottie: ^2.2.0
   awesome_dialog: ^3.0.2
@@ -48,9 +46,18 @@ dependencies:
   http: ^0.13.5
   flutter_bloc: ^8.1.2
   shared_preferences: ^2.0.18
-
+  syncfusion_flutter_datepicker: ^20.4.52
+  image_picker: ^0.8.6+4
+  permission_handler: ^10.2.0
+  path_provider: ^2.0.13
+  extended_image: ^7.0.2
+  url_launcher: ^6.1.6
+  flutter_dotenv: ^5.0.2
+  easy_localization: ^3.0.1
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -58,6 +65,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -71,10 +79,14 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env.production
+    - .env.development
     - assets/images/
     - assets/svgs/
     - assets/form/
     - assets/json/
+    - assets/translations/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

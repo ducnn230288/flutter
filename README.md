@@ -1,6 +1,6 @@
-# uberentaltest
+# uberental
 
-A Flutter uberental project.
+A new Flutter project.
 
 ## Getting Started
 

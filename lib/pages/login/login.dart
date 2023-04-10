@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '/constants/index.dart';
 import '/cubit/index.dart';
-import '/models/form.dart';
+import '/models/index.dart';
 import '/utils/index.dart';
 import '/widgets/index.dart';
 
@@ -13,19 +14,17 @@ class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    List<ModelFormItem> listFormItem = [
-      ModelFormItem(name: 'username', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
-      ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true)
+    List<MFormItem> listFormItem = [
+      MFormItem(name: 'username', label: 'pages.login.login.Email address'.tr(), icon: 'assets/form/mail.svg'),
+      MFormItem(
+          name: 'password', label: 'pages.login.login.Password'.tr(), icon: 'assets/form/password.svg', password: true)
     ];
-    List<ModelFormItem> listEmail = [
-      ModelFormItem(name: 'email', label: 'Địa chỉ Email', icon: 'assets/form/mail.svg'),
+    List<MFormItem> listEmail = [
+      MFormItem(name: 'email', label: 'pages.login.login.Email address'.tr(), icon: 'assets/form/mail.svg'),
     ];
-    handleEmail() async {
-      GoRouter.of(context).pushNamed(RoutesName.otpVerification, extra: 'Email');
-    }
 
     return Scaffold(
-      appBar: appBar(title: 'Đăng nhập', context: context),
+      appBar: appBar(title: 'pages.login.login.Log in'.tr()),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Center(
@@ -33,90 +32,88 @@ class LoginPage extends StatelessWidget {
             shrinkWrap: true,
             children: [
               Container(
-                  padding: const EdgeInsets.symmetric(horizontal: Space.large), child: WidgetForm(list: listFormItem)),
+                  padding: const EdgeInsets.symmetric(horizontal: CSpace.large), child: WForm(list: listFormItem)),
               const SizedBox(
-                height: Space.large / 4,
+                height: CSpace.large / 4,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: Space.large / 2.5),
+                padding: const EdgeInsets.symmetric(horizontal: CSpace.large / 2.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    BlocBuilder<AppFormCubit, AppFormState>(
-                      builder: (context, state) {
-                        return TextButton(
-                            onPressed: () => context.read<AppFormCubit>().savedBool(name: 'rememberMe'),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: Checkbox(
-                                    side: BorderSide(width: 1, color: ColorName.primary),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                                    value: state.data['rememberMe'] != null && state.data['rememberMe'],
-                                    onChanged: (bool? value) {},
-                                  ),
+                    BlocBuilder<BlocC, BlocS>(
+                      builder: (context, state) => TextButton(
+                          onPressed: () => context.read<BlocC>().savedBool(name: 'rememberMe'),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: Checkbox(
+                                  side: BorderSide(width: 1, color: CColor.primary),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                                  value: state.value['rememberMe'] != null && state.value['rememberMe'],
+                                  onChanged: (bool? value) {},
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text('Lưu mật khẩu'),
-                              ],
-                            ));
-                      },
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text('pages.login.login.Remember me'.tr()),
+                            ],
+                          )),
                     ),
                     TextButton(
-                        onPressed: () => Dialogs(context).showForm(
-                            title: 'Quên mật khẩu',
+                        onPressed: () => UDialog().showForm(
+                            title: 'pages.login.login.Forgot password'.tr(),
                             formItem: listEmail,
-                            submit: handleEmail,
-                            textButton: 'Cấp lại mật khẩu'),
-                        child: const Text('Quên mật khẩu?'))
+                            api: (value, page, size, sort) =>
+                                RepositoryProvider.of<Api>(context).auth.forgotPassword(email: value['email']),
+                            textButton: 'pages.login.login.Password reset'.tr()),
+                        child: Text('${'pages.login.login.Forgot password'.tr()}?'))
                   ],
                 ),
               ),
               const SizedBox(
-                height: Space.large * 2,
+                height: CSpace.large * 2,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: Space.large),
+                padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
                 child: Column(
                   children: [
                     Text(
-                      'Bằng cách đăng nhập, bạn đã đồng ý với các điều khoản dịch vụ và điều kiện bảo mật của ứng dụng',
+                      'pages.login.login.terms of service'.tr(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: ColorName.black.shade300),
+                      style: TextStyle(color: CColor.black.shade300),
                     ),
                     const SizedBox(
-                      height: Space.large * 4,
+                      height: CSpace.large * 4,
                     ),
-                    BlocConsumer<AppFormCubit, AppFormState>(
-                      listenWhen: (context, state) => state.status == AppStatus.success,
-                      listener: (context, state) => GoRouter.of(context).go(
-                        RoutesName.home,
-                      ),
-                      builder: (context, state) {
-                        return ElevatedButton(
-                            onPressed: () => context.read<AppFormCubit>().submit(context: context),
-                            child: const Text('Đăng nhập'));
-                      },
-                    ),
+                    BlocConsumer<BlocC, BlocS>(
+                        listenWhen: (context, state) => state.status == AppStatus.success,
+                        listener: (context, state) => GoRouter.of(context).go(
+                              CRoute.home,
+                            ),
+                        builder: (context, state) => ElevatedButton(
+                            onPressed: () => context.read<BlocC>().submit(
+                                api: (value, page, size, sort) =>
+                                    RepositoryProvider.of<Api>(context).auth.login(body: value),
+                                submit: (data) => context.read<AuthC>().save(data: data)),
+                            child: Text('pages.login.login.Log in'.tr()))),
                     const SizedBox(
-                      height: Space.large * 2,
+                      height: CSpace.large * 2,
                     ),
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                          text: "Ban chưa có tài khoản? ",
+                          text: "pages.login.login.You don't have an account yet?".tr(),
                           children: [
                             TextSpan(
-                                text: "Đăng ký",
-                                style: TextStyle(color: ColorName.primary),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => context.pushNamed(RoutesName.register))
+                                text: 'pages.login.login.Register'.tr(),
+                                style: TextStyle(color: CColor.primary),
+                                recognizer: TapGestureRecognizer()..onTap = () => context.pushNamed(CRoute.register))
                           ],
-                          style: TextStyle(color: ColorName.black.shade300)),
+                          style: TextStyle(color: CColor.black.shade300)),
                     ),
                   ],
                 ),

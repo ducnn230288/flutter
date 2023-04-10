@@ -1,0 +1,84 @@
+{
+  "pages": {
+    "login": {
+      "introduction": {
+        "Skip": "Skip",
+        "Next": "Next",
+        "Get started": "Get started"
+      },
+      "login": {
+        "Email address": "Email address",
+        "Password": "Password",
+        "Log in": "Log in",
+        "Remember me": "Remember me",
+        "Forgot password": "Forgot password",
+        "Password reset": "Password reset",
+        "terms of service": "By logging in, you agree to the app's terms of service and privacy conditions",
+        "You don't have an account yet?": "You don't have an account yet? ",
+        "Register": "Register"
+      },
+      "otp_verification": {
+        "Sign Up Success": "Sign Up Success",
+        "Change password successfully": "Change password successfully",
+        "Confirm OTP": "Confirm OTP",
+        "Check your registered email": "Check your registered email. We have sent you a PIN",
+        "Confirm": "Confirm"
+      },
+      "register": {
+        "Fullname": "Fullname",
+        "Gender": "Gender",
+        "Re-enter password": "Re-enter password",
+        "Account Type": "Account Type",
+        "Professional Degree": "Professional Degree",
+        "Do you already have an account?": "Do you already have an account?"
+      }
+    }
+  },
+  "utils": {
+    "app_console": {
+      "days ago": "days ago",
+      "months ago": "months ago",
+      "years ago": "years ago",
+      "Agreement": "Agreement",
+      "million": "million",
+      "billion": "billion",
+      "System management": "System management",
+      "Undefined": "Undefined"
+    }
+  },
+  "widgets": {
+    "drawer": {
+      "Log out": "Log out"
+    },
+    "form": {
+      "input": {
+        "Required content": "Required content"
+      },
+      "select": {
+        "Search": "Search"
+      },
+      "upload": {
+        "Upload": "Upload",
+        "Cancel": "Cancel",
+        "Select image from gallery": "Select image from gallery",
+        "Select multiple images from gallery": "Select multiple images from gallery",
+        "Take a photo": "Take a photo",
+        "Select Video from gallery": "Select Video from gallery",
+        "Shoot a movie": "Shoot a movie"
+      }
+    },
+    "list": {
+      "details": {
+        "Empty": "Empty",
+        "Phone number copied": "Phone number copied",
+        "Successfully copied": "Successfully copied"
+      }
+    },
+    "description_text_widget": {
+      "See more": "Xem thêm"
+    }
+  },
+  "example": {
+    "hello": "Hello"
+  }
+}

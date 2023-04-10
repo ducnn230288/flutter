@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/constants/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
+import '/utils/index.dart';
 import '/widgets/index.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -16,98 +18,113 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppFormCubit cubit = context.read<AppFormCubit>();
+    BlocC cubit = context.read<BlocC>();
 
-    final List<ModelFormItem> listFormItem = [
-      ModelFormItem(name: 'fullname', placeholder: true, label: 'Họ và tên', icon: 'assets/form/fullname.svg'),
-      ModelFormItem(
+    final List<MFormItem> listFormItem = [
+      MFormItem(name: 'name', label: 'pages.login.register.Fullname'.tr(), icon: 'assets/form/full-name.svg'),
+      MFormItem(
         name: 'email',
-        label: 'Địa chỉ email',
+        label: 'pages.login.login.Email address'.tr(),
         icon: 'assets/form/mail.svg',
       ),
-      ModelFormItem(name: 'password', label: 'Mật khẩu', icon: 'assets/form/password.svg', password: true),
-      ModelFormItem(
-          name: 'confirmPassword', label: 'Nhập lại mật khẩu', icon: 'assets/form/password.svg', password: true),
-      ModelFormItem(
+      MFormItem(
           type: "select",
-          name: 'type',
-          label: 'Loại tài khoản',
+          name: 'gender',
+          label: 'pages.login.register.Gender'.tr(),
+          icon: 'assets/form/gender.svg',
+          items: [MOption(label: 'Nam', value: 'MALE'), MOption(label: 'Nữ', value: 'FEMALE')]),
+      MFormItem(
+          name: 'password', label: 'pages.login.login.Password'.tr(), icon: 'assets/form/password.svg', password: true),
+      MFormItem(
+          name: 'confirmPassword',
+          label: 'pages.login.register.Re-enter password'.tr(),
+          icon: 'assets/form/password.svg',
+          password: true),
+      MFormItem(
+          type: "select",
+          name: 'role',
+          label: 'pages.login.register.Account Type'.tr(),
           icon: 'assets/form/type-account.svg',
           items: [
-            ModelOption(label: 'Order Side', value: 'value1'),
-            ModelOption(label: 'Farmer Side', value: 'value2'),
+            MOption(label: 'Order Side', value: 'ORDER_SIDE'),
+            MOption(label: 'Farmer Side', value: 'FARMER_SIDE')
           ]),
-      ModelFormItem(
+      MFormItem(
           type: "select",
-          name: 'degree',
-          label: 'Bằng cấp chuyên môn',
+          name: 'professionalDegree',
+          label: 'pages.login.register.Professional Degree'.tr(),
           icon: 'assets/form/degree.svg',
           show: false,
-          items: [
-            ModelOption(label: 'Bằng điều dưỡng', value: 'value1'),
-          ])
+          items: [MOption(label: 'Bằng điều dưỡng', value: 'value1')])
     ];
-    onChangeType(String text) async {
-      if (text == 'value2' && !listFormItem[5].show) {
-        listFormItem[5].show = true;
+    onChangeType(text) async {
+      if (text == 'FARMER_SIDE' && !listFormItem[6].show) {
+        listFormItem[6].show = true;
         cubit.setList(list: listFormItem);
-      } else if (text != 'value2' && listFormItem[5].show) {
-        listFormItem[5].show = false;
+      } else if (text != 'FARMER_SIDE' && listFormItem[6].show) {
+        listFormItem[6].show = false;
         cubit.saved(name: 'degree', value: null);
         cubit.setList(list: listFormItem);
       }
     }
 
-    listFormItem[4].onChange = onChangeType;
+    listFormItem[5].onChange = onChangeType;
 
     return Scaffold(
-      appBar: appBar(title: 'Đăng ký', context: context),
+      appBar: appBar(title: 'pages.login.login.Register'.tr()),
       body: SizedBox(
         child: Center(
           child: ListView(
             shrinkWrap: true,
             children: [
               const SizedBox(
-                height: Space.large,
+                height: CSpace.large,
               ),
-              BlocListener<AppFormCubit, AppFormState>(
+              BlocListener<BlocC, BlocS>(
                 listener: (context, state) {
                   // TODO: implement listener
                 },
                 child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: Space.large),
-                    child: WidgetForm(list: listFormItem)),
+                    padding: const EdgeInsets.symmetric(horizontal: CSpace.large), child: WForm(list: listFormItem)),
               ),
               const SizedBox(
-                height: Space.large * 2,
+                height: CSpace.large * 2,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: Space.large),
+                padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
                 child: Column(
                   children: [
-                    ElevatedButton(onPressed: () => cubit.submit(context: context), child: const Text('Đăng ký')),
+                    BlocConsumer<BlocC, BlocS>(
+                      listenWhen: (context, state) => state.status == AppStatus.success,
+                      listener: (context, state) => Navigator.pop(context),
+                      builder: (context, state) => ElevatedButton(
+                          onPressed: () => cubit.submit(
+                              api: (value, page, size, sort) =>
+                                  RepositoryProvider.of<Api>(context).auth.register(body: value)),
+                          child: Text('pages.login.login.Register'.tr())),
+                    ),
                     const SizedBox(
-                      height: Space.large * 2,
+                      height: CSpace.large * 2,
                     ),
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                          text: "Ban đã có tài khoản? ",
+                          text: "${'pages.login.register.Do you already have an account?'.tr()}? ",
                           children: [
                             TextSpan(
-                                text: "Đăng ký",
-                                style: TextStyle(color: ColorName.primary),
+                                text: 'pages.login.login.Log in'.tr(),
+                                style: TextStyle(color: CColor.primary),
                                 recognizer: TapGestureRecognizer()..onTap = () => {Navigator.pop(context)})
                           ],
                           style: TextStyle(
-                            color: ColorName.black.shade300,
+                            color: CColor.black.shade300,
                           )),
                     ),
                   ],
                 ),
               ),
               const SizedBox(
-                height: Space.large,
+                height: CSpace.large,
               ),
             ],
           ),

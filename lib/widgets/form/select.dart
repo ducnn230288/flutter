@@ -1,103 +1,154 @@
-import 'package:dropdown_search/dropdown_search.dart';
+import 'dart:async';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '/constants/index.dart';
-import '/models/index.dart';
+import '/cubit/index.dart';
+import '/widgets/index.dart';
 
-class WidgetSelect extends StatelessWidget {
+class WSelect extends StatefulWidget {
   final String label;
+  final String value;
   final bool space;
-  final String? icon;
-  final Function? onChanged;
-  final Function? onFind;
+  final int maxLines;
   final bool required;
   final bool enabled;
-  final ModelOption? value;
-  final List<ModelOption>? items;
+  final ValueChanged<String> onChanged;
+  final String? icon;
+  final Function? format;
+  final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
+  final Function(dynamic content, int index) itemSelect;
+  final bool showSearch;
+  final Function selectLabel;
+  final Function selectValue;
+  final TextEditingController controller;
+  final List? items;
 
-  const WidgetSelect(
-      {super.key,
-      this.label = '',
-      this.value,
-      this.icon,
-      this.onChanged,
-      this.required = false,
-      this.enabled = true,
-      this.space = false,
-      this.onFind,
-      this.items});
+  const WSelect({
+    Key? key,
+    this.label = '',
+    this.value = '',
+    required this.onChanged,
+    this.required = false,
+    this.enabled = true,
+    this.space = false,
+    this.maxLines = 1,
+    this.icon,
+    this.format,
+    required this.api,
+    required this.itemSelect,
+    this.showSearch = true,
+    required this.selectLabel,
+    required this.selectValue,
+    required this.controller,
+    this.items,
+  }) : super(key: key);
+
+  @override
+  State<WSelect> createState() => _WSelectState();
+}
+
+class _WSelectState extends State<WSelect> {
+  FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(Space.medium),
-              boxShadow: [
-                BoxShadow(color: ColorName.black.shade50, blurRadius: Space.large / 3, spreadRadius: Space.large / 4)
-              ]),
-          child: DropdownSearch<ModelOption>(
-            items: items ?? [],
-            selectedItem: value,
-            itemAsString: (ModelOption u) => u.label,
-            enabled: enabled,
-            onChanged: (ModelOption? text) {
-              onChanged!(text!.value);
-            },
-            autoValidateMode: AutovalidateMode.onUserInteraction,
-            validator: (value) {
-              if (required && value == null) return ('Required content');
-              return null;
-            },
-            // popupProps: const PopupProps.bottomSheet(),
-            dropdownDecoratorProps: DropDownDecoratorProps(
-              baseStyle: TextStyle(color: ColorName.primary),
-              dropdownSearchDecoration: InputDecoration(
-                labelText: label,
-                labelStyle: TextStyle(color: ColorName.black.shade400, fontSize: FontSizes.paragraph1),
-                prefixIcon: icon != ''
-                    ? Container(
-                        padding: const EdgeInsets.all(Space.medium),
-                        child: SvgPicture.asset(
-                          icon ?? '',
-                          semanticsLabel: label,
-                          width: 0,
+    return WInput(
+      controller: widget.controller,
+      label: widget.label,
+      value: widget.value,
+      space: widget.space,
+      maxLines: widget.maxLines,
+      required: widget.required,
+      enabled: widget.enabled,
+      icon: widget.icon,
+      suffix: CIcon.arrowDown,
+      focus: true,
+      focusNode: focusNode,
+      onTap: () {
+        focusNode.unfocus();
+        return showModalBottomSheet<void>(
+          // isDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return BlocProvider(
+              create: (context) => BlocC(),
+              child: SizedBox(
+                width: 250,
+                child: WList(
+                    isPage: false,
+                    extendItem: widget.items == null && widget.showSearch ? 25 : 1,
+                    items: widget.items,
+                    top: Column(
+                      children: [
+                        const SizedBox(
+                          height: CSpace.large / 2,
                         ),
-                      )
-                    : null,
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
-                  borderSide: BorderSide(color: ColorName.primary, width: 0),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
-                  borderSide: BorderSide(color: ColorName.primary.withOpacity(0.0), width: 0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
-                  borderSide: BorderSide(color: ColorName.primary.withOpacity(value != null ? 0.3 : 0), width: 0),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
-                  borderSide: BorderSide(color: ColorName.danger, width: 0),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(Space.medium)),
-                  borderSide: BorderSide(color: ColorName.danger.withOpacity(0.5), width: 0),
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
-                fillColor: Colors.white,
-                filled: true,
+                        Text(
+                          widget.label,
+                          style: TextStyle(color: CColor.black.shade400, fontSize: CFontSize.paragraph1),
+                        ),
+                        const SizedBox(
+                          height: CSpace.large / 2,
+                        ),
+                        (widget.items == null && widget.showSearch)
+                            ? Container(
+                                padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+                                child: BlocBuilder<BlocC, BlocS>(
+                                  builder: (context, state) {
+                                    Timer t = Timer(const Duration(seconds: 1), () {});
+                                    return Row(
+                                      children: [
+                                        Flexible(
+                                          child: WInput(
+                                            label: 'widgets.form.select.Search'.tr(),
+                                            required: true,
+                                            icon: 'assets/svgs/search.svg',
+                                            onChanged: (value) async {
+                                              context.read<BlocC>().saved(name: 'fullTextSearch', value: value);
+                                              t.cancel();
+                                              t = Timer(const Duration(seconds: 1), () {
+                                                context
+                                                    .read<BlocC>()
+                                                    .submit(api: widget.api, getData: true, format: widget.format);
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                    loadMore: widget.items == null && widget.showSearch,
+                    item: widget.items == null
+                        ? widget.itemSelect
+                        : (item, int index) => Container(
+                            padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+                            child: itemList(
+                              title: Text(item.label, style: const TextStyle(fontSize: CFontSize.paragraph1)),
+                            )),
+                    format: widget.format,
+                    onTap: (item) async {
+                      widget.onChanged(widget.items == null ? widget.selectValue(item) : item.value);
+                      widget.controller.text = widget.items == null ? widget.selectLabel(item) : item.label;
+                      await Future.delayed(const Duration(milliseconds: 50));
+                      // focusNode.nextFocus();
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    api: widget.api),
               ),
-            ),
-            // filterFn: (user, filter) => onFind(filter),
-          ),
-        ),
-        SizedBox(height: space ? Space.large : 0),
-      ],
+            );
+          },
+        );
+      },
     );
   }
 }

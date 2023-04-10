@@ -8,16 +8,12 @@ import '/cubit/index.dart';
 import '/models/index.dart';
 import '/widgets/index.dart';
 
-class Dialogs {
-  late BuildContext context;
-
-  Dialogs(this.context);
-
+class UDialog {
   Future<void> startLoading() async {
     return await showDialog<void>(
-      context: context,
+      context: rootNavigatorKey.currentState!.context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (_) {
         return SimpleDialog(
           elevation: 0.0,
           backgroundColor: Colors.transparent,
@@ -37,16 +33,16 @@ class Dialogs {
   }
 
   Future<void> stopLoading() async {
-    Navigator.of(context).pop();
+    Navigator.of(rootNavigatorKey.currentState!.context).pop();
   }
 
   Future<void> showError({String? text, String? title}) async {
     return AwesomeDialog(
-      context: context,
+      context: rootNavigatorKey.currentState!.context,
       animType: AnimType.leftSlide,
       headerAnimationLoop: false,
       dialogType: DialogType.error,
-      titleTextStyle: Style.title,
+      titleTextStyle: CStyle.title,
       title: title,
       desc: text,
     ).show();
@@ -54,62 +50,103 @@ class Dialogs {
 
   Future<void> showSuccess({String? text, String? title, Function? onDismiss}) async {
     return AwesomeDialog(
-        context: context,
+        context: rootNavigatorKey.currentState!.context,
         autoHide: const Duration(seconds: 2),
         animType: AnimType.leftSlide,
         headerAnimationLoop: false,
         dialogType: DialogType.success,
-        titleTextStyle: Style.title,
+        titleTextStyle: CStyle.title,
         title: title,
         desc: text,
         onDismissCallback: (DismissType type) {
           if (onDismiss != null) {
-            onDismiss(context);
+            onDismiss(rootNavigatorKey.currentState!.context);
+          }
+        }).show();
+  }
+
+  Future<dynamic> showConfirm({
+    String? text,
+    String? title,
+    Function(BuildContext context)? onDismiss,
+    void Function()? btnCancelOnPress,
+    void Function()? btnOkOnPress,
+    String btnOkText = 'Đồng ý',
+    String btnCancelText = 'Huỷ bỏ',
+    Widget? body,
+  }) async {
+    return AwesomeDialog(
+        context: rootNavigatorKey.currentState!.context,
+        autoDismiss: false,
+        animType: AnimType.leftSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.warning,
+        titleTextStyle: CStyle.title,
+        title: title,
+        desc: text,
+        btnCancelText: btnCancelText,
+        btnCancel: ElevatedButton(
+          style: CStyle.buttonWhite.copyWith(elevation: const MaterialStatePropertyAll(0)),
+          onPressed: btnCancelOnPress ?? () => rootNavigatorKey.currentState!.pop(),
+          child: Text(btnCancelText),
+        ),
+        btnOk: ElevatedButton(
+          style: CStyle.button,
+          onPressed: btnOkOnPress ?? () => rootNavigatorKey.currentState!.pop(),
+          child: Text(btnOkText),
+        ),
+        body: body,
+        onDismissCallback: (DismissType type) {
+          if (onDismiss != null) {
+            onDismiss(rootNavigatorKey.currentState!.context);
           }
         }).show();
   }
 
   Future<void> showForm(
       {required String title,
-      required List<ModelFormItem> formItem,
-      required submit,
+      required List<MFormItem> formItem,
+      required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
+      Function()? submit,
       String textButton = 'Xác nhận'}) async {
     late AwesomeDialog dialog;
     dialog = AwesomeDialog(
       padding: const EdgeInsets.all(0),
-      context: context,
+      context: rootNavigatorKey.currentState!.context,
       animType: AnimType.scale,
       dialogType: DialogType.question,
       headerAnimationLoop: false,
       keyboardAware: true,
       body: BlocProvider(
-        create: (context) => AppFormCubit(),
+        create: (context) => BlocC(),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
               Text(
                 title,
-                style: Style.title,
+                style: CStyle.title,
               ),
               const SizedBox(
-                height: Space.large,
+                height: CSpace.large,
               ),
-              WidgetForm(list: formItem),
+              WForm(list: formItem),
               const SizedBox(
-                height: Space.large,
+                height: CSpace.large,
               ),
-              BlocBuilder<AppFormCubit, AppFormState>(
+              BlocBuilder<BlocC, BlocS>(
                 builder: (context, state) {
-                  return BlocListener<AppFormCubit, AppFormState>(
+                  return BlocListener<BlocC, BlocS>(
                     listenWhen: (context, state) => state.status == AppStatus.success,
                     listener: (context, state) {
                       dialog.dismiss();
-                      submit();
+                      if (submit != null) {
+                        submit();
+                      }
                     },
                     child: ElevatedButton(
                         onPressed: () {
-                          context.read<AppFormCubit>().submit(context: context);
+                          context.read<BlocC>().submit(api: api);
                         },
                         child: Text(textButton)),
                   );
@@ -120,5 +157,11 @@ class Dialogs {
         ),
       ),
     )..show();
+  }
+
+  Future<void> delay([int milliseconds = 100]) async {
+    if (rootNavigatorKey.currentState!.context.mounted == false) {
+      await Future.delayed(Duration(milliseconds: milliseconds));
+    }
   }
 }
