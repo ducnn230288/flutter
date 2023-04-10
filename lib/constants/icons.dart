@@ -88,19 +88,4 @@ class CIcon {
     width: CFontSize.paragraph2,
     color: CColor.primary,
   );
-  static final search = SvgPicture.asset(
-    'assets/svgs/search.svg',
-    semanticsLabel: 'Search',
-    width: FontSizes.headline3,
-    color: Colors.white,
-  );
-  static final arrowDown = SvgPicture.asset(
-    'assets/svgs/arrow-down.svg',
-    semanticsLabel: 'Arrow down',
-    color: ColorName.black.shade200,
-    width: 0,
-  );
-  static final placeholderImage = Image.asset(
-    'assets/images/placeholder.jpeg',
-  );
 }
