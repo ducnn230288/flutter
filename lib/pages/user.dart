@@ -12,57 +12,58 @@ class UserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppAuthCubit auth = context.read<AppAuthCubit>();
-    List<ModelFormItem> listFormItem = [
-      ModelFormItem(name: 'fullTextSearch', label: 'Tìm kiếm người dùng'),
+    List<MFormItem> listFormItem = [
+      MFormItem(name: 'fullTextSearch', label: 'Tìm kiếm người dùng'),
     ];
 
     return Scaffold(
-        appBar: appBar(title: 'Người dùng', context: context),
-        body: WidgetList(
+        appBar: appBar(title: 'Người dùng'),
+        body: WList(
             top: Column(
               children: [
                 const SizedBox(
-                  height: Space.large / 2,
+                  height: CSpace.large / 2,
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: Space.large),
+                  padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
                   child: Row(
                     children: [
-                      Flexible(child: WidgetForm(list: listFormItem)),
+                      Flexible(child: WForm(list: listFormItem)),
                       const SizedBox(
-                        width: Space.large,
+                        width: CSpace.large,
                       ),
                       SizedBox(
-                        width: Height.medium,
+                        width: CHeight.medium,
                         child: ElevatedButton(
-                            onPressed: () => context.read<AppFormCubit>().submit(
-                                context: context,
-                                auth: auth,
-                                api: (filter, logout, page, size, sort) => RepositoryProvider.of<Api>(context)
-                                    .getUser(logout: logout, filter: filter, page: page, size: size),
+                            onPressed: () => context.read<BlocC>().submit(
+                                api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context)
+                                    .user
+                                    .get(filter: filter, page: page, size: size),
                                 getData: true,
-                                format: ModelUser.fromJson),
-                            child: AppIcons.search),
+                                format: MUser.fromJson),
+                            child: CIcon.search),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            item: (ModelUser item, Function onTap) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: Space.large),
-                child: itemList(
-                  leading: AppIcons.placeholderImage,
-                  title: Text(item.name, style: TextStyle(color: ColorName.primary, fontSize: FontSizes.paragraph1)),
-                  content: Text(
-                    item.email,
-                    style: TextStyle(color: ColorName.black.shade200, fontSize: FontSizes.paragraph2),
-                  ),
-                  onTap: () {},
-                )),
-            format: ModelUser.fromJson,
-            api: (filter, logout, page, size, sort) =>
-                RepositoryProvider.of<Api>(context).getUser(logout: logout, filter: filter, page: page, size: size)));
+            item: (content, int index){
+              MUser item =content;
+              return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+                  child: itemList(
+                    leading: CIcon.placeholderImage,
+                    title: Text(item.name ?? '', style: TextStyle(color: CColor.primary, fontSize: CFontSize.paragraph1)),
+                    content: Text(
+                      item.email ?? '',
+                      style: TextStyle(color: CColor.black.shade200, fontSize: CFontSize.paragraph2),
+                    ),
+                    onTap: () {},
+                  ));
+            },
+            format: MUser.fromJson,
+            api: (filter, page, size, sort) =>
+                RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size)));
   }
 }

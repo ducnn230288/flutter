@@ -1,4 +1,4 @@
-package com.example.uberentaltest
+package com.uberental.uberental
 
 import io.flutter.embedding.android.FlutterActivity
 

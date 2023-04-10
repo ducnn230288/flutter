@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -17,17 +18,17 @@ class IntroductionPage extends StatelessWidget {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: FontSizes.headline1,
-              color: ColorName.black,
+              fontSize: CFontSize.headline1,
+              color: CColor.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
+            style: TextStyle(fontSize: CFontSize.paragraph1, color: CColor.black.shade500),
           ),
-          image: AppIcons.logo,
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
+          image: CIcon.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: CSpace.superLarge)),
         ),
         PageViewModel(
           titleWidget: Text(
@@ -35,17 +36,17 @@ class IntroductionPage extends StatelessWidget {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: FontSizes.headline1,
-              color: ColorName.black,
+              fontSize: CFontSize.headline1,
+              color: CColor.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
+            style: TextStyle(fontSize: CFontSize.paragraph1, color: CColor.black.shade500),
           ),
-          image: AppIcons.logo,
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
+          image: CIcon.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: CSpace.superLarge)),
         ),
         PageViewModel(
           titleWidget: Text(
@@ -53,17 +54,17 @@ class IntroductionPage extends StatelessWidget {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: FontSizes.headline1,
-              color: ColorName.black,
+              fontSize: CFontSize.headline1,
+              color: CColor.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
+            style: TextStyle(fontSize: CFontSize.paragraph1, color: CColor.black.shade500),
           ),
-          image: AppIcons.logo,
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
+          image: CIcon.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: CSpace.superLarge)),
         ),
         PageViewModel(
           titleWidget: Text(
@@ -71,37 +72,37 @@ class IntroductionPage extends StatelessWidget {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: FontSizes.headline1,
-              color: ColorName.black,
+              fontSize: CFontSize.headline1,
+              color: CColor.black,
             ),
           ),
           bodyWidget: Text(
             "Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. Không có ai muốn khổ đau cho chính mình, muốn tìm kiếm về nó và muốn có nó, bởi vì nó là sự đau khổ. ",
             textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: FontSizes.paragraph1, color: ColorName.black.shade500),
+            style: TextStyle(fontSize: CFontSize.paragraph1, color: CColor.black.shade500),
           ),
-          image: AppIcons.logo,
-          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: Space.superLarge)),
+          image: CIcon.logo,
+          decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: CSpace.superLarge)),
         ),
       ],
       isTopSafeArea: true,
       dotsDecorator: DotsDecorator(
-        size: const Size.square(Space.mediumSmall),
-        activeSize: const Size(Space.large, Space.mediumSmall),
+        size: const Size.square(CSpace.mediumSmall),
+        activeSize: const Size(CSpace.large, CSpace.mediumSmall),
         activeColor: Theme.of(context).colorScheme.secondary,
-        color: ColorName.black.shade100,
-        spacing: const EdgeInsets.symmetric(horizontal: Space.superSmall),
-        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Space.large)),
+        color: CColor.black.shade100,
+        spacing: const EdgeInsets.symmetric(horizontal: CSpace.superSmall),
+        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.large)),
       ),
       showSkipButton: true,
-      skip: const Text("Bỏ qua"),
+      skip: Text("pages.login.introduction.Skip".tr()),
       showNextButton: true,
-      next: const Text("Tiếp tục"),
-      nextStyle: Style.button,
-      doneStyle: Style.button,
-      done: const Text("Bắt đầu"),
+      next: Text("pages.login.introduction.Next".tr()),
+      nextStyle: CStyle.button,
+      doneStyle: CStyle.button,
+      done: Text("pages.login.introduction.Get started".tr()),
       onDone: () {
-        context.pushNamed('/login');
+        context.goNamed(CRoute.login);
       },
     );
   }

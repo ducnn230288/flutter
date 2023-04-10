@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
@@ -16,8 +17,10 @@ class OTPVerificationPage extends StatelessWidget {
 
     handleSubmit() async {
       if (controller.value.text.length == 6) {
-        Dialogs(context).showSuccess(
-            title: extra == 'Register' ? 'Đăng ký thành công' : 'Đổi mật khẩu thành công',
+        UDialog().showSuccess(
+            title: extra == 'Register'
+                ? 'pages.login.otp_verification.Sign Up Success'.tr()
+                : 'pages.login.otp_verification.Change password successfully'.tr(),
             onDismiss: (context) {
               if (extra == 'Register') {
                 GoRouter.of(context).pop();
@@ -37,20 +40,20 @@ class OTPVerificationPage extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: appBar(title: 'Xác nhận OTP', context: context),
+      appBar: appBar(title: 'pages.login.otp_verification.Confirm OTP'.tr()),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: Space.large),
+        padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
         child: Center(
           child: ListView(
             shrinkWrap: true,
             children: [
               Text(
-                'Kiểm tra email đã đăng ký của bạn. Chúng tôi đã gửi cho bạn mã PIN ******',
+                '${'pages.login.otp_verification.Check your registered email'.tr()} ******',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: ColorName.black.shade300),
+                style: TextStyle(color: CColor.black.shade300),
               ),
               const SizedBox(
-                height: Space.large * 2,
+                height: CSpace.large * 2,
               ),
               Pinput(
                 length: 6,
@@ -58,10 +61,10 @@ class OTPVerificationPage extends StatelessWidget {
                 controller: controller,
                 defaultPinTheme: defaultPinTheme,
                 submittedPinTheme: defaultPinTheme.copyWith(
-                  textStyle: TextStyle(color: ColorName.primary, fontSize: 18.0),
+                  textStyle: TextStyle(color: CColor.primary, fontSize: 18.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(width: 3, color: ColorName.primary),
+                    border: Border.all(width: 3, color: CColor.primary),
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: const [
                       BoxShadow(
@@ -79,7 +82,7 @@ class OTPVerificationPage extends StatelessWidget {
                     Container(
                       height: 3,
                       decoration: BoxDecoration(
-                        color: ColorName.primary,
+                        color: CColor.primary,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -91,7 +94,7 @@ class OTPVerificationPage extends StatelessWidget {
                     Container(
                       height: 3,
                       decoration: BoxDecoration(
-                        color: ColorName.black.shade50,
+                        color: CColor.black.shade50,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -99,11 +102,11 @@ class OTPVerificationPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: Space.large * 4,
+                height: CSpace.large * 4,
               ),
-              ElevatedButton(onPressed: handleSubmit, child: const Text('Xác nhận')),
+              ElevatedButton(onPressed: handleSubmit, child: Text('pages.login.otp_verification.Confirm'.tr())),
               const SizedBox(
-                height: Space.large,
+                height: CSpace.large,
               ),
             ],
           ),

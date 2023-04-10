@@ -1,4 +1,4 @@
 export 'auth.dart';
-export 'form.dart';
+export 'bloc.dart';
 
-enum AppStatus { init, success, fails, inProcess }
+enum AppStatus { init, success, fails, inProcess, show }

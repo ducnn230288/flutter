@@ -3,22 +3,22 @@ import 'package:flutter_svg/svg.dart';
 
 import '/constants/index.dart';
 
-itemDrawer({required String svg, required String name, onTap, bool isBorder = true}) => ListTile(
+listTile({required String svg, required String name, onTap, bool isBorder = true}) => ListTile(
       minLeadingWidth: 0,
       contentPadding: const EdgeInsets.only(right: 0),
       leading: SvgPicture.asset(
         svg,
         semanticsLabel: name,
         width: 24,
-        color: ColorName.black,
+        color: CColor.black,
       ),
       shape: Border(
-        bottom: BorderSide(width: 0, color: isBorder ? ColorName.black.shade100 : Colors.transparent),
+        bottom: BorderSide(width: 0, color: isBorder ? CColor.black.shade100 : Colors.transparent),
       ),
       title: Text(
         name,
-        style: TextStyle(color: ColorName.black, fontSize: FontSizes.headline4),
+        style: TextStyle(color: CColor.black, fontSize: CFontSize.headline4),
       ),
-      trailing: AppIcons.arrowRight,
+      trailing: CIcon.arrowRight,
       onTap: onTap,
     );

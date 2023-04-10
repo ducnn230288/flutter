@@ -1,0 +1,84 @@
+{
+  "pages": {
+    "login": {
+      "introduction": {
+        "Skip": "Bỏ qua",
+        "Next": "Tiếp tục",
+        "Get started": "Bắt đầu"
+      },
+      "login": {
+        "Email address": "Địa chỉ Email",
+        "Password": "Mật khẩu",
+        "Log in": "Đăng nhập",
+        "Remember me": "Lưu mật khẩu",
+        "Forgot password": "Quên mật khẩu",
+        "Password reset": "Cấp lại mật khẩu",
+        "terms of service": "Bằng cách đăng nhập, bạn đã đồng ý với các điều khoản dịch vụ và điều kiện bảo mật của ứng dụng",
+        "You don't have an account yet?": "Ban chưa có tài khoản? ",
+        "Register": "Đăng ký"
+      },
+      "otp_verification": {
+        "Sign Up Success": "Đăng ký thành công",
+        "Change password successfully": "Đổi mật khẩu thành công",
+        "Confirm OTP": "Xác nhận OTP",
+        "Check your registered email": "Kiểm tra email đã đăng ký của bạn. Chúng tôi đã gửi cho bạn mã PIN",
+        "Confirm": "Xác nhận"
+      },
+      "register": {
+        "Fullname": "Họ và tên",
+        "Gender": "Giới tính",
+        "Re-enter password": "Nhập lại mật khẩu",
+        "Account Type": "Loại tài khoản",
+        "Professional Degree": "Bằng cấp chuyên môn",
+        "Do you already have an account?": "Ban đã có tài khoản?"
+      }
+    }
+  },
+  "utils": {
+    "app_console": {
+      "days ago": "ngày trước",
+      "months ago": "tháng trước",
+      "years ago": "năm trước",
+      "Agreement": "Thỏa thuận",
+      "million": "triệu",
+      "billion": "tỷ",
+      "System management": "Quản trị hệ thống",
+      "Undefined": "Chưa xác định"
+    }
+  },
+  "widgets": {
+    "drawer": {
+      "Log out": "Đăng xuất"
+    },
+    "form": {
+      "input": {
+        "Required content": "Nội dung bắt buộc"
+      },
+      "select": {
+        "Search": "Tìm kiếm"
+      },
+      "upload": {
+        "Upload": "Tải lên",
+        "Cancel": "Hủy bỏ",
+        "Select image from gallery": "Chọn hình ảnh từ thư viện",
+        "Select multiple images from gallery": "Chọn nhiều hình ảnh từ thư viện",
+        "Take a photo": "Chụp ảnh",
+        "Select Video from gallery": "Chọn Video từ thư viện",
+        "Shoot a movie": "Quay một đoạn phim"
+      }
+    },
+    "list": {
+      "details": {
+        "Empty": "Trống",
+        "Phone number copied": "Đã sao chép số điện thoại",
+        "Successfully copied": "Đã sao chép thành công"
+      }
+    },
+    "description_text_widget": {
+      "See more": "Xem thêm"
+    }
+  },
+  "example": {
+    "hello": "Chào"
+  }
+}

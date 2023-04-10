@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,32 +14,28 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.white,
-      endDrawer: endDrawer(context: context),
-      body: BlocBuilder<AppAuthCubit, AppAuthState>(
+      drawer: drawer(),
+      body: BlocBuilder<AuthC, AuthS>(
         builder: (context, state) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: Space.large),
+            padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
             child: ListView(
               shrinkWrap: true,
               children: [
-                const SizedBox(
-                  height: Space.large / 4,
-                ),
+                const SizedBox(height: CSpace.large / 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Text'),
                     SizedBox(
                         width: 40,
                         height: 40,
                         child: Builder(
                             builder: (context) => ElevatedButton(
-                                  onPressed: () {
-                                    Scaffold.of(context).openEndDrawer();
-                                  },
-                                  style: Style.buttonWhite,
-                                  child: AppIcons.menuRight,
+                                  onPressed: () => Scaffold.of(context).openDrawer(),
+                                  style: CStyle.buttonWhite,
+                                  child: CIcon.menuRight,
                                 ))),
+                    Text('example.hello'.tr()),
                   ],
                 )
               ],

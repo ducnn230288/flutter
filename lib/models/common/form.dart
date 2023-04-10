@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ModelFormItem {
-  ModelFormItem({
-    required this.name,
+class MFormItem {
+  MFormItem({
+    this.name = '',
     this.type = '',
     this.label = '',
     this.value = '',
+    this.code = '',
     this.maxLines = 1,
     this.required = true,
     this.show = true,
@@ -24,12 +25,17 @@ class ModelFormItem {
     this.showSearch = true,
     this.selectLabel,
     this.selectValue,
+    this.maxQuantity = 1,
+    this.minQuantity = 1,
+    this.child,
+    this.dataType,
   });
 
   String name;
   String type;
   String label;
   dynamic value;
+  dynamic code;
   int maxLines;
   bool required;
   bool show;
@@ -38,22 +44,27 @@ class ModelFormItem {
   bool number;
   Function? onTap;
   Function? onFind;
-  Function? onChange;
+  Function(dynamic)? onChange;
   String? icon;
   Widget? suffix;
-  List? items;
+  List<MOption>? items;
   Function? format;
-  Function? api;
-  Function? itemSelect;
+  Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort)? api;
+  Function(dynamic content, int index)? itemSelect;
   bool? showSearch;
   Function? selectLabel;
   Function? selectValue;
+  int minQuantity;
+  int maxQuantity;
+  Widget? child;
+  DataType? dataType;
 
-  factory ModelFormItem.fromJson(Map<String, dynamic> json) => ModelFormItem(
+  factory MFormItem.fromJson(Map<String, dynamic> json) => MFormItem(
         name: json["name"] ?? '',
         type: json["type"] ?? '',
         label: json["label"] ?? '',
         value: json["value"] ?? '',
+        code: json["code"] ?? '',
         maxLines: json["maxLines"] ?? 1,
         required: json["required"] ?? true,
         show: json["show"] ?? true,
@@ -65,13 +76,17 @@ class ModelFormItem {
         onChange: json["onChange"],
         icon: json["icon"],
         suffix: json["suffix"],
-        items: json["items"] != null ? List<ModelOption>.from(json["items"].map((x) => ModelOption.fromJson(x))) : null,
+        items: json["items"],
         format: json["format"],
         api: json["api"],
         itemSelect: json["itemSelect"],
         showSearch: json["showSearch"] ?? true,
         selectLabel: json["selectLabel"],
         selectValue: json["selectValue"],
+        minQuantity: json["minQuantity"],
+        maxQuantity: json["maxQuantity"],
+        child: json["child"],
+        dataType: json["dataType"] ?? DataType.normal,
       );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +94,7 @@ class ModelFormItem {
         "type": type,
         "label": label,
         "value": value,
+        "code": code,
         "maxLines": maxLines,
         "required": required,
         "show": show,
@@ -90,25 +106,29 @@ class ModelFormItem {
         "onChange": onChange,
         "icon": icon,
         "suffix": suffix,
-        "items": items != null ? List<dynamic>.from(items!.map((x) => x.toJson())) : null,
+        "items": items != null ? List<MOption>.from(items!.map((x) => x.toJson())) : null,
         "format": format,
         "api": api,
         "itemSelect": itemSelect,
         "showSearch": showSearch,
         "selectLabel": selectLabel,
         "selectValue": selectValue,
+        "minQuantity": minQuantity,
+        "maxQuantity": maxQuantity,
+        "child": child,
+        "dataType": dataType,
       };
 }
 
-class ModelOption {
-  ModelOption({
+class MOption {
+  MOption({
     this.label = '',
     this.value = '',
   });
 
   String label;
   String value;
-  factory ModelOption.fromJson(Map<String, dynamic> json) => ModelOption(
+  factory MOption.fromJson(Map<String, dynamic> json) => MOption(
         label: json["label"] ?? '',
         value: json["value"] ?? '',
       );
@@ -118,3 +138,5 @@ class ModelOption {
         "value": value,
       };
 }
+
+enum DataType { phone, status, separation, normal, column, button, copy, image }

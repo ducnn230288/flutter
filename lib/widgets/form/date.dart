@@ -1,13 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:uberental/utils/dialogs.dart';
 
 import '/constants/index.dart';
 import './input.dart';
 
-class WidgetDate extends StatelessWidget {
+class WDate extends StatefulWidget {
   final String label;
   final String value;
   final bool space;
@@ -19,7 +21,7 @@ class WidgetDate extends StatelessWidget {
   final String? format;
   final TextEditingController controller;
 
-  const WidgetDate({
+  const WDate({
     Key? key,
     this.label = '',
     this.value = '',
@@ -34,60 +36,70 @@ class WidgetDate extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<WDate> createState() => _WDateState();
+}
+
+class _WDateState extends State<WDate> {
+  FocusNode focusNode = FocusNode();
+  DateTime selectedDate = DateTime.now();
+
+  @override
   Widget build(BuildContext context) {
-    return WidgetInput(
-      controller: controller,
-      label: label,
-      value: value,
-      space: space,
-      maxLines: maxLines,
-      required: required,
-      enabled: enabled,
+    return WInput(
+      controller: widget.controller,
+      label: widget.label,
+      value: widget.value,
+      space: widget.space,
+      maxLines: widget.maxLines,
+      required: widget.required,
+      enabled: widget.enabled,
+      focus: true,
+      focusNode: focusNode,
       onTap: () {
+        focusNode.unfocus();
         return showDialog<void>(
           context: context,
-          barrierDismissible: false, // user must tap button!
+          // barrierDismissible: false, // user must tap button!
           builder: (BuildContext context) {
             return AlertDialog(
               content: SingleChildScrollView(
-                  child: SizedBox(
-                width: 250,
-                child: SfDateRangePicker(
-                  headerStyle: DateRangePickerHeaderStyle(textStyle: Style.title),
-                  view: DateRangePickerView.month,
-                  selectionMode: DateRangePickerSelectionMode.single,
-                  onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                    // _selectedDate = DateFormat('dd MMMM, yyyy').format(args.value);
-
-                    SchedulerBinding.instance!.addPostFrameCallback((duration) {
-                      if (onChanged != null) {
-                        initializeDateFormatting();
-                        controller.text = DateFormat('dd MMMM, yyyy', 'vi').format(args.value);
-                        onChanged!(args.value.toString());
-                        Navigator.of(context).pop();
-                        FocusScope.of(context).unfocus();
-                      }
-                    });
-                  },
-                ),
-              )),
-              contentPadding: const EdgeInsets.all(Space.small),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Huỷ bỏ'),
-                  onPressed: () {
-                    controller.clear();
-                    onChanged!('');
-                    Navigator.of(context).pop();
-                    FocusScope.of(context).unfocus();
-                  },
-                )
-              ],
+                child: SizedBox(
+                  width: 250,
+                  child: SfDateRangePicker(
+                    initialSelectedDate: selectedDate,
+                    headerStyle: DateRangePickerHeaderStyle(textStyle: CStyle.title),
+                    view: DateRangePickerView.month,
+                    selectionMode: DateRangePickerSelectionMode.single,
+                    onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+                      SchedulerBinding.instance.addPostFrameCallback((duration) async {
+                        if (widget.onChanged != null) {
+                          selectedDate = args.value;
+                          initializeDateFormatting();
+                          widget.controller.text = DateFormat('dd MMMM, yyyy', 'vi').format(args.value);
+                          widget.onChanged!(args.value.toString());
+                          await UDialog().delay();
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+                        }
+                      });
+                    },
+                  ),
+                )),
+              contentPadding: const EdgeInsets.all(CSpace.small),
             );
           },
         );
       },
-      icon: icon,
+      icon: widget.icon,
     );
+  }
+
+  @override
+  void initState() {
+    if (widget.value != '') {
+      selectedDate = DateTime.parse(widget.value);
+    }
+    super.initState();
   }
 }

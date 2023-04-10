@@ -1,83 +1,114 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import '/constants/routes.dart';
+import '/cubit/index.dart';
 import '/models/index.dart';
+import '/service/index.dart';
+import 'index.dart';
 
 class Api {
-  final endpoint = 'http://dev1.geneat.vn:7800/api/v1';
+  SAuth get auth => SAuth(endpoint, headers, checkAuth);
+  SUser get user => SUser(endpoint, headers, checkAuth);
+  SDrawer get drawer => SDrawer(endpoint, headers, checkAuth);
+  SAddress get address => SAddress(endpoint, headers, checkAuth);
 
-  final apiKey = 'b8735916ebe69a988e7a757928558cf0';
-
-  final headers = {"Content-Type": "application/json"};
-
-  Future<ModelApi?> checkAuth({required http.Response result, required logout}) async {
-    if (result.statusCode < 400) {
-      ModelApi response = ModelApi.fromJson(jsonDecode(result.body));
-      if (response.data is List) {
-        response.data = {
-          'page': 1,
-          'totalPages': response.data.length,
-          'size': response.data.length,
-          'numberOfElements': response.data.length,
-          'totalElements': response.data.length,
-          'content': response.data
-        };
-      }
-      return response;
-    } else if (result.statusCode == 401 && logout != null) {
-      logout();
+  final String endpoint = Environment.apiUrl;
+  final Map<String, String> headers = {"Content-Type": "application/json"};
+  Future<MApi?> checkAuth({required http.Response result}) async {
+    if (result.body.isEmpty) {
+      return null;
     }
-    return null;
+    if (result.statusCode == 401) {
+      rootNavigatorKey.currentState!.context.read<AuthC>().logout();
+    }
+    MApi response = MApi.fromJson(jsonDecode(result.body));
+    if (!response.isSuccess) {
+      Timer(const Duration(milliseconds: 50), () {
+        UDialog().showError(text: response.message);
+      });
+      return null;
+    }
+
+    if (response.data is List) {
+      return response.copyWith(data: {
+        'page': 1,
+        'totalPages': response.data.length,
+        'size': response.data.length,
+        'numberOfElements': response.data.length,
+        'totalElements': response.data.length,
+        'content': response.data
+      });
+    }
+    return response;
   }
 
   Future setToken({required String token}) async {
     headers['Authorization'] = 'Bearer $token';
   }
 
-  // Future<List<Map<String, dynamic>>> login({required body}) async {
-  //   var result = await http.post(Uri.parse('$endpoint/authentication/jwt/login'), body: jsonEncode(body));
-  //   return List.castFrom<dynamic, Map<String, dynamic>>(jsonDecode(result.body)['results']);
-  // }
-
-  Future<ModelApi> login({required body}) async {
-    http.Response result =
-        await http.post(Uri.parse('$endpoint/authentication/jwt/login'), body: jsonEncode(body), headers: headers);
-    return ModelApi.fromJson(jsonDecode(result.body));
+  Future setLanguage({required String language}) async {
+    headers['x-language'] = language;
   }
 
-  Future<ModelApi> register({required body}) async {
-    http.Response result =
-        await http.post(Uri.parse('$endpoint/idm/users/register'), body: jsonEncode(body), headers: headers);
-    return ModelApi.fromJson(jsonDecode(result.body));
+  Future<MUpload> postUploadPhysicalBlob({required XFile file, required String docType}) async {
+    http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse('$endpoint/upload/blob/$docType'));
+    request.headers['Content-Type'] = 'multipart/form-data';
+    request.headers['Authorization'] = headers['Authorization'] ?? '';
+
+    http.ByteStream stream = http.ByteStream(file.openRead());
+    int length = await file.length();
+
+    http.MultipartFile multipartFile = http.MultipartFile('file', stream, length, filename: file.name);
+    request.files.add(multipartFile);
+    var response = await request.send();
+    final res = await http.Response.fromStream(response).timeout(const Duration(seconds: 20), onTimeout: () {
+      return http.Response('Error', 408);
+    });
+    return MUpload.fromJson(jsonDecode(res.body)['data']);
   }
 
-  Future<ModelApi> forgotPassword({required String email}) async {
+  Future<List<MUpload>> getAttachmentsTemplate({String entityType = 'post'}) async {
     http.Response result =
-        await http.put(Uri.parse('$endpoint/idm/users/forgot-password/$email'), body: jsonEncode({}), headers: headers);
-    return ModelApi.fromJson(jsonDecode(result.body));
-  }
-
-  Future<ModelApi?> info({required String token}) async {
-    headers['Authorization'] = 'Bearer $token';
-    http.Response result =
-        await http.post(Uri.parse('$endpoint/authentication/jwt/info'), body: jsonEncode({}), headers: headers);
+        await http.get(Uri.parse('$endpoint/upload/$entityType/attachment-templates'), headers: headers);
+    List<MUpload> data = [];
     if (result.statusCode < 400) {
-      return ModelApi.fromJson(jsonDecode(result.body));
+      List body = jsonDecode(result.body)['data'];
+      for (int i = 0; i < body.length; i++) {
+        data.add(MUpload.fromJson(body[i]));
+      }
     }
-    return null;
+    return data;
   }
 
-  Future<ModelApi?> getUser(
-      {required logout, Map<String, dynamic> filter = const {}, int page = 1, int size = 20}) async {
-    return checkAuth(
-        result: await http.get(
-            Uri.parse('$endpoint/idm/users').replace(queryParameters: {
-              'filter': jsonEncode(filter),
-              'page': page.toString(),
-              'size': size.toString(),
-            }),
-            headers: headers),
-        logout: logout);
+  Future<dynamic> downloadFile({required http.Response response, String nameFile = 'test.png'}) async {
+    File file;
+    String filePath = '';
+    String dir = '';
+
+    final String fileName = response.headers['content-disposition'] != null
+        ? response.headers['content-disposition']!.split(';')[1].split('=')[1].replaceAll(r'/\"/g', '')
+        : nameFile;
+    if (Platform.isAndroid) {
+      if (await Permission.storage.request().isGranted) {
+        dir = (await getExternalStorageDirectory())!.path;
+        dir = '$dir/Download';
+        dir = dir.replaceAll("Android/data/com.geneat.scale.scale/files/", "");
+        await Directory(dir).create(recursive: true);
+      }
+    } else if (Platform.isIOS) {
+      dir = (await getApplicationDocumentsDirectory()).path;
+    }
+    filePath = '$dir/$fileName';
+    file = File(filePath);
+    file.writeAsBytesSync(response.bodyBytes);
+    return fileName;
   }
 }

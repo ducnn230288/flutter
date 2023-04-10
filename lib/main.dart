@@ -1,18 +1,26 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '/constants/index.dart';
 import '/cubit/index.dart';
 import '/utils/index.dart';
-import 'routes.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  await dotenv.load(fileName: Environment.fileName);
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(EasyLocalization(supportedLocales: const [
+    // Locale('en'),
+    Locale('vi'),
+  ], path: 'assets/translations', fallbackLocale: const Locale('vi'), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
+
   final Api _api = Api();
 
   @override
@@ -21,19 +29,26 @@ class MyApp extends StatelessWidget {
         value: _api,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<AppAuthCubit>(
-              create: (BuildContext context) => AppAuthCubit(),
+            BlocProvider<AuthC>(
+              create: (BuildContext context) => AuthC(),
             ),
           ],
           child: MaterialApp.router(
-            title: 'Flutter Template',
+            title: 'UberRental',
+            builder: (BuildContext context, Widget? child) => GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: child!,
+            ),
             debugShowCheckedModeBanner: false,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             theme: ThemeData(
               textTheme: GoogleFonts.manropeTextTheme(),
-              primarySwatch: ColorName.primary,
-              unselectedWidgetColor: ColorName.primary,
+              primarySwatch: CColor.primary,
+              unselectedWidgetColor: CColor.primary,
               elevatedButtonTheme: ElevatedButtonThemeData(
-                style: Style.button,
+                style: CStyle.button,
               ),
             ),
             routeInformationProvider: routes.routeInformationProvider,

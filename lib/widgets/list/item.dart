@@ -17,29 +17,29 @@ itemList(
                 border: Border(
                     bottom: BorderSide(
                 width: 0,
-                color: ColorName.black.shade100,
+                color: CColor.black.shade100,
               )))
             : const BoxDecoration(),
-        padding: const EdgeInsets.symmetric(vertical: Space.medium),
+        padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             leading != null
                 ? SizedBox(
-                    width: Height.mediumSmall * 1.8,
+                    width: CHeight.mediumSmall * 1.8,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(Space.small), // Image border
+                      borderRadius: BorderRadius.circular(CSpace.small), // Image border
                       child: leading,
                     ),
                   )
                 : const SizedBox(),
-            leading != null ? const SizedBox(width: Space.medium) : const SizedBox(),
+            leading != null ? const SizedBox(width: CSpace.medium) : const SizedBox(),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   title,
-                  const SizedBox(height: Space.superSmall / 2),
+                  const SizedBox(height: CSpace.superSmall / 2),
                   content ?? const SizedBox(),
                 ],
               ),

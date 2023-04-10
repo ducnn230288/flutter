@@ -16,19 +16,19 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    context.read<AppAuthCubit>().check(context: context);
+    context.read<AuthC>().check(context: context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorName.primary,
-      body: BlocConsumer<AppAuthCubit, AppAuthState>(
+      backgroundColor: CColor.primary,
+      body: BlocConsumer<AuthC, AuthS>(
           listenWhen: (oldState, newState) => newState.status != AppStatus.init,
           listener: (context, state) =>
-              GoRouter.of(context).goNamed(state.status == AppStatus.fails ? RoutesName.introduction : RoutesName.home),
+              GoRouter.of(context).goNamed(state.status == AppStatus.fails ? CRoute.introduction : CRoute.home),
           builder: (context, state) => Center(
-                child: AppIcons.logoWhite,
+                child: CIcon.logoWhite,
               )),
     );
   }
