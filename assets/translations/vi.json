@@ -1,4 +1,9 @@
 {
+  "text": {
+    "clinic": "Phòng khám",
+    "detail": "Chi tiết",
+    "clinic_detail": "@:text.detail @.lower:text.clinic"
+  },
   "pages": {
     "login": {
       "introduction": {
@@ -10,11 +15,11 @@
         "Email address": "Địa chỉ Email",
         "Password": "Mật khẩu",
         "Log in": "Đăng nhập",
-        "Remember me": "Lưu mật khẩu",
+        "Remember me": "Ghi nhớ tài khoản",
         "Forgot password": "Quên mật khẩu",
         "Password reset": "Cấp lại mật khẩu",
         "terms of service": "Bằng cách đăng nhập, bạn đã đồng ý với các điều khoản dịch vụ và điều kiện bảo mật của ứng dụng",
-        "You don't have an account yet?": "Ban chưa có tài khoản? ",
+        "You don't have an account yet?": "Bạn chưa có tài khoản? ",
         "Register": "Đăng ký"
       },
       "otp_verification": {
@@ -26,11 +31,12 @@
       },
       "register": {
         "Fullname": "Họ và tên",
+        "Phone number": "Số điện thoại",
         "Gender": "Giới tính",
         "Re-enter password": "Nhập lại mật khẩu",
         "Account Type": "Loại tài khoản",
         "Professional Degree": "Bằng cấp chuyên môn",
-        "Do you already have an account?": "Ban đã có tài khoản?"
+        "Do you already have an account?": "Bạn đã có tài khoản?"
       }
     }
   },
@@ -52,10 +58,20 @@
     },
     "form": {
       "input": {
-        "Required content": "Nội dung bắt buộc"
+        "rulesRequired": "Vui lòng nhập {}",
+        "Enter": "Nhập {}",
+        "Choose": "Chọn {}"
       },
       "select": {
-        "Search": "Tìm kiếm"
+        "Search": "Tìm kiếm",
+        "rulesRequired": "Vui lòng chọn {}"
+      },
+      "date": {
+        "Save": "Lưu lại",
+        "Time from": "Giờ bắt đầu",
+        "Time to": "Giờ kết thúc",
+        "Error message": "Bạn chưa chọn đầy đủ ngày",
+        "rulesRequired": "Vui lòng chọn {}"
       },
       "upload": {
         "Upload": "Tải lên",
@@ -80,5 +96,78 @@
   },
   "example": {
     "hello": "Chào"
+  },
+  "order": {
+    "form": {
+      "createdOnDate": "Ngày tạo đơn",
+      "implementationDate": "Ngày thực hiện",
+      "treatmentDate": "Thời gian thực hiện",
+      "medicalProcedureGroupCode": "Nhóm thủ thuật",
+      "medicalProcedureCode": "Loại thủ thuật",
+      "clinicId": "Phòng khám",
+      "commissionAmount": "Đề xuất hoa hồng",
+      "totalCommissionAmount": "Hoa hồng",
+      "customerName": "Tên khách hàng",
+      "isChildrenCustomer": {
+        "Title": "Độ tuổi",
+        "Adult": "Người lớn (trên 16 tuổi)",
+        "Child": "Trẻ em (từ 12 ~ 16 tuổi)"
+      },
+      "birthday": "Ngày sinh",
+      "gender": "Giới tính",
+      "difficultyCode": "Phân loại độ khó",
+      "numbersOfTeeth": "Số răng",
+      "positionOfTeeth": "Vị trí cung răng",
+      "description": "Nội dung chi tiết",
+      "patientCondition": "Tình trạng bệnh lý",
+      "medicalHistory": "Tiền sử bệnh lý khác",
+      "status": "Trạng thái đơn",
+      "orderNo": "Mã Order",
+      "address": "Địa chỉ phòng khám"
+    },
+    "create": {
+      "Title1": "Tạo Order",
+      "Title2": "Chỉnh sửa Order",
+      "Save draft": "Lưu nháp",
+      "Create order": "Gửi Order",
+      "Edit order": "Lưu Order",
+      "Total payment": "Tổng tiền thanh toán",
+      "term": {
+        "Title": "Trách nghiệm của Order Side",
+        "content": {
+          "0": "• Đảm bảo cơ sở vật chất để Farmer Side thực hiện thủ thuật 1 cách an toàn, sạch sẽ.",
+          "1": "• Có giấy phép kinh doanh hành nghề.",
+          "2": "• Đã tư vấn tất cả các vấn đề liên quan đến bệnh lý, rủi ro cho khách hàng trước khi Farmer tiến hành thực hiện.",
+          "3": "• Tuân thủ tất cả các quy định do nền tảng đưa ra.",
+          "4": "• Order Side hiểu rõ, ý thức rõ về các quy định do Bộ Y Tế ban hành trong làm việc, khám chữa bệnh chuyên ngành Nha Khoa.",
+          "5": "• Order Side hoàn toàn chủ động, tự nguyện trong việc kết nối, giao dịch công việc với Farmer Side. Order Side và Farmer Side hoàn toàn tự chịu trách nhiệm về các vi phạm của mình theo quy định hành nghề Nha Khoa do bộ Y Tế quy định.",
+          "6": "• Nền tảng không thay mặt Order Side, Farmer Side thỏa thuận giao dịch hay có các hành động không tuân thủ theo quy định của Bộ Y Tế."
+        }
+      }
+    }
+  },
+  "actions": {
+    "Title": "Thao tác",
+    "EDIT": "Chỉnh sửa",
+    "DELETE": "Xóa",
+    "CANCEL": "Hủy",
+    "REJECT": "Từ chối",
+    "APPROVE": "Duyệt",
+    "UN_PICK": "Hủy nhận Order",
+    "PICK": "Nhận Order",
+    "DISTRIBUTE": "Phân phối",
+    "PROPOSAL": "Gửi đề xuất"
+  },
+  "introduction": {
+    "Title": {
+      "0": "Dịch vụ nha khoa",
+      "1": "Phòng khám nha khoa",
+      "2": "Bác sĩ chuyên nghiệp"
+    },
+    "Content": {
+      "0": "Ngày nay các dịch vụ làm đẹp nha khoa, răng hàm mặt đang dần phổ biến và được nhiều người quan tâm. Vì vậy, Uberental đã cung cấp đa dạng các dịch vụ nha khoa với giá thành hợp lý nhất",
+      "1": "Phòng khám nha khoa của bạn đang có nhiều khách hàng nhưng lại thiếu bác sĩ. Hãy đặt lịch hẹn cho các bác sĩ của Uberental để đến phòng khám của bạn và điều trị cho các khách hàng",
+      "2": "Với đội ngũ bác sĩ có trình độ chuyên môn nghiệp vụ cao, có kinh nghiệm lâu năm được Uberental chọn lọc kĩ càng. Giúp mang đến cho khách hàng những phương pháp điều trị tốt nhất, tiết kiệm nhất. Nhằm đáp ứng mọi nhu cầu khám chữa bệnh của khách hàng"
+    }
   }
 }

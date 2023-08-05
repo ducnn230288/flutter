@@ -6,9 +6,9 @@
   <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- Cấp quyền cập nhật vị trí ở khi ở trạng thái nền -->
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/><!-- Cấp quyền truy cập url cho Android > 11. -->
    <application
-        android:label="uberental"
+        android:label="Uberental"
+        android:requestLegacyExternalStorage="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -27,6 +27,10 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <meta-data
+              android:name="io.flutter.embedding.android.SplashScreenDrawable"
+              android:resource="@drawable/launch_background"
+            />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

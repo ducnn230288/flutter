@@ -1,32 +1,38 @@
 {
+  "text": {
+    "clinic": "Phòng khám",
+    "detail": "Chi tiết",
+    "clinic_detail": "@:text.detail @.lower:text.clinic"
+  },
   "pages": {
     "login": {
       "introduction": {
-        "Skip": "Skip",
-        "Next": "Next",
-        "Get started": "Get started"
+        "Skip": "Bỏ qua",
+        "Next": "Tiếp tục",
+        "Get started": "Bắt đầu"
       },
       "login": {
-        "Email address": "Email address",
-        "Password": "Password",
-        "Log in": "Log in",
-        "Remember me": "Remember me",
-        "Forgot password": "Forgot password",
-        "Password reset": "Password reset",
-        "terms of service": "By logging in, you agree to the app's terms of service and privacy conditions",
-        "You don't have an account yet?": "You don't have an account yet? ",
-        "Register": "Register"
+        "Email address": "Địa chỉ Email",
+        "Password": "Mật khẩu",
+        "Log in": "Đăng nhập",
+        "Remember me": "Ghi nhớ tài khoản",
+        "Forgot password": "Quên mật khẩu",
+        "Password reset": "Cấp lại mật khẩu",
+        "terms of service": "Bằng cách đăng nhập, bạn đã đồng ý với các điều khoản dịch vụ và điều kiện bảo mật của ứng dụng",
+        "You don't have an account yet?": "Bạn chưa có tài khoản? ",
+        "Register": "Đăng ký"
       },
       "otp_verification": {
-        "Sign Up Success": "Sign Up Success",
-        "Change password successfully": "Change password successfully",
-        "Confirm OTP": "Confirm OTP",
-        "Check your registered email": "Check your registered email. We have sent you a PIN",
-        "Confirm": "Confirm"
+        "Sign Up Success": "Đăng ký thành công",
+        "Change password successfully": "Đổi mật khẩu thành công",
+        "Confirm OTP": "Xác nhận OTP",
+        "Check your registered email": "Kiểm tra email đã đăng ký của bạn. Chúng tôi đã gửi cho bạn mã PIN",
+        "Confirm": "Xác nhận"
       },
       "register": {
         "Fullname": "Fullname",
         "Gender": "Gender",
+        "Phone number": "Phone number",
         "Re-enter password": "Re-enter password",
         "Account Type": "Account Type",
         "Professional Degree": "Professional Degree",
@@ -36,42 +42,52 @@
   },
   "utils": {
     "app_console": {
-      "days ago": "days ago",
-      "months ago": "months ago",
-      "years ago": "years ago",
-      "Agreement": "Agreement",
-      "million": "million",
-      "billion": "billion",
-      "System management": "System management",
-      "Undefined": "Undefined"
+      "days ago": "ngày trước",
+      "months ago": "tháng trước",
+      "years ago": "năm trước",
+      "Agreement": "Thỏa thuận",
+      "million": "triệu",
+      "billion": "tỷ",
+      "System management": "Quản trị hệ thống",
+      "Undefined": "Chưa xác định"
     }
   },
   "widgets": {
     "drawer": {
-      "Log out": "Log out"
+      "Log out": "Đăng xuất"
     },
     "form": {
       "input": {
-        "Required content": "Required content"
+        "rulesRequired": "Enter {}",
+        "Enter": "Enter {}",
+        "Choose": "Choose {}"
       },
       "select": {
-        "Search": "Search"
+        "Search": "Search",
+        "rulesRequired": "Choose {}"
+      },
+      "date": {
+        "Save": "Lưu lại",
+        "Time from": "Giờ bắt đầu",
+        "Time to": "Giờ kết thúc",
+        "Error message": "You have not selected the full date",
+        "rulesRequired": "Choose {}"
       },
       "upload": {
-        "Upload": "Upload",
-        "Cancel": "Cancel",
-        "Select image from gallery": "Select image from gallery",
-        "Select multiple images from gallery": "Select multiple images from gallery",
-        "Take a photo": "Take a photo",
-        "Select Video from gallery": "Select Video from gallery",
-        "Shoot a movie": "Shoot a movie"
+        "Upload": "Tải lên",
+        "Cancel": "Hủy bỏ",
+        "Select image from gallery": "Chọn hình ảnh từ thư viện",
+        "Select multiple images from gallery": "Chọn nhiều hình ảnh từ thư viện",
+        "Take a photo": "Chụp ảnh",
+        "Select Video from gallery": "Chọn Video từ thư viện",
+        "Shoot a movie": "Quay một đoạn phim"
       }
     },
     "list": {
       "details": {
-        "Empty": "Empty",
-        "Phone number copied": "Phone number copied",
-        "Successfully copied": "Successfully copied"
+        "Empty": "Trống",
+        "Phone number copied": "Đã sao chép số điện thoại",
+        "Successfully copied": "Đã sao chép thành công"
       }
     },
     "description_text_widget": {
@@ -79,6 +95,79 @@
     }
   },
   "example": {
-    "hello": "Hello"
+    "hello": "Chào"
+  },
+  "order": {
+    "form": {
+      "createdOnDate": "Ngày tạo đơn",
+      "implementationDate": "Ngày thực hiện",
+      "treatmentDate": "Thời gian thực hiện",
+      "medicalProcedureGroupCode": "Nhóm thủ thuật",
+      "medicalProcedureCode": "Loại thủ thuật",
+      "clinicId": "Phòng khám",
+      "commissionAmount": "Đề xuất hoa hồng",
+      "totalCommissionAmount": "Hoa hồng",
+      "customerName": "Tên khách hàng",
+      "isChildrenCustomer":{
+        "Title": "Độ tuổi",
+        "Adult": "Người lớn (trên 16 tuổi)",
+        "Child": "Trẻ em (từ 12 ~ 16 tuổi)"
+      },
+      "birthday": "Ngày sinh",
+      "gender":  "Giới tính",
+      "difficultyCode": "Phân loại độ khó",
+      "numbersOfTeeth": "Số răng",
+      "positionOfTeeth": "Vị trí cung răng",
+      "description": "Nội dung chi tiết",
+      "patientCondition": "Tình trạng bệnh lý",
+      "medicalHistory": "Tiền sử bệnh lý khác",
+      "status": "Trạng thái đơn",
+      "orderNo": "Mã Order",
+      "address": "Địa chỉ phòng khám"
+    },
+    "create": {
+      "Title1": "Tạo Order",
+      "Title2": "Chỉnh sửa Order",
+      "Save draft": "Lưu nháp",
+      "Create order": "Gửi Order",
+      "Edit order": "Lưu Order",
+      "Total payment": "Tổng tiền thanh toán",
+      "term": {
+        "Title": "Trách nghiệm của Order Side",
+        "content": {
+          "0": "• Đảm bảo cơ sở vật chất để Farmer Side thực hiện thủ thuật 1 cách an toàn, sạch sẽ.",
+          "1": "• Có giấy phép kinh doanh hành nghề.",
+          "2": "• Đã tư vấn tất cả các vấn đề liên quan đến bệnh lý, rủi ro cho khách hàng trước khi Farmer tiến hành thực hiện.",
+          "3": "• Tuân thủ tất cả các quy định do nền tảng đưa ra.",
+          "4": "• Order Side hiểu rõ, ý thức rõ về các quy định do Bộ Y Tế ban hành trong làm việc, khám chữa bệnh chuyên ngành Nha Khoa.",
+          "5": "• Order Side hoàn toàn chủ động, tự nguyện trong việc kết nối, giao dịch công việc với Farmer Side. Order Side và Farmer Side hoàn toàn tự chịu trách nhiệm về các vi phạm của mình theo quy định hành nghề Nha Khoa do bộ Y Tế quy định.",
+          "6": "• Nền tảng không thay mặt Order Side, Farmer Side thỏa thuận giao dịch hay có các hành động không tuân thủ theo quy định của Bộ Y Tế."
+        }
+      }
+    }
+  },
+  "actions": {
+    "Title": "Thao tác",
+    "EDIT": "Chỉnh sửa",
+    "DELETE": "Xóa",
+    "CANCEL": "Hủy",
+    "REJECT": "Từ chối",
+    "APPROVE": "Duyệt",
+    "UN_PICK": "Hủy nhận Order",
+    "PICK": "Nhận Order",
+    "DISTRIBUTE": "Phân phối",
+    "PROPOSAL": "Gửi đề xuất"
+  },
+  "introduction": {
+    "Title": {
+      "0": "Dịch vụ nha khoa",
+      "1": "Phòng khám nha khoa",
+      "2": "Bác sĩ chuyên nghiệp"
+    },
+    "Content": {
+      "0": "Ngày nay các dịch vụ làm đẹp nha khoa, răng hàm mặt đang dần phổ biến và được nhiều người quan tâm. Vì vậy, Uberental đã cung cấp đa dạng các dịch vụ nha khoa với giá thành hợp lý nhất",
+      "1": "Phòng khám nha khoa của bạn đang có nhiều khách hàng nhưng lại thiếu bác sĩ. Hãy đặt lịch hẹn cho các bác sĩ của Uberental để đến phòng khám của bạn và điều trị cho các khách hàng",
+      "2": "Với đội ngũ bác sĩ có trình độ chuyên môn nghiệp vụ cao, có kinh nghiệm lâu năm được Uberental chọn lọc kĩ càng. Giúp mang đến cho khách hàng những phương pháp điều trị tốt nhất, tiết kiệm nhất. Nhằm đáp ứng mọi nhu cầu khám chữa bệnh của khách hàng"
+    }
   }
 }

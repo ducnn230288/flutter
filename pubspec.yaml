@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.9+1
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
@@ -50,10 +50,17 @@ dependencies:
   image_picker: ^0.8.6+4
   permission_handler: ^10.2.0
   path_provider: ^2.0.13
-  extended_image: ^7.0.2
+  extended_image: ^8.0.2
   url_launcher: ^6.1.6
   flutter_dotenv: ^5.0.2
   easy_localization: ^3.0.1
+  dio: ^5.1.1
+  image_gallery_saver: ^1.7.1
+#  agora_uikit: ^1.3.2
+#  socket_io_client: ^2.0.2
+  flutter_hooks: ^0.18.6
+  syncfusion_flutter_charts: ^20.4.54
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +90,10 @@ flutter:
     - .env.development
     - assets/images/
     - assets/svgs/
+    - assets/svgs/teeth/adult/
+    - assets/svgs/teeth/child/
+    - assets/svgs/upload/
+    - assets/svgs/splash/
     - assets/form/
     - assets/json/
     - assets/translations/
@@ -98,12 +109,23 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: SFProText
+      fonts:
+        - asset: assets/fonts/SFProText-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SFProText-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/SFProText-Semibold.ttf
+          weight: 600
+    - family: SFProDisplay
+      fonts:
+        - asset: assets/fonts/SFProDisplay-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SFProDisplay-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/SFProDisplay-Semibold.ttf
+          weight: 600
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

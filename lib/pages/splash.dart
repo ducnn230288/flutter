@@ -22,13 +22,13 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CColor.primary,
+      backgroundColor: Colors.white,
       body: BlocConsumer<AuthC, AuthS>(
           listenWhen: (oldState, newState) => newState.status != AppStatus.init,
           listener: (context, state) =>
               GoRouter.of(context).goNamed(state.status == AppStatus.fails ? CRoute.introduction : CRoute.home),
           builder: (context, state) => Center(
-                child: CIcon.logoWhite,
+                child: CIcon.logo,
               )),
     );
   }

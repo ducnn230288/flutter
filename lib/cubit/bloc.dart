@@ -5,16 +5,22 @@ import '/models/index.dart';
 import '/utils/index.dart';
 import 'index.dart';
 
-class BlocC extends Cubit<BlocS> {
+class BlocC<T> extends Cubit<BlocS<T>> {
   BlocC()
-      : super(BlocS(
-            key: GlobalKey<FormState>(), value: {}, list: [], sort: {}, page: 1, size: 20, data: MData(content: [])));
+      : super(BlocS<T>(
+            key: GlobalKey<FormState>(),
+            value: {},
+            list: [],
+            sort: {},
+            page: 1,
+            size: 20,
+            data: MData<T>(content: [])));
 
   void setList({required List<MFormItem> list}) {
     emit(state.copyWith(list: list));
   }
 
-  void setData({required MData data, AppStatus status = AppStatus.init}) {
+  void setData({required MData<T> data, AppStatus status = AppStatus.init}) {
     emit(state.copyWith(data: data, status: status));
   }
 
@@ -23,7 +29,17 @@ class BlocC extends Cubit<BlocS> {
   }
 
   void setValue({required Map<String, dynamic> value, AppStatus status = AppStatus.init}) {
-    emit(state.copyWith(value: value, status: status));
+    emit(state.copyWith(value: {...state.value, ...value}, status: status));
+  }
+
+  void addValue({required dynamic value, required String name}) {
+    Map<String, dynamic> newValue = {...state.value};
+    if (state.value.containsKey(name)) {
+      newValue[name] = value;
+    } else {
+      newValue = {...newValue, name: value};
+    }
+    emit(state.copyWith(value: newValue));
   }
 
   void setSize(
@@ -32,30 +48,35 @@ class BlocC extends Cubit<BlocS> {
       required Function format}) async {
     final int oldSize = state.size;
     try {
-      emit(state.copyWith(size: size));
+      if (state.status != AppStatus.success){
+        emit(state.copyWith(size: size, status: AppStatus.inProcess));
+      }
       MApi? result = await api(
         state.value,
-        state.page,
+        1,
         state.size,
         state.sort,
       );
 
       if (result != null) {
-        MData data = MData.fromJson(result.data, format);
-        emit(state.copyWith(data: data));
+        MData<T> data = MData.fromJson(result.data, format);
+        emit(state.copyWith(data: data, status: AppStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(size: oldSize));
+      emit(state.copyWith(size: oldSize, status: AppStatus.init));
       debugPrint(e.toString());
     }
   }
 
-  void setPage(
+  Future<void> setPage(
       {required int page,
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
-      required Function format}) async {
-    // try {
-      emit(state.copyWith(page: page));
+      Function? format}) async {
+    int oldPage = state.page;
+    try {
+      if (state.status != AppStatus.success){
+        emit(state.copyWith(page: page, status: AppStatus.inProcess));
+      }
       MApi? result = await api(
         state.value,
         state.page,
@@ -64,19 +85,26 @@ class BlocC extends Cubit<BlocS> {
       );
 
       if (result != null) {
-        MData data = MData.fromJson(result.data, format);
-        emit(state.copyWith(data: data));
+        MData<T> data = MData.fromJson(result.data, format);
+        emit(state.copyWith(data: data, status: AppStatus.success));
       }
-    // } catch (e) {
-    //   emit(state.copyWith(size: oldSize));
-    //   debugPrint(e.toString());
-    // }
+    } catch (e) {
+      emit(state.copyWith(page: oldPage));
+      debugPrint(e.toString());
+    }
   }
 
-  void increasePage(
+  void resetPage({required int page, String? name, dynamic value}) {
+    emit(state.copyWith(page: page));
+    if (name != null && value != null) {
+      state.value[name] = value;
+    }
+  }
+
+  Future<void> increasePage(
       {required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       required Function format}) async {
-    emit(state.copyWith(status: AppStatus.init, page: state.page + 1));
+    emit(state.copyWith(page: state.page + 1));
     try {
       MApi? result = await api(
         state.value,
@@ -86,10 +114,10 @@ class BlocC extends Cubit<BlocS> {
       );
 
       if (result != null) {
-        MData data = MData.fromJson(result.data, format);
-        if (data.content!.isNotEmpty) {
-          for (var i = 0; i < data.content!.length; i++) {
-            state.data.content!.add(data.content![i]);
+        MData<T> data = MData.fromJson(result.data, format);
+        if (data.content.isNotEmpty) {
+          for (var i = 0; i < data.content.length; i++) {
+            state.data.content.add(data.content[i]);
           }
           emit(state.copyWith(status: AppStatus.success, data: state.data));
         } else {
@@ -97,13 +125,22 @@ class BlocC extends Cubit<BlocS> {
         }
       }
     } catch (e) {
-      emit(state.copyWith(status: AppStatus.success, page: state.page - 1));
+      emit(state.copyWith(page: state.page - 1));
       debugPrint(e.toString());
     }
   }
 
   void saved({value, required String name}) {
-    state.value[name] = value;
+    if (value != null) {
+      state.value[name] = value;
+    }
+  }
+
+  void removeKey({required String name, bool isEmit = false}) {
+    state.value.remove(name);
+    if (isEmit) {
+      emit(state.copyWith(value: state.value));
+    }
   }
 
   void savedBool({required String name}) {
@@ -116,6 +153,9 @@ class BlocC extends Cubit<BlocS> {
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       bool getData = false,
       bool onlyApi = false,
+      bool showDialog = true,
+      bool notification = true,
+      String key = 'value',
       Function? format}) async {
     if (getData || onlyApi || state.formKey.currentState?.validate() == true) {
       if (getData) {
@@ -123,22 +163,36 @@ class BlocC extends Cubit<BlocS> {
       }
       UDialog dialogs = UDialog();
       try {
-        await dialogs.delay();
-        dialogs.startLoading();
+        if (showDialog) {
+          await dialogs.delay();
+          dialogs.startLoading();
+        }
         MApi? result = await api(state.value, state.page, state.size, state.sort);
-        dialogs.stopLoading();
+        if (showDialog) {
+          dialogs.stopLoading();
+        }
         if (result != null) {
           if (!getData || onlyApi) {
-            dialogs.showSuccess(
-                title: result.message,
-                onDismiss: (context) {
-                  if (submit != null) submit(result.data);
-                  emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
-                });
-          } else if (format != null) {
-            MData data = MData.fromJson(result.data, format);
-            if (submit != null) submit(data);
-            emit(state.copyWith(status: AppStatus.success, data: data));
+            if (notification) {
+              dialogs.showSuccess(
+                  text: result.message,
+                  onDismiss: (context) {
+                    if (submit != null) submit(result.data);
+                    emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+                  });
+            } else {
+              if (submit != null) submit(result.data);
+              emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+            }
+          } else {
+            if (format != null) {
+              dynamic data = MData.fromJson(result.data, format);
+              if (submit != null) submit(data);
+              emit(state.copyWith(status: AppStatus.success, data: data));
+            } else {
+              if (submit != null) submit(result.data);
+              emit(state.copyWith(status: AppStatus.success, value: {key: result.data}));
+            }
           }
         }
       } catch (e) {
@@ -149,7 +203,7 @@ class BlocC extends Cubit<BlocS> {
   }
 }
 
-class BlocS {
+class BlocS<T> {
   final AppStatus status;
   final GlobalKey<FormState> formKey;
   final Map<String, dynamic> value;
@@ -157,7 +211,7 @@ class BlocS {
   final Map<String, dynamic> sort;
   final int page;
   final int size;
-  final MData data;
+  final MData<T> data;
 
   BlocS({
     this.status = AppStatus.init,
@@ -170,7 +224,7 @@ class BlocS {
     required this.data,
   }) : formKey = key;
 
-  BlocS copyWith({
+  BlocS<T> copyWith({
     AppStatus? status,
     GlobalKey<FormState>? key,
     Map<String, dynamic>? value,
@@ -178,9 +232,9 @@ class BlocS {
     Map<String, dynamic>? sort,
     int? page,
     int? size,
-    MData? data,
+    MData<T>? data,
   }) {
-    return BlocS(
+    return BlocS<T>(
       status: status ?? this.status,
       value: value ?? this.value,
       list: list ?? this.list,

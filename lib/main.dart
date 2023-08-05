@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '/constants/index.dart';
 import '/cubit/index.dart';
@@ -22,7 +21,6 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final Api _api = Api();
-
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
@@ -34,22 +32,38 @@ class MyApp extends StatelessWidget {
             ),
           ],
           child: MaterialApp.router(
-            title: 'UberRental',
+            title: 'Uberental',
             builder: (BuildContext context, Widget? child) => GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-              child: child!,
+              child: Builder(
+                builder: (context) {
+                  CSpace.setScreenSize(context);
+                  return child!;
+                }
+              ),
             ),
             debugShowCheckedModeBanner: false,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
             theme: ThemeData(
-              textTheme: GoogleFonts.manropeTextTheme(),
+              fontFamily: 'SFProDisplay',
+              textTheme: TextTheme(
+                bodyMedium: CStyle.caption(
+                  style: const TextStyle(
+                      fontSize: CFontSize.subhead,
+                      fontWeight: FontWeight.w400,
+                      textBaseline: TextBaseline.alphabetic,
+                      fontFamily: 'SFProDisplay'),
+                ),
+                labelLarge: CStyle.caption(
+                  style: const TextStyle(fontSize: CFontSize.subhead, fontWeight: FontWeight.w400),
+                ),
+              ),
+              scaffoldBackgroundColor: CColor.hintButton,
               primarySwatch: CColor.primary,
               unselectedWidgetColor: CColor.primary,
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                style: CStyle.button,
-              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(style: CStyle.button),
             ),
             routeInformationProvider: routes.routeInformationProvider,
             routeInformationParser: routes.routeInformationParser,
