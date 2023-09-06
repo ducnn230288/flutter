@@ -69,6 +69,7 @@ class _WidgetFilterState extends State<WidgetFilter> {
               final String label = filter.changeLabel && state.value[keyValue]?['label'] != null
                   ? (state.value[keyValue]?['label'] ?? '')
                   : filter.label;
+
               return InkWell(
                 splashColor: CColor.primary.shade100,
                 onTap: () {

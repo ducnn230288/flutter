@@ -36,13 +36,14 @@ class CStyle {
         borderRadius: BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: Colors.transparent))),
   );
 
-  static ButtonStyle buttonOutline = ButtonStyle(
-      side: MaterialStatePropertyAll(BorderSide(width: 1.0, color: CColor.primary)),
-      elevation: const MaterialStatePropertyAll(0),
-      padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
-      shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(radius)),
-      )));
+  static ButtonStyle buttonOutline = button.copyWith(
+    shadowColor: MaterialStatePropertyAll(CColor.black.shade50),
+    elevation: const MaterialStatePropertyAll(0),
+    backgroundColor: const MaterialStatePropertyAll(Colors.white),
+    foregroundColor: MaterialStatePropertyAll(CColor.primary),
+    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: CColor.primary))),
+  );
 
   static ButtonStyle buttonOutlinePrimary = buttonOutline.copyWith(
     backgroundColor: MaterialStatePropertyAll(CColor.primary),

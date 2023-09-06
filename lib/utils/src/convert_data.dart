@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+import 'snack_bar.dart';
 
 class Convert {
   static String dateTime(String dateTime, {String separator = '/'}) {
@@ -19,7 +24,12 @@ class Convert {
     if (day >= 365) {
       return '${(day / 365).toStringAsFixed(0)} ${'utils.app_console.years ago'.tr()}';
     }
-    return DateFormat('HH:mm dd${separator}MM${separator}yyyy', 'vi').format(DateTime.parse(dateTime));
+    final int hours = now.difference(DateTime.parse(dateTime)).inHours;
+    if (hours >= 1) {
+      return '$hours ${'utils.app_console.hours ago'.tr()}';
+    }
+    final int minutes = now.difference(DateTime.parse(dateTime)).inMinutes;
+    return '$minutes ${'utils.app_console.minutes ago'.tr()}';
   }
 
   static String dateTimeSecond(String dateTime, {String separator = '/'}) {
@@ -90,17 +100,17 @@ class Convert {
       convertPrice /= 1000000000;
       unit = 'tỷ $unit';
     }
-    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
+    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', ' ');
   }
 
   static String price(num price, {String unit = 'đ'}) {
-    double convertPrice = double.parse(price.toStringAsFixed(0));
-    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
+    final double convertPrice = double.parse(price.toStringAsFixed(0));
+    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', ' ');
   }
 
   static String phoneNumber(String number) {
     if (number == '') return '';
-    return number.toString().replaceAllMapped(RegExp(r'(\d{4})(\d{3})(\d+)'), (Match m) => "${m[1]} ${m[2]} ${m[3]}");
+    return number.toString().replaceAllMapped(RegExp(r'(\d{4})(\d{3})(\d+)'), (Match m) => '${m[1]} ${m[2]} ${m[3]}');
   }
 
   static String hidePhoneNumber(String number, {String hide = '*', required int size}) {
@@ -113,17 +123,17 @@ class Convert {
   }
 
   static String thousands(String number, [String separation = '.']) {
-    String priceInText = "";
+    String priceInText = '';
     int counter = 0;
     for (int i = (number.length - 1); i >= 0; i--) {
       counter++;
       String str = number[i];
       if ((counter % 3) != 0 && i != 0) {
-        priceInText = "$str$priceInText";
+        priceInText = '$str$priceInText';
       } else if (i == 0) {
-        priceInText = "$str$priceInText";
+        priceInText = '$str$priceInText';
       } else {
-        priceInText = "$separation$str$priceInText";
+        priceInText = '$separation$str$priceInText';
       }
     }
     return priceInText.trim();
@@ -136,5 +146,32 @@ class Convert {
         return 'utils.app_console.System management'.tr();
     }
     return 'utils.app_console.Undefined'.tr();
+  }
+
+  static Future<Map<String, dynamic>> checkDevice() async {
+    String id = '';
+    String name = '';
+    try {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        id = iosInfo.identifierForVendor ?? '';
+        name = iosInfo.name ?? '';
+      } else {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        id = androidInfo.id;
+        name = androidInfo.model;
+      }
+    } catch (e) {
+      USnackBar.smallSnackBar(
+        title: 'Không nhận diện được thiết bị',
+      );
+      return {'deviceNo': '', 'deviceName': ''};
+    }
+    return {
+      'deviceNo': id,
+      'deviceName': name,
+      'deviceType': 'MOBILE',
+    };
   }
 }

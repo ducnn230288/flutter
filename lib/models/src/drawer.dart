@@ -17,22 +17,22 @@ class DrawerData {
 
   DrawerData(
       {this.parentId,
-        this.urlRewrite,
-        this.iconClass,
-        this.subChild,
-        this.roleList,
-        this.subUrl,
-        this.type,
-        this.id,
-        this.code,
-        this.name,
-        this.idPath,
-        this.path,
-        this.level,
-        this.order,
-        this.status});
+      this.urlRewrite,
+      this.iconClass,
+      this.subChild,
+      this.roleList,
+      this.subUrl,
+      this.type,
+      this.id,
+      this.code,
+      this.name,
+      this.idPath,
+      this.path,
+      this.level,
+      this.order,
+      this.status});
 
-  DrawerData.fromJson(Map<String, dynamic> json) {
+  DrawerData.fromJson(dynamic json) {
     parentId = json['parentId'] ?? '';
     urlRewrite = json['urlRewrite'] ?? '';
     iconClass = json['iconClass'] ?? '';
@@ -101,20 +101,20 @@ class SubChild {
 
   SubChild(
       {this.parentId,
-        this.urlRewrite,
-        this.iconClass,
-        this.subChild,
-        this.roleList,
-        this.subUrl,
-        this.type,
-        this.id,
-        this.code,
-        this.name,
-        this.idPath,
-        this.path,
-        this.level,
-        this.order,
-        this.status});
+      this.urlRewrite,
+      this.iconClass,
+      this.subChild,
+      this.roleList,
+      this.subUrl,
+      this.type,
+      this.id,
+      this.code,
+      this.name,
+      this.idPath,
+      this.path,
+      this.level,
+      this.order,
+      this.status});
 
   SubChild.fromJson(Map<String, dynamic> json) {
     parentId = json['parentId'] ?? '';

@@ -24,7 +24,7 @@ class Api {
   SUser get user => SUser(endpoint, headers, checkAuth);
 
   final String endpoint = Environment.apiUrl;
-  final Map<String, String> headers = {"Content-Type": "application/json"};
+  final Map<String, String> headers = {'Content-Type': 'application/json'};
 
   Future<MApi?> checkAuth({required http.Response result}) async {
     if (result.body.isEmpty) {
@@ -32,6 +32,10 @@ class Api {
     }
     if (result.statusCode == 401) {
       rootNavigatorKey.currentState!.context.read<AuthC>().logout();
+      return null;
+    }
+    if (result.statusCode == 404) {
+      return MApi(code: 404);
     }
     MApi response = MApi.fromJson(jsonDecode(result.body));
     if (!response.isSuccess) {
@@ -62,9 +66,10 @@ class Api {
     headers['x-language'] = language;
   }
 
-  Future<MUpload?> postUploadPhysicalBlob({required XFile file, required String docType}) async {
+  Future<MUpload?> postUploadPhysicalBlob(
+      {required XFile file, required String prefix, required Map<String, dynamic> obj}) async {
     http.MultipartRequest request =
-        http.MultipartRequest('POST', Uri.parse('$endpoint${Environment.uploadUrl}$docType'));
+        http.MultipartRequest('POST', Uri.parse('$endpoint${Environment.uploadUrl}$prefix'));
     AppConsole.dump(request.url.queryParameters);
     request.headers['Content-Type'] = 'multipart/form-data';
     request.headers['Authorization'] = headers['Authorization'] ?? '';
@@ -79,7 +84,8 @@ class Api {
       return http.Response('Error', 408);
     });
     if (res.statusCode > 300) return null;
-    return MUpload.fromJson(jsonDecode(res.body)['data']);
+    dynamic data = {...jsonDecode(res.body)['data'], ...obj};
+    return MUpload.fromJson(data);
   }
 
   Future<List<MUpload>> getAttachmentsTemplate({String entityType = 'post'}) async {
@@ -107,7 +113,7 @@ class Api {
       if (await Permission.storage.request().isGranted) {
         dir = (await getExternalStorageDirectory())!.path;
         dir = '$dir/Download';
-        dir = dir.replaceAll("Android/data/com.geneat.scale.scale/files/", "");
+        dir = dir.replaceAll('Android/data/${Environment.appPackage}/files/', '');
         await Directory(dir).create(recursive: true);
       }
     } else if (Platform.isIOS) {

@@ -32,10 +32,11 @@ totalElementTitle({
             }
             return Text(
               (totalElements != null
-                  ? totalElements.toString()
-                  : state.data.totalElements == null
-                      ? ''
-                      : state.data.totalElements.toString()).padLeft(2,'0'),
+                      ? totalElements.toString().padLeft(2, '0')
+                      : state.data.totalElements == null
+                          ? ''
+                          : state.data.totalElements.toString())
+                  .padLeft(2, '0'),
               style: TextStyle(fontSize: textStyle?.fontSize ?? CFontSize.caption2, fontWeight: FontWeight.w600),
             );
           },

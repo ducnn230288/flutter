@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-enum EFormItemType { select, date, time, upload, selectMultiple, title, separation, input }
+enum EFormItemType { select, date, time, upload, selectMultiple, title, separation, input, checkbox }
 
 class MFormItem {
   MFormItem({
@@ -33,6 +33,7 @@ class MFormItem {
     this.selectValue,
     this.maxQuantity = 1,
     this.minQuantity = 1,
+    this.prefix,
     this.child,
     this.dataType,
     this.selectDateType = SelectDateType.full,
@@ -67,7 +68,7 @@ class MFormItem {
   String? icon;
   Widget? suffix;
   List<MOption>? items;
-  Function? format;
+  Function(dynamic json)? format;
   Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort)? api;
   Function(dynamic content, int index)? itemSelect;
   bool? showSearch;
@@ -75,6 +76,7 @@ class MFormItem {
   Function? selectValue;
   int minQuantity;
   int maxQuantity;
+  String? prefix;
   Widget? child;
   DataType? dataType;
   bool stackedLabel;
@@ -118,6 +120,7 @@ class MFormItem {
         selectValue: json["selectValue"],
         minQuantity: json["minQuantity"],
         maxQuantity: json["maxQuantity"],
+        prefix: json["prefix"],
         child: json["child"],
         dataType: json["dataType"] ?? DataType.normal,
         selectDateType: json["selectDateType"] ?? SelectDateType.full,
@@ -161,6 +164,7 @@ class MFormItem {
         "selectValue": selectValue,
         "minQuantity": minQuantity,
         "maxQuantity": maxQuantity,
+        "prefix": prefix,
         "child": child,
         "dataType": dataType,
         "selectDateType": selectDateType,

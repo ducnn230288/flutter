@@ -47,7 +47,7 @@ class _UserDetailsState extends State<UserDetails> {
               //   ),
               // ],
               MFormItem(label: 'Thao tác', dataType: DataType.separation),
-              if (isFarmer)
+              // if (isFarmer)
                 // MFormItem(
                 //   child: button(
                 //     label: 'Hồ sơ Farmer',

@@ -73,7 +73,7 @@ appBar({
       return AppBar(
         toolbarHeight: toolbarHeight,
         title: Text(title,
-            style: const TextStyle(fontSize: CFontSize.headline4, fontWeight: FontWeight.w600, color: Colors.white)
+            style: const TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w600, color: Colors.white)
                 .merge(titleStyle)),
         centerTitle: true,
         leadingWidth: leadingWidth ?? (hasDrawer ? 50 : 105),

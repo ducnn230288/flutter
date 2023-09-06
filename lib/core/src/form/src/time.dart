@@ -7,6 +7,7 @@ import '/utils/index.dart';
 class WTime extends StatefulWidget {
   final String label;
   final String value;
+  final String? subtitle;
   final String? hintText;
   final bool space;
   final int maxLines;
@@ -20,6 +21,7 @@ class WTime extends StatefulWidget {
     Key? key,
     this.label = '',
     this.value = '',
+    this.subtitle = '',
     this.onChanged,
     this.required = false,
     this.enabled = true,
@@ -44,6 +46,7 @@ class _WTimeState extends State<WTime> {
       controller: widget.controller,
       label: widget.label,
       value: widget.value,
+      subtitle: widget.subtitle,
       hintText: widget.hintText ?? 'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),
       space: widget.space,
       maxLines: widget.maxLines,
@@ -57,7 +60,6 @@ class _WTimeState extends State<WTime> {
           initialTime: timeOfDay,
           context: context,
           helpText: widget.label,
-
         );
         if (pickedTime != null && widget.onChanged != null && context.mounted) {
           if (context.mounted) {

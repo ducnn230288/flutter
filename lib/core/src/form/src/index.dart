@@ -29,6 +29,7 @@ class WForm extends StatefulWidget {
 
 class _WFormState extends State<WForm> {
   final Map<String, TextEditingController> listController = {};
+  late final cubit = context.read<BlocC>();
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _WFormState extends State<WForm> {
       listController[item.name] = TextEditingController();
     }
     widget.onInit?.call(listController);
-    context.read<BlocC>().setList(list: widget.list);
+    cubit.setList(list: widget.list);
   }
 
   @override
@@ -83,8 +84,20 @@ class _WFormState extends State<WForm> {
             case EFormItemType.selectMultiple:
               state.value[item.name] = item.code.split(',');
               break;
+            case EFormItemType.checkbox:
+              state.value[item.name] = item.value ?? false;
+              break;
             default:
-              state.value[item.name] = item.value;
+              if (item.number) {
+                if (item.value.toString().contains(' ')) {
+                  state.value[item.name] = item.value.toString().replaceAll(' ', '');
+                } else if (item.formatNumberType == FormatNumberType.inputFormatters) {
+                  state.value[item.name] = item.value;
+                  listController[item.name]!.text = Convert.thousands(item.value);
+                }
+              } else {
+                state.value[item.name] = item.value;
+              }
           }
         }
         listController[item.name]?.selection = TextSelection.fromPosition(
@@ -94,20 +107,28 @@ class _WFormState extends State<WForm> {
         switch (item.type) {
           case EFormItemType.title:
             child = Container(
-              margin: const EdgeInsets.only(bottom: CSpace.large),
+              margin: const EdgeInsets.only(bottom: CSpace.small),
               alignment: Alignment.topLeft,
               child: Text(item.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title2)),
             );
             break;
+          case EFormItemType.checkbox:
+            child = WCheckbox(
+              name: item.name,
+              required: item.required,
+              onChanged: (value) {
+                if (item.onChange != null) item.onChange!(value);
+                cubit.saved(value: value, name: item.name);
+              },
+              child: item.child!,
+            );
+            break;
           case EFormItemType.separation:
             child = Container(
-              margin: const EdgeInsets.only(bottom: CSpace.large, top: CSpace.small / 2),
+              margin: const EdgeInsets.only(bottom: CSpace.small, top: CSpace.small / 2),
               child: Row(
                 children: [
-                  Text(
-                    item.label,
-                    style: TextStyle(fontWeight: FontWeight.w400, color: CColor.hintColor),
-                  ),
+                  Text(item.label, style: TextStyle(fontWeight: FontWeight.w400, color: CColor.hintColor)),
                   const SizedBox(width: 10),
                   Expanded(child: line())
                 ],
@@ -118,16 +139,17 @@ class _WFormState extends State<WForm> {
             child = WUpload(
               required: item.required,
               uploadType: item.uploadType,
-              list: item.value != null || item.value != '' ? item.value : [],
+              list: item.value != null && item.value != '' ? item.value : [],
               label: item.label,
               space: index != state.list.length - 1,
               maxQuantity: item.maxQuantity,
               minQuantity: item.minQuantity,
               docType: item.name,
+              prefix: item.prefix,
               maxCount: item.maxCountUpload,
-              onChanged: (value) {
-                if (item.onChange != null) item.onChange!(value);
-                context.read<BlocC>().saved(value: value, name: item.name);
+              onChanged: (dynamic value) {
+                if (item.onChange != null) item.onChange!(item.uploadType == UploadType.single ? value[0] : value);
+                cubit.saved(value: item.uploadType == UploadType.single ? value[0] : value, name: item.name);
               },
             );
             break;
@@ -149,13 +171,13 @@ class _WFormState extends State<WForm> {
                     onChanged: (value) {
                       widget.onChangedController?.call(listController);
                       if (item.onChange != null) item.onChange!(value);
-                      context.read<BlocC>().saved(value: value, name: item.name);
+                      cubit.saved(value: value, name: item.name);
                       item.value = '';
                     },
                     onTap: item.onTap,
                     icon: item.icon,
                     format: item.format,
-                    api: item.api ?? (Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) {},
+                    api: item.api ?? (_, __, ___, ____) {},
                     itemSelect: item.itemSelect ?? (dynamic content, int index) {},
                     showSearch: item.showSearch ?? true,
                     selectLabel: item.selectLabel ?? () {},
@@ -182,11 +204,11 @@ class _WFormState extends State<WForm> {
                     onChanged: (value) {
                       widget.onChangedController?.call(listController);
                       if (item.onChange != null) item.onChange!(value);
-                      context.read<BlocC>().saved(value: value.split(','), name: item.name);
+                      cubit.saved(value: value.split(','), name: item.name);
                     },
                     icon: item.icon,
                     format: item.format,
-                    api: item.api ?? (Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) {},
+                    api: item.api ?? (_, __, ___, ____) {},
                     itemSelect: item.itemSelect ?? (dynamic content, int index) {},
                     showSearch: item.showSearch ?? true,
                     selectLabel: item.selectLabel ?? () {},
@@ -205,6 +227,7 @@ class _WFormState extends State<WForm> {
                     value: item.mode == DateRangePickerSelectionMode.single
                         ? (item.value ?? '')
                         : (item.value != '' ? item.value.join('|') : ''),
+                    subtitle: item.subtitle,
                     space: index != state.list.length - 1,
                     stackedLabel: item.stackedLabel,
                     maxLines: item.maxLines,
@@ -216,7 +239,7 @@ class _WFormState extends State<WForm> {
                         val = value.split('|');
                       }
                       if (item.onChange != null) item.onChange!(val);
-                      context.read<BlocC>().saved(value: val, name: item.name);
+                      cubit.saved(value: val, name: item.name);
                       item.value = '';
                     },
                     icon: item.icon,
@@ -232,13 +255,14 @@ class _WFormState extends State<WForm> {
                     label: item.label,
                     hintText: item.hintText,
                     value: item.code ?? '',
+                    subtitle: item.subtitle,
                     space: index != state.list.length - 1,
                     maxLines: item.maxLines,
                     required: item.required,
                     enabled: item.enabled,
                     onChanged: (value) {
                       if (item.onChange != null) item.onChange!(value);
-                      context.read<BlocC>().saved(value: value, name: item.name);
+                      cubit.saved(value: value, name: item.name);
                       item.value = '';
                     },
                     icon: item.icon,
@@ -255,7 +279,28 @@ class _WFormState extends State<WForm> {
               listController[item.name]!.text = Convert.thousands(item.value);
             }
             if (item.child != null) {
-              child = item.child!;
+              child = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (item.label != '')
+                    Container(
+                      margin: const EdgeInsets.only(bottom: CSpace.mediumSmall),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: item.label,
+                            style: TextStyle(
+                              color: CColor.black,
+                              fontSize: CFontSize.headline,
+                              fontWeight: FontWeight.w600,
+                              height: 22 / CFontSize.body,
+                            )),
+                      ),
+                    ),
+                  item.child!,
+                  SizedBox(height: index != state.list.length - 1 ? CSpace.medium : 0),
+                ],
+              );
             } else {
               child = item.show
                   ? WInput(
@@ -274,7 +319,7 @@ class _WFormState extends State<WForm> {
                       number: item.number,
                       onChanged: (value) {
                         if (item.onChange != null) item.onChange!(value);
-                        context.read<BlocC>().saved(value: value, name: item.name);
+                        cubit.saved(value: value, name: item.name);
                         item.value = '';
                       },
                       onTap: item.onTap,

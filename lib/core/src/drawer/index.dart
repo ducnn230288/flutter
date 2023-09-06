@@ -173,7 +173,6 @@ drawer() {
                       );
                     }
                     return InkWell(
-                      // key: PageStorageKey<String>(drawer.urlRewrite ?? ''),
                       onTap: () => context.goNamed(drawer.urlRewrite!),
                       child: Container(
                           // color: CRoute.routerName == drawer.urlRewrite

@@ -17,6 +17,7 @@ import '/utils/index.dart';
 class WUpload extends StatefulWidget {
   final String label;
   final String docType;
+  final String? prefix;
   final bool required;
   final bool space;
   final bool isDescription;
@@ -35,6 +36,7 @@ class WUpload extends StatefulWidget {
     this.space = true,
     this.isDescription = true,
     this.docType = 'post',
+    this.prefix,
     required this.onChanged,
     this.onDelete,
     this.onAdd,
@@ -56,23 +58,23 @@ class WUploadState extends State<WUpload> {
     return BlocProvider(
       create: (context) {
         if (widget.list != null) {
-          return BlocC()
+          return BlocC<MUpload>()
             ..setData(
-                data: MData.fromJson({
+                data: MData<MUpload>.fromJson({
               'page': 1,
               'totalPages': widget.list!.length,
               'size': widget.list!.length,
               'numberOfElements': widget.list!.length,
               'totalElements': widget.list!.length,
               'content': widget.list
-            }, null));
+            }, MUpload.fromJson));
         }
-        return BlocC();
+        return BlocC<MUpload>();
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BlocBuilder<BlocC, BlocS>(
+          BlocBuilder<BlocC<MUpload>, BlocS<MUpload>>(
             builder: (context, state) => Row(
               children: [
                 Flexible(
@@ -94,7 +96,7 @@ class WUploadState extends State<WUpload> {
               ],
             ),
           ),
-          BlocConsumer<BlocC, BlocS>(listener: (_, state) {
+          BlocConsumer<BlocC<MUpload>, BlocS<MUpload>>(listener: (_, state) {
             if (state.status == AppStatus.inProcess) {
               USnackBar.smallSnackBar(title: 'Đang tải ảnh lên...', isInfiniteTime: true);
             } else {
@@ -132,7 +134,7 @@ class WUploadState extends State<WUpload> {
                         onChangedDescription: !widget.isDescription
                             ? null
                             : (description, idx) {
-                                final cubit = context.read<BlocC>();
+                                final cubit = context.read<BlocC<MUpload>>();
                                 listImage[idx] = listImage[idx].copyWith(description: description);
                                 cubit.setData(
                                     data: MData.fromJson({
@@ -143,7 +145,7 @@ class WUploadState extends State<WUpload> {
                                   'totalElements': listImage.length,
                                   'content': listImage
                                 }, null));
-                                widget.onChanged(listImage.map((e) => e.toJson()));
+                                widget.onChanged(listImage.map((e) => e.toJson()).toList());
                               },
                       ),
                       Positioned(
@@ -156,10 +158,10 @@ class WUploadState extends State<WUpload> {
                               title: 'Xóa ảnh đã chọn',
                               text: 'Bạn có chắc muốn xóa ảnh hiện tại không?',
                               btnOkOnPress: () {
-                                List list = context.read<BlocC>().state.data.content;
+                                List<MUpload> list = context.read<BlocC<MUpload>>().state.data.content;
                                 if (widget.onDelete != null) widget.onDelete!(list[index]);
                                 list.removeAt(index);
-                                context.read<BlocC>().setData(
+                                context.read<BlocC<MUpload>>().setData(
                                     data: MData(
                                         page: 1,
                                         totalPages: list.length,
@@ -168,14 +170,14 @@ class WUploadState extends State<WUpload> {
                                         totalElements: list.length,
                                         content: list),
                                     status: AppStatus.show);
-                                widget.onChanged(list.map((e) => e.toJson()));
+                                widget.onChanged(list.map((e) => e.toJson()).toList());
                                 context.pop();
                               }),
                           child: Container(
                             padding: const EdgeInsets.all(CSpace.small),
                             decoration: BoxDecoration(
                               color: CColor.danger,
-                              borderRadius: const BorderRadius.all(Radius.circular(CSpace.large)),
+                              borderRadius: const BorderRadius.all(Radius.circular(CSpace.small)),
                             ),
                             child: CIcon.closeWhite,
                           ),
@@ -185,14 +187,14 @@ class WUploadState extends State<WUpload> {
                   );
                 });
           }),
-          SizedBox(height: widget.space ? CSpace.large : 0),
+          SizedBox(height: widget.space ? CSpace.small : 0),
         ],
       ),
     );
   }
 
   Widget addItem(BuildContext context) {
-    return BlocBuilder<BlocC, BlocS>(
+    return BlocBuilder<BlocC<MUpload>, BlocS<MUpload>>(
       builder: (context, state) => (state.data.content.isEmpty && widget.uploadType == UploadType.single) ||
               widget.uploadType == UploadType.multiple
           ? (widget.maxCount == null || (state.data.content.length) < (widget.maxCount ?? 0))
@@ -299,7 +301,7 @@ class WUploadState extends State<WUpload> {
     required BuildContext context,
   }) async {
     Navigator.of(context).pop();
-    final BlocC cubit = context.read<BlocC>();
+    final BlocC<MUpload> cubit = context.read<BlocC<MUpload>>();
     cubit.setStatus(status: AppStatus.inProcess);
     if (isMultiImage) {
       Navigator.of(context).pop();
@@ -311,7 +313,11 @@ class WUploadState extends State<WUpload> {
       if (widget.maxCount != null && count >= widget.maxCount!) {
         break;
       }
-      MUpload? data = await api.postUploadPhysicalBlob(file: item, docType: widget.docType);
+      MUpload? data = await api.postUploadPhysicalBlob(file: item, prefix: widget.prefix ?? widget.docType, obj: {
+        'docType': widget.docType,
+        'docTypeName': widget.label,
+        'prefix': widget.prefix ?? widget.docType,
+      });
       if (data != null) {
         if (widget.onAdd != null) widget.onAdd!(data);
         list.add(data);
@@ -327,7 +333,7 @@ class WUploadState extends State<WUpload> {
       'totalElements': list.length,
       'content': list
     }, null));
-    widget.onChanged(list.map((e) => e.toJson()));
+    widget.onChanged(list.map((e) => e.toJson()).toList());
   }
 
   void _showModal(context) {
@@ -335,7 +341,7 @@ class WUploadState extends State<WUpload> {
       context: context,
       builder: (_) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+          padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
           child: Wrap(
             children: [
               listTile(

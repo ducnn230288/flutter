@@ -37,7 +37,7 @@ class CColor {
     0xFF2C2C2c,
     <int, Color>{
       50: Color(0xFFF3f3f3),
-      100: Color(0xFFE0E0E0),
+      100: Color(0xFFC2C2C2),
       200: Color(0xFFA8A8A8),
       300: Color(0xFF8F8F8F),
       400: Color(0xFF696969),

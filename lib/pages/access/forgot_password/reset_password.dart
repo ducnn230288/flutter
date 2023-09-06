@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '/constants/index.dart';
+import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
-import '/core/index.dart';
 
 class ResetPassword extends StatelessWidget {
   final String resetPasswordToken;

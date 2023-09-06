@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,29 +44,43 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     emit(state.copyWith(value: newValue));
   }
 
-  void setSize(
+  Future<void> setSize(
       {required int size,
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       required Function format}) async {
-    final int oldSize = state.size;
     try {
-      if (state.status != AppStatus.success){
-        emit(state.copyWith(size: size, status: AppStatus.inProcess));
-      }
+      inProcess();
       MApi? result = await api(
         state.value,
         1,
-        state.size,
+        size,
         state.sort,
       );
-
       if (result != null) {
         MData<T> data = MData.fromJson(result.data, format);
-        emit(state.copyWith(data: data, status: AppStatus.success));
+        emit(state.copyWith(size: size, data: data, status: AppStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(size: oldSize, status: AppStatus.init));
-      debugPrint(e.toString());
+      AppConsole.dump(e.toString(), name: 'Try Catch Error: ');
+    }
+  }
+
+  Future<void> refreshPage(
+      {required Future<MApi?> apiId, required int index, required Function(dynamic json) format}) async {
+    inProcess();
+    MApi? result = await apiId;
+    // //Lấy totalElements mới nhất
+    if (result != null) {
+      MData<T>? newData;
+      if (result.code != 404) {
+        state.data.content.replaceRange(index, index + 1, [format(result.data)]);
+      } else {
+        state.data.content.removeAt(index);
+        if (state.data.totalElements != null) {
+          newData = state.data.copyWith(totalElements: state.data.totalElements! - 1);
+        }
+      }
+      emit(state.copyWith(status: AppStatus.success, data: newData ?? state.data));
     }
   }
 
@@ -72,25 +88,20 @@ class BlocC<T> extends Cubit<BlocS<T>> {
       {required int page,
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       Function? format}) async {
-    int oldPage = state.page;
     try {
-      if (state.status != AppStatus.success){
-        emit(state.copyWith(page: page, status: AppStatus.inProcess));
-      }
+      inProcess();
       MApi? result = await api(
         state.value,
-        state.page,
+        page,
         state.size,
         state.sort,
       );
-
       if (result != null) {
         MData<T> data = MData.fromJson(result.data, format);
-        emit(state.copyWith(data: data, status: AppStatus.success));
+        emit(state.copyWith(page: page, data: data, status: AppStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(page: oldPage));
-      debugPrint(e.toString());
+      AppConsole.dump(e.toString(), name: 'Try Catch Error: ');
     }
   }
 
@@ -104,29 +115,24 @@ class BlocC<T> extends Cubit<BlocS<T>> {
   Future<void> increasePage(
       {required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       required Function format}) async {
-    emit(state.copyWith(page: state.page + 1));
     try {
       MApi? result = await api(
         state.value,
-        state.page,
+        state.page + 1,
         state.size,
         state.sort,
       );
-
       if (result != null) {
         MData<T> data = MData.fromJson(result.data, format);
         if (data.content.isNotEmpty) {
           for (var i = 0; i < data.content.length; i++) {
             state.data.content.add(data.content[i]);
           }
-          emit(state.copyWith(status: AppStatus.success, data: state.data));
-        } else {
-          emit(state.copyWith(status: AppStatus.success, page: state.page - 1));
+          emit(state.copyWith(status: AppStatus.success, data: state.data, page: state.page + 1));
         }
       }
     } catch (e) {
-      emit(state.copyWith(page: state.page - 1));
-      debugPrint(e.toString());
+      AppConsole.dump(e.toString(), name: 'Try Catch Error: ');
     }
   }
 
@@ -148,7 +154,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     emit(state.copyWith(value: state.value));
   }
 
-  void submit<T>(
+  Future<void> submit<T>(
       {Function? submit,
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       bool getData = false,
@@ -173,7 +179,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
         }
         if (result != null) {
           if (!getData || onlyApi) {
-            if (notification) {
+            if (notification && result.message != '') {
               dialogs.showSuccess(
                   text: result.message,
                   onDismiss: (context) {
@@ -199,6 +205,12 @@ class BlocC<T> extends Cubit<BlocS<T>> {
         dialogs.stopLoading();
         dialogs.showError(text: e.toString());
       }
+    }
+  }
+
+  void inProcess() {
+    if (state.status != AppStatus.success) {
+      emit(state.copyWith(status: AppStatus.inProcess));
     }
   }
 }

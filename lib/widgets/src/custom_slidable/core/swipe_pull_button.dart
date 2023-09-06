@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '/constants/index.dart';
 import 'cell.dart';
 import 'events.dart';
 import 'store.dart';

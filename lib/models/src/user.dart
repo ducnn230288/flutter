@@ -225,6 +225,7 @@ class MUser {
   String get profileType => _profileType ?? '';
   String get createdOnDate => _createdOnDate ?? '';
 
+  @override
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     if (_listRole != null) {

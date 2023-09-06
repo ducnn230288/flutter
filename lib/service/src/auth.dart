@@ -50,14 +50,14 @@ class SAuth {
   }
 
   Future<MApi?> updateProfile({required body}) async => checkAuth(
-      result: await BaseHttp.put(
+          result: await BaseHttp.put(
         url: '$endpoint/idm/users/info',
         body: body,
         headers: headers,
       ));
 
   Future<MApi?> updatePassword({required body}) async => checkAuth(
-      result: await BaseHttp.put(
+          result: await BaseHttp.put(
         url: '$endpoint/me/password',
         body: body,
         headers: headers,

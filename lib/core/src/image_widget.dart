@@ -307,7 +307,7 @@ Widget listImageNetwork(
     child: Hero(
         tag: url,
         child: ClipRRect(
-          borderRadius: borderRadius,
+          borderRadius: borderRadius ?? BorderRadius.zero,
           child: ExtendedImage.network(url, fit: fit, width: width, height: height),
         )),
   );
@@ -315,7 +315,6 @@ Widget listImageNetwork(
 }
 
 downloadImage({required String url}) => GestureDetector(
-      // splashColor: CColor.primary.shade100,
       onTap: () async {
         USnackBar.smallSnackBar(title: 'Đang tải ảnh về...', isInfiniteTime: true);
         var response = await Dio().get(url, options: Options(responseType: ResponseType.bytes));

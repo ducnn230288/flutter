@@ -11,11 +11,12 @@ import '/models/index.dart';
 
 class WList<T> extends StatefulWidget {
   final Function(Map<String, dynamic>, int, int, Map<String, dynamic>)? api;
+  final Function(T item)? apiId;
   final Widget? top;
   final Widget? bottom;
   final ScrollPhysics? physics;
   final Function(T content, int index) item;
-  final Function? format;
+  final Function(dynamic json)? format;
   final Function(T content)? onTap;
   final Function(T content, BuildContext context)? onTapMultiple;
   final CrossAxisAlignment crossAxisAlignment;
@@ -49,6 +50,7 @@ class WList<T> extends StatefulWidget {
     this.margin,
     this.backgroundColor,
     this.init,
+    this.apiId,
   });
 
   @override
@@ -62,6 +64,8 @@ class _WListState<T> extends State<WList<T>> {
   final int size = 20;
   Timer t = Timer(const Duration(seconds: 1), () {});
   late final String currentUrl;
+  int? index;
+  T? item;
 
   @override
   void initState() {
@@ -91,7 +95,7 @@ class _WListState<T> extends State<WList<T>> {
       );
     }
     if (widget.items == null) {
-      controller = ScrollController()..addListener(_scrollListener);
+      controller = ScrollController()..addListener(scrollListener);
     }
     super.initState();
   }
@@ -100,7 +104,7 @@ class _WListState<T> extends State<WList<T>> {
   void dispose() {
     loadMoreController.close();
     if (widget.items == null) {
-      controller.removeListener(_scrollListener);
+      controller.removeListener(scrollListener);
       t.cancel();
     }
     super.dispose();
@@ -117,20 +121,20 @@ class _WListState<T> extends State<WList<T>> {
     if (location.contains('?')) {
       location = location.substring(0, location.indexOf('?'));
     }
-    if (currentUrl == location && widget.items == null) {
-      context.read<BlocC<T>>().setSize(
-            size: size,
-            api: widget.api ?? (_, __, ___, ____) {},
-            format: widget.format ?? MAttachment.fromJson,
-          );
+    if (currentUrl == location && widget.items == null && item != null && index != null && widget.format != null) {
+      await context
+          .read<BlocC<T>>()
+          .refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format!);
+      index = null;
+      item = null;
     }
   }
 
-  void _scrollListener() async {
+  void scrollListener() async {
     const int space = 100;
     if (widget.items != null) return;
     final BlocC cubit = context.read<BlocC<T>>();
-    bool increasePage =
+    final bool increasePage =
         cubit.state.data.content.length >= size && cubit.state.data.content.length < cubit.state.data.totalElements!;
     if (controller.position.pixels >= controller.position.maxScrollExtent - space &&
         context.mounted &&
@@ -188,6 +192,7 @@ class _WListState<T> extends State<WList<T>> {
                                   child: Text('Oops!, có lỗi xảy ra...', style: TextStyle(color: CColor.hintColor)),
                                 );
                               }
+                              final item = state.data.content[index];
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: widget.crossAxisAlignment,
@@ -197,13 +202,19 @@ class _WListState<T> extends State<WList<T>> {
                                   state.data.content.isNotEmpty
                                       ? InkWell(
                                           splashColor: CColor.primary.shade100,
-                                          onTap: () {
-                                            if (widget.onTap != null) widget.onTap!(state.data.content[index]);
+                                          onTap: () async {
+                                            if (widget.onTap != null) {
+                                              this.index = index;
+                                              if (widget.apiId != null) {
+                                                this.item = item;
+                                              }
+                                              widget.onTap!(item);
+                                            }
                                             if (widget.onTapMultiple != null) {
-                                              widget.onTapMultiple!(state.data.content[index], context);
+                                              widget.onTapMultiple!(item, context);
                                             }
                                           },
-                                          child: widget.item(state.data.content[index], index),
+                                          child: widget.item(item, index),
                                         )
                                       : const Padding(
                                           padding: EdgeInsets.only(top: CSpace.large),
@@ -234,7 +245,14 @@ class _WListState<T> extends State<WList<T>> {
                             },
                           ),
                         )
-                      : const Padding(padding: EdgeInsets.only(top: CSpace.large), child: Text('Danh sách trống')),
+                      : Padding(
+                          padding: const EdgeInsets.only(top: CSpace.large),
+                          child: BlocSelector<BlocC, BlocS, int>(
+                            selector: (state) => state.data.content.length,
+                            builder: (context, state) {
+                              return const Text('Danh sách trống');
+                            },
+                          )),
                   if (widget.inputDisplayType == InputDisplayType.outside) widget.bottom ?? Container(),
                 ],
               ),

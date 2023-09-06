@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '/constants/index.dart';
+import '/core/index.dart';
 import '/cubit/index.dart';
 import '/utils/index.dart';
 
@@ -44,7 +45,7 @@ class _TextSearchState<T> extends State<TextSearch> {
             suffixIcon: BlocBuilder<BlocC<T>, BlocS<T>>(
               builder: (context, state) {
                 if (state.value['fullTextSearch'] == null || state.value['fullTextSearch'] == '') {
-                  return const SizedBox(width: 0);
+                  return const HSpacer(0);
                 } else {
                   return InkWell(
                     splashColor: CColor.primary.shade100,

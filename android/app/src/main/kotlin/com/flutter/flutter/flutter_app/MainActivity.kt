@@ -1,4 +1,4 @@
-package com.uberental.uberental
+package com.flutter.flutter.flutter_app
 
 import io.flutter.embedding.android.FlutterActivity
 

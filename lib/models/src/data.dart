@@ -26,9 +26,9 @@ class MData<T> {
     if (format != null) {
       if (data != null && data is List) {
         _content = [];
-        data.forEach((v) {
+        for (var v in data) {
           _content?.add(format(v));
-        });
+        }
       } else {
         _data = format(data);
       }
@@ -43,16 +43,16 @@ class MData<T> {
   num? _totalElements;
   List<T>? _content;
   T? _data;
-  MData copyWith({
+  MData<T> copyWith({
     num? page,
     num? totalPages,
     num? size,
     num? numberOfElements,
     num? totalElements,
-    List<dynamic>? content,
+    List<T>? content,
     dynamic data,
   }) =>
-      MData(
+      MData<T>(
         page: page ?? _page,
         totalPages: totalPages ?? _totalPages,
         size: size ?? _size,

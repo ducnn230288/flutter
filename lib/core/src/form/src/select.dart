@@ -20,7 +20,7 @@ class WSelect extends StatefulWidget {
   final bool stackedLabel;
   final ValueChanged<String> onChanged;
   final String? icon;
-  final Function? format;
+  final Function(dynamic json)? format;
   final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
   final Function(dynamic content, int index) itemSelect;
   final bool showSearch;
@@ -92,20 +92,19 @@ class _WSelectState extends State<WSelect> {
           builder: (_) {
             return BlocProvider(
               create: (context) => BlocC(),
-              child: Builder(
-                builder: (context) {
-                  print(value);
-                  while (count == 0) {
-                    value.forEach((name, value) {
-                      context.read<BlocC>().saved(name: name, value: value);
-                    });
-                    count++;
-                  }
-                  return SafeArea(
-                    child: Column(
-                      children: [
+              child: Builder(builder: (context) {
+                while (count == 0) {
+                  value.forEach((name, value) {
+                    context.read<BlocC>().saved(name: name, value: value);
+                  });
+                  count++;
+                }
+                return SafeArea(
+                  child: Column(
+                    children: [
+                      if (widget.label != '')
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: CSpace.large),
+                          margin: const EdgeInsets.symmetric(vertical: CSpace.small),
                           child: Text(
                             widget.hintText ?? (widget.label != '' ? widget.label : ''),
                             style: TextStyle(
@@ -115,74 +114,75 @@ class _WSelectState extends State<WSelect> {
                             ),
                           ),
                         ),
-                        if (widget.items == null && widget.showSearch)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
-                            child: Builder(
-                              builder: (context) {
-                                return WInput(
-                                  name: 'fullTextSearch',
-                                  hintText: 'widgets.form.select.Search'.tr(),
-                                  required: false,
-                                  icon: 'assets/svgs/search.svg',
-                                  onChanged: (value) {
-                                    context.read<BlocC>().saved(name: 'fullTextSearch', value: value);
-                                    Delay().run(() {
-                                      context.read<BlocC>().submit(
-                                            showDialog: false,
-                                            api: widget.api,
-                                            getData: true,
-                                            format: widget.format,
-                                          );
-                                    });
-                                  },
-                                );
-                              },
-                            ),
+                      if (widget.items == null && widget.showSearch)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
+                          child: Builder(
+                            builder: (context) {
+                              return WInput(
+                                name: 'fullTextSearch',
+                                hintText: 'widgets.form.select.Search'.tr(),
+                                required: false,
+                                icon: 'assets/svgs/search.svg',
+                                onChanged: (value) {
+                                  context.read<BlocC>().saved(name: 'fullTextSearch', value: value);
+                                  Delay().run(() {
+                                    context.read<BlocC>().submit(
+                                          showDialog: false,
+                                          api: widget.api,
+                                          getData: true,
+                                          format: widget.format,
+                                        );
+                                  });
+                                },
+                              );
+                            },
                           ),
-                        Expanded(
-                          child: WList<dynamic>(
-                              items: widget.items,
-                              item: widget.items == null
-                                  ? (item, int index) {
-                                      final value = context.read<BlocC>().state.value;
-                                      final code = widget.items == null ? widget.selectValue(item) : item.value;
-                                      return Container(
+                        ),
+                      Expanded(
+                        child: WList<dynamic>(
+                            items: widget.items,
+                            item: widget.items == null
+                                ? (item, int index) {
+                                    final value = context.read<BlocC>().state.value;
+                                    final code = widget.items == null ? widget.selectValue(item) : item.value;
+                                    return Container(
+                                      color: value[widget.name] != null &&
+                                              value[widget.name].toString().toLowerCase() ==
+                                                  code.toString().toLowerCase()
+                                          ? CColor.primary.shade100
+                                          : Colors.transparent,
+                                      child: widget.itemSelect(item, index),
+                                    );
+                                  }
+                                : (item, int index) {
+                                    final value = context.read<BlocC>().state.value;
+                                    return Container(
                                         color: value[widget.name] != null &&
-                                                value[widget.name].toString().toLowerCase() == code.toString().toLowerCase()
+                                                value[widget.name].toString().toLowerCase() == item.value.toLowerCase()
                                             ? CColor.primary.shade100
                                             : Colors.transparent,
-                                        child: widget.itemSelect(item, index),
-                                      );
-                                    }
-                                  : (item, int index) {
-                                      final value = context.read<BlocC>().state.value;
-                                      return Container(
-                                          color: value[widget.name] != null &&
-                                                  value[widget.name].toString().toLowerCase() == item.value.toLowerCase()
-                                              ? CColor.primary.shade100
-                                              : Colors.transparent,
-                                          padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
-                                          child: itemList(
-                                            title: Text(item.label, style: const TextStyle(fontSize: CFontSize.paragraph1)),
-                                          ));
-                                    },
-                              format: widget.format,
-                              onTap: (item) async {
-                                widget.controller.text = widget.items == null ? widget.selectLabel(item) : item.label;
-                                widget.onChanged(widget.items == null ? widget.selectValue(item) : item.value);
-                                await UDialog().delay();
-                                if (context.mounted) {
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                              api: widget.api),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              ),
+                                        padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
+                                        child: itemList(
+                                          title:
+                                              Text(item.label, style: const TextStyle(fontSize: CFontSize.paragraph1)),
+                                        ));
+                                  },
+                            format: widget.format,
+                            onTap: (item) async {
+                              widget.controller.text = widget.items == null ? widget.selectLabel(item) : item.label;
+                              widget.onChanged(widget.items == null ? widget.selectValue(item) : item.value);
+                              await UDialog().delay();
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            api: widget.api),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             );
           },
         );

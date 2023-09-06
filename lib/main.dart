@@ -32,15 +32,13 @@ class MyApp extends StatelessWidget {
             ),
           ],
           child: MaterialApp.router(
-            title: 'Uberental',
+            title: 'Flutter App',
             builder: (BuildContext context, Widget? child) => GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-              child: Builder(
-                builder: (context) {
-                  CSpace.setScreenSize(context);
-                  return child!;
-                }
-              ),
+              child: Builder(builder: (context) {
+                CSpace.setScreenSize(context);
+                return child!;
+              }),
             ),
             debugShowCheckedModeBanner: false,
             localizationsDelegates: context.localizationDelegates,
@@ -51,10 +49,11 @@ class MyApp extends StatelessWidget {
               textTheme: TextTheme(
                 bodyMedium: CStyle.caption(
                   style: const TextStyle(
-                      fontSize: CFontSize.subhead,
-                      fontWeight: FontWeight.w400,
-                      textBaseline: TextBaseline.alphabetic,
-                      fontFamily: 'SFProDisplay'),
+                    fontSize: CFontSize.subhead,
+                    fontWeight: FontWeight.w400,
+                    textBaseline: TextBaseline.alphabetic,
+                    fontFamily: 'SFProDisplay',
+                  ),
                 ),
                 labelLarge: CStyle.caption(
                   style: const TextStyle(fontSize: CFontSize.subhead, fontWeight: FontWeight.w400),

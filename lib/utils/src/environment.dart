@@ -13,7 +13,15 @@ class Environment {
     return dotenv.env['API_URL'] ?? 'API_URL not found!';
   }
 
+  static String get fileUrl {
+    return dotenv.env['FILE_URL'] ?? 'FILE_URL not found!';
+  }
+
   static String get uploadUrl {
     return dotenv.env['UPLOAD_URL'] ?? 'UPLOAD_URL not found!';
+  }
+
+  static String get appPackage {
+    return dotenv.env['APP_PACKAGE'] ?? 'APP_PACKAGE not found!';
   }
 }

@@ -21,7 +21,7 @@ class WSelectMultiple extends StatefulWidget {
   final bool stackedLabel;
   final ValueChanged<String> onChanged;
   final String? icon;
-  final Function? format;
+  final Function(dynamic json)? format;
   final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
   final Function(dynamic content, int index) itemSelect;
   final bool showSearch;
@@ -89,7 +89,7 @@ class _WSelectMultipleState extends State<WSelectMultiple> {
                   children: [
                     if (widget.label != '')
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: CSpace.large),
+                        margin: const EdgeInsets.symmetric(vertical: CSpace.small),
                         child: Text(
                           widget.label,
                           style: TextStyle(
@@ -101,7 +101,7 @@ class _WSelectMultipleState extends State<WSelectMultiple> {
                       ),
                     if (widget.items == null && widget.showSearch)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+                        padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
                         child: Builder(
                           builder: (context) {
                             return WInput(
@@ -144,7 +144,7 @@ class _WSelectMultipleState extends State<WSelectMultiple> {
                                       color: value[widget.name] != null && value[widget.name].contains(item.value)
                                           ? CColor.primary.shade100
                                           : Colors.transparent,
-                                      padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+                                      padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
                                       child: itemList(
                                         title: Text(item.label, style: const TextStyle(fontSize: CFontSize.paragraph1)),
                                       ));

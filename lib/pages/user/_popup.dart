@@ -3,8 +3,9 @@ part of 'index.dart';
 class _PopUpItem extends StatelessWidget {
   final MUser data;
   final BuildContext ctx;
+  final int index;
 
-  const _PopUpItem({Key? key, required this.ctx, required this.data}) : super(key: key);
+  const _PopUpItem({Key? key, required this.ctx, required this.data, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,7 @@ class _PopUpItem extends StatelessWidget {
               0,
             ),
             onSelected: (MCodeType item) {
+              final user = RepositoryProvider.of<Api>(context).user;
               switch (item.code) {
                 case 'EDIT':
                   context.goNamed(
@@ -63,13 +65,18 @@ class _PopUpItem extends StatelessWidget {
                     title: 'Xác nhận trước khi xoá',
                     text: 'Thao tác này sẽ làm mất đi dữ liệu của bạn. Bạn có chắc chắn thực hiện?',
                     btnOkOnPress: () async {
-                      context.pop();
-                      context.read<BlocC>().submit(
-                            onlyApi: true,
-                            submit: (_) => getData(),
-                            api: (_, __, ___, ____) =>
-                                RepositoryProvider.of<Api>(context).user.delete(id: data.id),
+                      ctx.read<BlocC>().submit(
+                        onlyApi: true,
+                        submit: (_) {
+                          ctx.pop();
+                          ctx.read<BlocC>().refreshPage(
+                            index: index,
+                            apiId: user.details(id: data.id),
+                            format: MUser.fromJson,
                           );
+                        },
+                        api: (_, __, ___, ____) => user.delete(id: data.id),
+                      );
                     },
                   );
                   break;

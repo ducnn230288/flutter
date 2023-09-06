@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '/constants/index.dart';
-
 class CFontSize {
   CFontSize._();
 
@@ -76,8 +74,8 @@ class CSpace {
 
   static double get height => _height;
 
-  static void setScreenSize(BuildContext context){
-    if (_width == 0 || _height == 0){
+  static void setScreenSize(BuildContext context) {
+    if (_width == 0 || _height == 0) {
       _width = MediaQuery.of(context).size.width;
       _height = MediaQuery.of(context).size.height;
     }

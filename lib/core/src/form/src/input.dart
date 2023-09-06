@@ -63,10 +63,9 @@ class WInput extends StatefulWidget {
 
 class _WInputState extends State<WInput> {
   late final TextEditingController controller;
-  final Color borderColor = const Color(0xFFc2c2c2);
   late final OutlineInputBorder borderStyle = OutlineInputBorder(
     borderRadius: const BorderRadius.all(Radius.circular(CRadius.small)),
-    borderSide: BorderSide(color: borderColor, width: 1),
+    borderSide: BorderSide(color: CColor.black.shade100, width: 1),
   );
   final OutlineInputBorder errorBorderStyle = OutlineInputBorder(
     borderRadius: const BorderRadius.all(Radius.circular(CRadius.small)),
@@ -91,9 +90,7 @@ class _WInputState extends State<WInput> {
 
   @override
   Widget build(BuildContext context) {
-    final bool inputFormatters = widget.number &&
-        !widget.name.toLowerCase().contains('phone') &&
-        widget.formatNumberType == FormatNumberType.inputFormatters;
+    final bool inputFormatters = widget.number && widget.formatNumberType == FormatNumberType.inputFormatters;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -131,7 +128,7 @@ class _WInputState extends State<WInput> {
           style: TextStyle(fontSize: CFontSize.body, color: CColor.black.shade700),
           onChanged: (String text) {
             if (inputFormatters) {
-              text = text.replaceAll('.', '');
+              text = text.replaceAll(' ', '');
             }
             if (widget.onChanged != null) {
               widget.onChanged!(text);
@@ -147,7 +144,7 @@ class _WInputState extends State<WInput> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           obscureText: visible,
           keyboardType: widget.number
-              ? TextInputType.number
+              ? const TextInputType.numberWithOptions(decimal: true, signed: true)
               : widget.maxLines > 1
                   ? TextInputType.multiline
                   : null,
@@ -169,6 +166,7 @@ class _WInputState extends State<WInput> {
                 : null,
             suffixIcon: widget.password
                 ? InkWell(
+                    canRequestFocus: false,
                     splashColor: CColor.primary.shade100,
                     onTap: () => setState(() {
                       visible = !visible;
@@ -181,6 +179,9 @@ class _WInputState extends State<WInput> {
                   )
                 : widget.name == 'fullTextSearch'
                     ? BlocBuilder<BlocC, BlocS>(
+                        buildWhen: (bf, at) =>
+                            (bf.value['fullTextSearch'] == '' && at.value['fullTextSearch'] != '') ||
+                            (bf.value['fullTextSearch'] != '' && at.value['fullTextSearch'] == ''),
                         builder: (context, state) {
                           if (state.value['fullTextSearch'] == null ||
                               state.value['fullTextSearch'] == '' ||
@@ -224,15 +225,17 @@ class _WInputState extends State<WInput> {
           maxLines: widget.maxLines,
           inputFormatters: inputFormatters ? [ThousandFormatter()] : null,
         ),
-        if (widget.subtitle != null) Text(widget.subtitle!, style: const TextStyle(fontSize: CFontSize.footnote)),
-        SizedBox(height: widget.space ? CSpace.large : 0),
+        if (widget.subtitle != null)
+          Text(widget.subtitle!, style: TextStyle(fontSize: CFontSize.footnote, color: CColor.black.shade400)),
+        SizedBox(height: widget.space ? CSpace.small : 0),
       ],
     );
   }
 }
 
 class ThousandFormatter extends TextInputFormatter {
-  static const separator = '.';
+  static const separator = ' ';
+  static const decimalSeparator = '.';
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
@@ -240,27 +243,42 @@ class ThousandFormatter extends TextInputFormatter {
       return newValue.copyWith(text: '');
     }
 
+    String oldValueText = oldValue.text.replaceAll(separator, '');
     String newValueText = newValue.text.replaceAll(separator, '');
 
     if (oldValue.text.endsWith(separator) && oldValue.text.length == newValue.text.length + 1) {
       newValueText = newValueText.substring(0, newValueText.length - 1);
     }
 
-    int selectionIndex = newValue.text.length - newValue.selection.extentOffset;
-    final chars = newValueText.split('');
-    String newString = '';
-    for (int i = chars.length - 1; i >= 0; i--) {
-      if ((chars.length - 1 - i) % 3 == 0 && i != chars.length - 1) {
-        newString = separator + newString;
+    if (oldValueText != newValueText) {
+      int selectionIndex = newValue.text.length - newValue.selection.extentOffset;
+      final chars = newValueText.split('');
+
+      String newString = '';
+      int decimalIndex = chars.indexOf(decimalSeparator);
+      if (decimalIndex == -1) {
+        decimalIndex = chars.length;
       }
-      newString = chars[i] + newString;
+
+      for (int i = decimalIndex - 1; i >= 0; i--) {
+        if ((decimalIndex - 1 - i) % 3 == 0 && i != decimalIndex - 1) {
+          newString = separator + newString;
+        }
+        newString = chars[i] + newString;
+      }
+
+      if (decimalIndex != chars.length) {
+        newString += decimalSeparator + chars.sublist(decimalIndex + 1).join();
+      }
+
+      return TextEditingValue(
+        text: newString,
+        selection: TextSelection.collapsed(
+          offset: newString.length - selectionIndex,
+        ),
+      );
     }
 
-    return TextEditingValue(
-      text: newString.toString(),
-      selection: TextSelection.collapsed(
-        offset: newString.length - selectionIndex,
-      ),
-    );
+    return newValue;
   }
 }

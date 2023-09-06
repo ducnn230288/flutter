@@ -7,10 +7,14 @@ Library             String
 ${BROWSER}          chromium
 ${HEADLESS}         ${True}
 ${BROWSER_TIMEOUT}  60 seconds
-${SHOULD_TIMEOUT}   0.1 seconds
+${SHOULD_TIMEOUT}   0.3 seconds
 ${IS_EMULATOR}      ${True}
 
 ${STATE}            Evaluate  json.loads('''{}''')  json
+${ANDROID_AUTOMATION_NAME}    UIAutomator2
+${ANDROID_APP}                ${CURDIR}/../../build/app/outputs/flutter-apk/app-debug.apk
+${ANDROID_PLATFORM_NAME}      Android
+${ANDROID_PLATFORM_VERSION}   %{ANDROID_PLATFORM_VERSION=11}
 
 *** Keywords ***
 Login to admin
@@ -23,20 +27,24 @@ Login to admin
 #### Setup e Teardown
 Setup
   IF    ${IS_EMULATOR}
+    # Open Application  http://127.0.0.1:4723/wd/hub  automationName=${ANDROID_AUTOMATION_NAME}
+    # ...  platformName=${ANDROID_PLATFORM_NAME}  platformVersion=${ANDROID_PLATFORM_VERSION}
+    # ...  app=${ANDROID_APP}  appPackage=com.uberental.uberental  appActivity=com.uberental.uberental.MainActivity
     Open Application
     ...  http://localhost:4723/wd/hub
     ...  platformName=Android
     ...  deviceName=emulator-5554
-    ...  appPackage=com.uberental.uberental
-    ...  appActivity=com.uberental.uberental.MainActivity
+    ...  appPackage=com.flutter.flutter.flutter_app
+    ...  appActivity=com.flutter.flutter.flutter_app.MainActivity
     ...  automationName=UIAutomator2
+    ...  app=${ANDROID_APP}
   ELSE
     Open Application
     ...  http://localhost:4723/wd/hub
     ...  platformName=Android
     ...  deviceName=LMV500N896a582a
-    ...  appPackage=com.uberental.uberental
-    ...  appActivity=com.uberental.uberental.MainActivity
+    ...  appPackage=com.flutter.flutter.flutter_app
+    ...  appActivity=com.flutter.flutter.flutter_app.MainActivity
     ...  automationName=UIAutomator2
   END
 
@@ -111,6 +119,17 @@ Get Element Form Item By Name
 Required message "${name}" displayed under "${text}" field
   ${element}=               Get Element Form Item By Name     ${name}                       /ancestor::android.widget.EditText/android.view.View[@content-desc="${text}"]
   Wait Until Element Is Visible                               ${element}
+  
+Get Select Option Element Form Item By Name
+  [Arguments]               ${name}                           ${xpath}=${EMPTY}
+  [Return]                  //android.view.View/android.view.View[@content-desc="${name}"]${xpath}
+  
+Required message from select option "${name}" displayed under "${text}" field
+  ${element}=               Get Select Option Element Form Item By Name         ${name}                      /ancestor::android.view.View//android.view.View[@content-desc="${text}"]
+  Wait Until Element Is Visible                               ${element}
+
+  # ${element}=               Set Variable                      //android.view.View/android.view.View[@content-desc="${name}"]
+  # ${element}=               Set Variable                      //android.view.View[@content-desc="${name}"]/ancestor::android.view.View//android.view.View[@content-desc="${text}"]
 
 Enter "${type}" in "${name}" with "${text}"
   ${text}=                  Get Random Text                   ${type}                       ${text}
@@ -127,6 +146,12 @@ Enter "${type}" in "${name}" with "${text}"
     Set Global Variable     ${STATE["${name}"]}               ${text}
   END
   Check Keyboard
+
+Scroll to "${name}" element
+  Sleep                     ${SHOULD_TIMEOUT}
+  ${element}=               Set Variable                      //android.view.View[@content-desc="${name}"]/parent::*
+  Wait Until Page Contains Element                            ${element}
+  Scroll                    ${element}                        ${element}/ancestor::android.view.View[1]
 
 #Enter "${type}" in textarea "${name}" with "${text}"
 #  ${text}=                  Get Random Text                   ${type}                       ${text}

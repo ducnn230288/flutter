@@ -48,7 +48,7 @@ class AuthC extends Cubit<AuthS> {
     emit(state.copyWith(status: AppStatus.fails));
   }
 
-  void save({required data}) async {
+  Future<void> save({required data}) async {
     final MUser user = MUser.fromJson(data['userModel']);
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(CPref.token, data['tokenString']);

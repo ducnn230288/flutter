@@ -56,8 +56,7 @@ class _UserState extends State<User> {
               children: [
                 TextSearch(
                   margin: const EdgeInsets.symmetric(horizontal: CSpace.large),
-                  api: (filter, page, size, sort) =>
-                      RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size),
+                  api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
                   format: MUser.fromJson,
                 ),
                 const _Filter(),
@@ -70,192 +69,196 @@ class _UserState extends State<User> {
           ),
           Expanded(
             child: WList<dynamic>(
-                item: (item, int index) {
-                  final cubit = context.read<BlocC>();
-                  final content = cubit.state.data.content.cast<MUser>().toList();
-                  String? createdOnDate = DateTime.tryParse(content[index].createdOnDate) != null
-                      ? Convert.date(content[index].createdOnDate)
-                      : null;
-                  if (index > 0 &&
-                      DateTime.tryParse(content[index].createdOnDate) != null &&
-                      DateTime.tryParse(content[index - 1].createdOnDate) != null) {
-                    final DateTime current = DateTime.parse(content[index].createdOnDate);
-                    final DateTime before = DateTime.parse(content[index - 1].createdOnDate);
-                    Duration timeDifference = before.difference(current);
-                    if (timeDifference.isNegative) {
-                      timeDifference = timeDifference.abs();
-                    }
-                    if (timeDifference.inDays > 0 || (timeDifference.inHours < 24 && current.day < before.day)) {
-                      createdOnDate = Convert.date(current.toIso8601String());
-                    } else {
-                      createdOnDate = null;
-                    }
+              apiId: (item) => user.details(id: item.id),
+              item: (item, int index) {
+                final cubit = context.read<BlocC>();
+                final content = cubit.state.data.content.cast<MUser>().toList();
+                String? createdOnDate = DateTime.tryParse(content[index].createdOnDate) != null
+                    ? Convert.date(content[index].createdOnDate)
+                    : null;
+                if (index > 0 &&
+                    DateTime.tryParse(content[index].createdOnDate) != null &&
+                    DateTime.tryParse(content[index - 1].createdOnDate) != null) {
+                  final DateTime current = DateTime.parse(content[index].createdOnDate);
+                  final DateTime before = DateTime.parse(content[index - 1].createdOnDate);
+                  Duration timeDifference = before.difference(current);
+                  if (timeDifference.isNegative) {
+                    timeDifference = timeDifference.abs();
                   }
-                  final MUser data = item;
-                  const double widthSpace = 35;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (index == 0) const VSpacer(CSpace.large),
-                      if (createdOnDate != null)
-                        Padding(
-                          padding: const EdgeInsets.only(left: CSpace.large, bottom: CSpace.mediumSmall),
-                          child: Text(
-                            createdOnDate,
-                            style: TextStyle(fontSize: CFontSize.footnote, color: CColor.hintColor),
-                          ),
+                  if (timeDifference.inDays > 0 || (timeDifference.inHours < 24 && current.day < before.day)) {
+                    createdOnDate = Convert.date(current.toIso8601String());
+                  } else {
+                    createdOnDate = null;
+                  }
+                }
+                final MUser data = item;
+                const double widthSpace = 35;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (index == 0) const VSpacer(CSpace.large),
+                    if (createdOnDate != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: CSpace.large, bottom: CSpace.mediumSmall),
+                        child: Text(
+                          createdOnDate,
+                          style: TextStyle(fontSize: CFontSize.footnote, color: CColor.hintColor),
                         ),
-                      SwipeActionCell(
-                        key: ValueKey(data.id),
-                        trailingActions: !isInternalUser
-                            ? [
-                                const SwipeAction(widthSpace: 20, color: Colors.transparent),
-                                SwipeAction(
-                                  widthSpace: widthSpace,
-                                  content: button(child: Icon(Icons.key, color: CColor.warning)),
-                                  color: Colors.transparent,
-                                  onTap: (handler) {
-                                    context.pushNamed(
-                                      CRoute.createCustomerUser,
-                                      queryParams: {'formType': FormType.password.name, 'data': jsonEncode(data)},
-                                    );
-                                  },
+                      ),
+                    SwipeActionCell(
+                      key: ValueKey(data.id),
+                      trailingActions: !isInternalUser
+                          ? [
+                              const SwipeAction(widthSpace: 20, color: Colors.transparent),
+                              SwipeAction(
+                                widthSpace: widthSpace,
+                                content: button(child: Icon(Icons.key, color: CColor.warning)),
+                                color: Colors.transparent,
+                                onTap: (handler) {
+                                  context.pushNamed(
+                                    CRoute.createCustomerUser,
+                                    queryParams: {'formType': FormType.password.name, 'data': jsonEncode(data)},
+                                  );
+                                },
+                              ),
+                              SwipeAction(
+                                widthSpace: widthSpace,
+                                content: button(child: Icon(Icons.edit_square, color: CColor.primary)),
+                                color: Colors.transparent,
+                                onTap: (handler) {
+                                  context.pushNamed(
+                                    CRoute.createCustomerUser,
+                                    queryParams: {'formType': FormType.edit.name, 'data': jsonEncode(data)},
+                                  );
+                                },
+                              ),
+                              SwipeAction(
+                                widthSpace: widthSpace,
+                                content: button(child: Icon(Icons.delete_forever_outlined, color: CColor.danger)),
+                                color: Colors.transparent,
+                                onTap: (handler) {
+                                  UDialog().showConfirm(
+                                    title: 'Xác nhận trước khi xoá',
+                                    text: 'Thao tác này sẽ làm mất đi dữ liệu của bạn. Bạn có chắc chắn thực hiện?',
+                                    btnOkOnPress: () async {
+                                      context.read<BlocC>().submit(
+                                            onlyApi: true,
+                                            submit: (_) {
+                                              context.pop();
+                                              context.read<BlocC>().refreshPage(
+                                                    index: index,
+                                                    apiId: user.details(id: data.id),
+                                                    format: MUser.fromJson,
+                                                  );
+                                            },
+                                            api: (_, __, ___, ____) => user.delete(id: data.id),
+                                          );
+                                    },
+                                  );
+                                },
+                              ),
+                            ]
+                          : [],
+                      child: Container(
+                        padding: const EdgeInsets.all(CSpace.large),
+                        margin: const EdgeInsets.only(left: 2.5 * CSpace.superLarge, right: CSpace.large),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(CRadius.basic),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (!isInternalUser)
+                              Container(
+                                height: 6,
+                                width: 6,
+                                margin: const EdgeInsets.only(top: 5, right: CSpace.medium),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: data.isEmailVerified ? CColor.danger : isNotActiveColor,
                                 ),
-                                SwipeAction(
-                                  widthSpace: widthSpace,
-                                  content: button(child: Icon(Icons.edit_square, color: CColor.primary)),
-                                  color: Colors.transparent,
-                                  onTap: (handler) {
-                                    context.pushNamed(
-                                      CRoute.createCustomerUser,
-                                      queryParams: {'formType': FormType.edit.name, 'data': jsonEncode(data)},
-                                    );
-                                  },
-                                ),
-                                SwipeAction(
-                                  widthSpace: widthSpace,
-                                  content: button(child: Icon(Icons.delete_forever_outlined, color: CColor.danger)),
-                                  color: Colors.transparent,
-                                  onTap: (handler) {
-                                    UDialog().showConfirm(
-                                      title: 'Xác nhận trước khi xoá',
-                                      text: 'Thao tác này sẽ làm mất đi dữ liệu của bạn. Bạn có chắc chắn thực hiện?',
-                                      btnOkOnPress: () async {
-                                        context.read<BlocC>().submit(
-                                              onlyApi: true,
-                                              submit: (_) {
-                                                context.pop();
-                                                getData();
-                                              },
-                                              api: (_, __, ___, ____) =>
-                                                  RepositoryProvider.of<Api>(context).user.delete(id: data.id),
-                                            );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ]
-                            : [],
-                        child: Container(
-                          padding: const EdgeInsets.all(CSpace.large),
-                          margin: const EdgeInsets.only(left: 2.5 * CSpace.superLarge, right: CSpace.large),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(CRadius.basic),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (!isInternalUser)
-                                Container(
-                                  height: 6,
-                                  width: 6,
-                                  margin: const EdgeInsets.only(top: 5, right: CSpace.medium),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: data.isEmailVerified ? CColor.danger : isNotActiveColor,
-                                  ),
-                                ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Row(
-                                            children: [
-                                              Flexible(
-                                                child: Text(
-                                                  '${data.name}  ',
-                                                  style: const TextStyle(fontWeight: FontWeight.w600),
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              if (data.isLockedOut)
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 5),
-                                                  child: Icon(Icons.lock, color: CColor.red, size: CFontSize.subhead),
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                        if (!isInternalUser) active(data)
-                                      ],
-                                    ),
-                                    const VSpacer(CSpace.small),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            height: CFontSize.callOut,
-                                            child: FittedBox(
+                              ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Flexible(
                                               child: Text(
-                                                data.userName,
-                                                style: TextStyle(
-                                                  color: CColor.hintColor,
-                                                  fontSize: CFontSize.footnote,
-                                                ),
+                                                '$index: ${data.name}  ',
+                                                style: const TextStyle(fontWeight: FontWeight.w600),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            if (data.isLockedOut)
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 5),
+                                                child: Icon(Icons.lock, color: CColor.red, size: CFontSize.subhead),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (!isInternalUser) active(data)
+                                    ],
+                                  ),
+                                  const VSpacer(CSpace.small),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: CFontSize.callOut,
+                                          child: FittedBox(
+                                            child: Text(
+                                              data.userName,
+                                              style: TextStyle(
+                                                color: CColor.hintColor,
+                                                fontSize: CFontSize.footnote,
                                               ),
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: isInternalUser ? 60 : 75,
-                                          child: Text(
-                                            CPref.statusTitle(data.roleListCode[0]),
-                                            style: TextStyle(color: CColor.primary, fontSize: CFontSize.footnote),
-                                            textAlign: TextAlign.right,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                      SizedBox(
+                                        width: isInternalUser ? 60 : 75,
+                                        child: Text(
+                                          CPref.statusTitle(data.roleListCode[0]),
+                                          style: TextStyle(color: CColor.primary, fontSize: CFontSize.footnote),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
-                              if (isInternalUser)
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8, top: 8.0),
-                                  child: _PopUpItem(ctx: context, data: data),
-                                )
-                            ],
-                          ),
+                            ),
+                            if (isInternalUser)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8, top: 8.0),
+                                child: _PopUpItem(ctx: context, data: data, index: index),
+                              )
+                          ],
                         ),
                       ),
-                    ],
-                  );
-                },
-                onTap: (data) => context.pushNamed(
-                      isInternalUser ? CRoute.internalUserDetails : CRoute.customerUserDetails,
-                      queryParams: {'id': data.id, 'title': data.name},
                     ),
-                separator: const VSpacer(CSpace.medium),
-                format: MUser.fromJson,
-                api: (filter, page, size, sort) =>
-                    RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size)),
+                  ],
+                );
+              },
+              onTap: (data) => context.pushNamed(
+                isInternalUser ? CRoute.internalUserDetails : CRoute.customerUserDetails,
+                queryParams: {'id': data.id, 'title': data.name},
+              ),
+              separator: const VSpacer(CSpace.medium),
+              format: MUser.fromJson,
+              api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
+            ),
           ),
         ],
       ),
@@ -271,14 +274,14 @@ class _UserState extends State<User> {
     );
   }
 
+  late final user = RepositoryProvider.of<Api>(context).user;
   final Color isNotActiveColor = const Color(0xFF9CA3AF);
   final bool isInternalUser =
       GoRouter.of(rootNavigatorKey.currentState!.context).location.contains(CRoute.internalUser);
 
   void getData() => context.read<BlocC>().submit(
       getData: true,
-      api: (filter, page, size, sort) =>
-          RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size),
+      api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
       format: MUser.fromJson);
 
   Widget active(MUser data) {

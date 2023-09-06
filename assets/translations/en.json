@@ -42,6 +42,8 @@
   },
   "utils": {
     "app_console": {
+      "minutes ago": "phút trước",
+      "hours ago": "giờ trước",
       "days ago": "ngày trước",
       "months ago": "tháng trước",
       "years ago": "năm trước",
@@ -59,6 +61,7 @@
     "form": {
       "input": {
         "rulesRequired": "Enter {}",
+        "Please check": "Please check",
         "Enter": "Enter {}",
         "Choose": "Choose {}"
       },

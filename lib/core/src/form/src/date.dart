@@ -14,6 +14,7 @@ import '/utils/index.dart';
 class WDate extends StatefulWidget {
   final String label;
   final String value;
+  final String? subtitle;
   final String? hintText;
   final bool space;
   final int maxLines;
@@ -32,6 +33,7 @@ class WDate extends StatefulWidget {
       {Key? key,
       this.label = '',
       this.value = '',
+      this.subtitle = '',
       this.onChanged,
       this.required = false,
       this.enabled = true,
@@ -63,6 +65,7 @@ class _WDateState extends State<WDate> {
       rulesRequired: 'widgets.form.date.rulesRequired'.tr(),
       label: widget.label,
       value: widget.value,
+      subtitle: widget.subtitle,
       space: widget.space,
       maxLines: widget.maxLines,
       required: widget.required,
@@ -104,7 +107,11 @@ class _WDateState extends State<WDate> {
                             initialSelectedDates: selectedDateMultiple != null
                                 ? [selectedDateMultiple!.startDate!, selectedDateMultiple!.endDate!]
                                 : null,
-                            initialDisplayDate: selectedDateSingle,
+                            initialDisplayDate: widget.mode == DateRangePickerSelectionMode.single
+                                ? selectedDateSingle
+                                : selectedDateMultiple != null
+                                    ? selectedDateMultiple!.startDate
+                                    : null,
                             initialSelectedRange: selectedDateMultiple,
                             headerStyle: DateRangePickerHeaderStyle(textStyle: CStyle.title),
                             view: DateRangePickerView.month,
@@ -257,7 +264,6 @@ class _WDateState extends State<WDate> {
                                         widget.onChanged!(
                                             '${selectedDateMultiple!.startDate!.toIso8601String()}|${selectedDateMultiple!.endDate!.toIso8601String()}');
                                       }
-
                                       await UDialog().delay();
                                       UDialog().stopLoading();
                                       context.pop({

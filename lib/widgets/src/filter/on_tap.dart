@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '/constants/index.dart';
+import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
-import '/core/index.dart';
 
 class OnTapFilter {
   OnTapFilter._();
@@ -209,8 +209,7 @@ class OnTapFilter {
                                     name: 'fromDate',
                                     onTap: () => selectDate(
                                       name: 'fromDate',
-                                      initialSelectedDate:
-                                          fromDate ?? (check ? DateTime.parse(value[0]) : null),
+                                      initialSelectedDate: fromDate ?? (check ? DateTime.parse(value[0]) : null),
                                       limit: check ? value[1] : state.value['toDate'],
                                     ),
                                     value: check ? value[0] : state.value['toDate'],
@@ -222,8 +221,7 @@ class OnTapFilter {
                                     name: 'toDate',
                                     onTap: () => selectDate(
                                       name: 'toDate',
-                                      initialSelectedDate:
-                                          toDate ?? (check ? DateTime.parse(value[1]) : null),
+                                      initialSelectedDate: toDate ?? (check ? DateTime.parse(value[1]) : null),
                                       limit: check ? value[0] : state.value['fromDate'],
                                     ),
                                     value: check ? value[1] : state.value['toDate'],

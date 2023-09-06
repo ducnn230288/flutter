@@ -1,3 +1,5 @@
+import '/utils/src/environment.dart';
+
 class MUpload {
   MUpload({
     String? id,
@@ -9,6 +11,7 @@ class MUpload {
     int? maxQuantity,
     int? minQuantity,
     String? fileUrl,
+    String? file,
   }) {
     _id = id;
     _description = description;
@@ -19,6 +22,7 @@ class MUpload {
     _maxQuantity = maxQuantity;
     _minQuantity = minQuantity;
     _fileUrl = fileUrl;
+    _file = file;
   }
 
   MUpload.fromJson(dynamic json) {
@@ -30,7 +34,8 @@ class MUpload {
     _order = json?['order'] ?? 0;
     _maxQuantity = json?['maxQuantity'] ?? 0;
     _minQuantity = json?['minQuantity'] ?? 0;
-    _fileUrl = json?['fileUrl'] ?? json?['file'] ?? json['physicalPath'] ?? '';
+    _file = json?['fileUrl'] ?? json?['file'] ?? json['physicalPath'] ?? '';
+    _fileUrl = ((_file as String).indexOf('http') < 0 ? Environment.fileUrl : '') + _file!;
   }
   String? _id;
   String? _description;
@@ -41,6 +46,7 @@ class MUpload {
   int? _maxQuantity;
   int? _minQuantity;
   String? _fileUrl;
+  String? _file;
   MUpload copyWith({
     String? id,
     String? description,
@@ -51,6 +57,7 @@ class MUpload {
     int? maxQuantity,
     int? minQuantity,
     String? fileUrl,
+    String? file,
   }) =>
       MUpload(
         id: id ?? _id,
@@ -62,6 +69,7 @@ class MUpload {
         maxQuantity: maxQuantity ?? _maxQuantity,
         minQuantity: minQuantity ?? _minQuantity,
         fileUrl: fileUrl ?? _fileUrl,
+        file: file ?? _file,
       );
   String get id => _id ?? '';
   String get description => _description ?? '';
@@ -72,18 +80,16 @@ class MUpload {
   int get maxQuantity => _maxQuantity ?? 1;
   int get minQuantity => _minQuantity ?? 1;
   String get fileUrl => _fileUrl ?? '';
+  String get file => _file ?? '';
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['id'] = _id;
+    if (_id != '') map['id'] = _id;
     map['description'] = _description;
     map['entityType'] = _entityType;
     map['docType'] = _docType;
     map['docTypeName'] = _docTypeName;
-    map['order'] = _order;
-    map['maxQuantity'] = _maxQuantity;
-    map['minQuantity'] = _minQuantity;
-    map['fileUrl'] = _fileUrl;
+    map['file'] = _file;
     return map;
   }
 }

@@ -1,5 +1,6 @@
 library form;
 
+export 'src/checkbox.dart';
 export 'src/date.dart';
 export 'src/index.dart';
 export 'src/input.dart';
