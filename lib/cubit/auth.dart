@@ -19,23 +19,24 @@ class AuthC extends Cubit<AuthS> {
     String token = prefs.getString(CPref.token) ?? '';
 
     RepositoryProvider.of<Api>(context).setLanguage(language: context.locale.toString());
+    MApi? res = await RepositoryProvider.of<Api>(context).auth.zalo();
+
     if ((token).isEmpty) {
-      emit(state.copyWith(status: AppStatus.fails));
+      emit(state.copyWith(status: AppStatus.fails, zalo: res?.data['value']));
     } else {
       if (context.mounted) {
         try {
           MApi? result = await RepositoryProvider.of<Api>(context).auth.info(token: token);
           if (result != null && result.isSuccess) {
-            // Map<String, dynamic> data = jsonDecode(prefs.getString(CPref.user) ?? '{}');
             final MUser user = MUser.fromJson(result.data['userModel']);
-            emit(state.copyWith(status: AppStatus.success, user: user));
+            emit(state.copyWith(status: AppStatus.success, user: user, zalo: res?.data['value']));
           } else {
             prefs.remove(CPref.token);
-            emit(state.copyWith(status: AppStatus.fails));
+            emit(state.copyWith(status: AppStatus.fails, zalo: res?.data['value']));
           }
         } catch (e) {
           UDialog().showError(text: e.toString());
-          emit(state.copyWith(status: AppStatus.fails));
+          emit(state.copyWith(status: AppStatus.fails, zalo: res?.data['value']));
         }
       }
     }
@@ -65,16 +66,19 @@ class AuthC extends Cubit<AuthS> {
 class AuthS {
   final AppStatus status;
   final MUser? user;
+  final String? zalo;
 
   AuthS({
     this.status = AppStatus.init,
     this.user,
+    this.zalo,
   });
 
-  AuthS copyWith({AppStatus? status, GlobalKey<FormState>? key, MUser? user}) {
+  AuthS copyWith({AppStatus? status, GlobalKey<FormState>? key, MUser? user, String? zalo}) {
     return AuthS(
       status: status ?? this.status,
       user: user ?? this.user,
+      zalo: zalo ?? this.zalo,
     );
   }
 }

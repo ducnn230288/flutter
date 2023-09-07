@@ -34,6 +34,13 @@ class ResetPassword extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(CSpace.superLarge),
         children: [
+          SizedBox(height: 170, child: CIcon.resetPassword),
+          const VSpacer(CSpace.superLarge),
+          const Text(
+            'Bây giờ bạn có thể đặt lại mật khẩu mới cho mình được rồi!',
+            textAlign: TextAlign.center,
+          ),
+          const VSpacer(CSpace.superLarge),
           WForm(list: listFormItem),
           const VSpacer(CSpace.superLarge),
           ElevatedButton(

@@ -19,10 +19,20 @@ class CIcon {
   static final placeholderImage = Image.asset(
     'assets/images/placeholder.jpeg',
   );
-  static final reminder = Image.asset(
-    'assets/images/reminder.png',
-    width: CSpace.width < 190 ? 190 : CSpace.width * 0.6,
-    semanticLabel: 'reminder',
+  static final forgotPassword = SvgPicture.asset(
+    'assets/svgs/forgot-password.svg',
+    semanticsLabel: 'forgot-password',
+    color: CColor.primary,
+  );
+  static final otpVerification = SvgPicture.asset(
+    'assets/svgs/otp-verification.svg',
+    semanticsLabel: 'otp-verification',
+    color: CColor.primary,
+  );
+  static final resetPassword = SvgPicture.asset(
+    'assets/svgs/reset-password.svg',
+    semanticsLabel: 'reset-password',
+    color: CColor.primary,
   );
   static final arrowDown = SvgPicture.asset(
     'assets/svgs/arrow-down.svg',

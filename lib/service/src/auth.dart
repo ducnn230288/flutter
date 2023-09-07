@@ -17,6 +17,13 @@ class SAuth {
         headers: headers,
       ));
 
+  Future<MApi?> zalo() async => checkAuth(
+          result: await BaseHttp.get(
+        url: '$endpoint/parameters/zalo',
+        queryParameters: {},
+        headers: headers,
+      ));
+
   Future<MApi?> register({required body}) async => checkAuth(
           result: await BaseHttp.post(
         url: '$endpoint/authentication/register',

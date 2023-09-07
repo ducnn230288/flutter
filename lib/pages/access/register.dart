@@ -39,20 +39,6 @@ class RegisterPage extends StatelessWidget {
         label: 'pages.login.register.Account Type'.tr(),
         items: [MOption(label: 'Order Side', value: 'ORDERER'), MOption(label: 'Farmer Side', value: 'FARMER')],
       ),
-      // MFormItem(
-      //   type: 'select',
-      //   name: 'medicalDegreeCode',
-      //   label: 'Bằng cấp chuyên môn',
-      //   format: MCodeType.fromJson,
-      //   api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).profileFarmer.getMedicalDegrees(),
-      //   itemSelect: (item, index) => Container(
-      //       padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
-      //       child: itemList(title: Text(item.title, style: const TextStyle(fontSize: CFontSize.paragraph1)))),
-      //   showSearch: false,
-      //   show: false,
-      //   selectLabel: (MCodeType item) => item.title,
-      //   selectValue: (MCodeType item) => item.code,
-      // ),
       MFormItem(label: 'Thông tin cá nhân', type: EFormItemType.title),
       MFormItem(
         name: 'name',

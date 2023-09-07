@@ -26,7 +26,16 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
       body: ListView(
         padding: const EdgeInsets.all(CSpace.superLarge),
         children: [
-          Text('Để xác nhận email là của bạn, nhập mã gồm 6 chữ số vừa được gửi đến email:\n${widget.email}'),
+          SizedBox(height: 170, child: CIcon.otpVerification),
+          const VSpacer(CSpace.mediumSmall),
+          Text.rich(TextSpan(
+            children: [
+              const TextSpan(text: 'Để xác nhận số điện thoại là của bạn, nhập mã gồm '),
+              TextSpan(text: '6', style: TextStyle(color: CColor.primary, fontWeight: FontWeight.bold)),
+              const TextSpan(text: ' chữ số vừa được gửi đến địa chỉ email: '),
+              TextSpan(text: widget.email, style: TextStyle(color: CColor.primary, fontWeight: FontWeight.bold))
+            ],
+          )),
           const VSpacer(40),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
@@ -40,7 +49,13 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
               },
             ),
           ),
-          const VSpacer(44),
+          const VSpacer(40),
+          Text(
+            'Bạn có thể cần phải chờ tối đa 1 phút để nhận được mã',
+            style: TextStyle(color: CColor.hintColor, fontSize: CFontSize.footnote),
+            textAlign: TextAlign.center,
+          ),
+          const VSpacer(40),
           ElevatedButton(onPressed: checkToken, child: Text('pages.login.otp_verification.Confirm'.tr())),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

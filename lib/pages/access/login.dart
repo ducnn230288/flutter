@@ -28,16 +28,8 @@ class LoginPage extends StatelessWidget {
         password: true,
       )
     ];
-    List<MFormItem> listEmail = [
-      MFormItem(
-        name: 'email',
-        hintText: 'pages.login.login.Email address'.tr(),
-        icon: 'assets/form/mail.svg',
-      ),
-    ];
 
     return Scaffold(
-      // appBar: appBar(title: 'pages.login.login.Log in'.tr()),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

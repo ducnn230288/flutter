@@ -14,22 +14,20 @@ class ForgotPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double size = CSpace.width < 190 ? 190 : CSpace.width * 0.6;
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(CSpace.large),
           children: [
+            SizedBox(height: 170, child: CIcon.forgotPassword),
             const VSpacer(CSpace.superLarge),
-            CIcon.reminder,
-            const VSpacer(CSpace.mediumSmall),
             const Center(
               child: Text(
                 'Quên mật khẩu?',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title2),
               ),
             ),
-            const VSpacer(CSpace.medium),
+            const VSpacer(CSpace.superLarge),
             Text(
               'Đừng lo, hãy nhập email đã đăng ký của bạn bên dưới để nhận mã OTP xác nhận lấy lại mật khẩu',
               style: TextStyle(color: CColor.hintColor),
