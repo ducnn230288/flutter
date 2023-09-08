@@ -100,10 +100,12 @@ class MUser {
     _profileType = json['profileType'];
     _createdOnDate = json['createdOnDate'];
   }
+
   List<MRole>? _listRole;
   MRole? _role;
   num? _totalClinic;
   num? _totalOrder;
+
   // MProfileFarmer? _profileFarmer;
   String? _id;
   String? _userName;
@@ -130,6 +132,7 @@ class MUser {
   List<String>? _roleListCode;
   String? _profileType;
   String? _createdOnDate;
+
   MUser copyWith({
     List<MRole>? listRole,
     MRole? role,
@@ -194,35 +197,64 @@ class MUser {
         profileType: profileType ?? _profileType,
         createdOnDate: createdOnDate ?? _createdOnDate,
       );
+
   List<MRole> get listRole => _listRole ?? [];
+
   MRole get role => _role ?? MRole();
+
   num get totalClinic => _totalClinic ?? 0;
+
   num get totalOrder => _totalOrder ?? 0;
+
   // MProfileFarmer get profileFarmer => _profileFarmer ?? MProfileFarmer();
   String get id => _id ?? '';
+
   String get userName => _userName ?? '';
+
   String get name => _name ?? '';
+
   String get phoneNumber => _phoneNumber ?? '';
+
   String get countryCode => _countryCode ?? '';
+
   String get gender => _gender ?? '';
+
   String get genderString => _genderString ?? '';
+
   String get email => _email ?? '';
+
   String get avatarUrl => _avatarUrl ?? '';
+
   String get bankAccountNo => _bankAccountNo ?? '';
+
   String get bankName => _bankName ?? '';
+
   String get bankUsername => _bankUsername ?? '';
+
   String get birthdate => _birthdate ?? '';
+
   String get lastActivityDate => _lastActivityDate ?? '';
+
   bool get isLockedOut => _isLockedOut ?? false;
+
   bool get isActive => _isActive ?? false;
+
   String get activeDate => _activeDate ?? '';
+
   num get level => _level ?? 0;
+
   String get facebookUserId => _facebookUserId ?? '';
+
   String get googleUserId => _googleUserId ?? '';
+
   String get emailVerifyToken => _emailVerifyToken ?? '';
+
   bool get isEmailVerified => _isEmailVerified ?? false;
+
   List<String> get roleListCode => _roleListCode ?? [];
+
   String get profileType => _profileType ?? '';
+
   String get createdOnDate => _createdOnDate ?? '';
 
   @override
@@ -290,11 +322,13 @@ class MRole {
     _isSystem = json['isSystem'];
     _level = json['level'];
   }
+
   String? _id;
   String? _code;
   String? _name;
   bool? _isSystem;
   num? _level;
+
   MRole copyWith({
     String? id,
     String? code,
@@ -309,10 +343,15 @@ class MRole {
         isSystem: isSystem ?? _isSystem,
         level: level ?? _level,
       );
+
   String get id => _id ?? '';
+
   String get code => _code ?? '';
+
   String get name => _name ?? '';
+
   bool get isSystem => _isSystem ?? false;
+
   num get level => _level ?? 0;
 
   Map<String, dynamic> toJson() {

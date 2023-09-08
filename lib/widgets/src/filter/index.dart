@@ -6,7 +6,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 
-class WidgetFilter extends StatefulWidget {
+class WidgetFilter<T> extends StatefulWidget {
   final List<MFilter> filter;
   final String keyValue;
   final Function() submit;
@@ -21,15 +21,15 @@ class WidgetFilter extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<WidgetFilter> createState() => _WidgetFilterState();
+  State<WidgetFilter> createState() => _WidgetFilterState<T>();
 }
 
-class _WidgetFilterState extends State<WidgetFilter> {
+class _WidgetFilterState<T> extends State<WidgetFilter> {
   bool _first = true;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BlocC, BlocS>(
+    return BlocBuilder<BlocC<T>, BlocS<T>>(
       builder: (context, state) {
         return Container(
           height: 26,
@@ -77,14 +77,14 @@ class _WidgetFilterState extends State<WidgetFilter> {
                   if (filter.onTap != null) {
                     filter.onTap!();
                   } else {
-                    final cubit = context.read<BlocC>();
+                    final cubit = context.read<BlocC<T>>();
                     cubit.resetPage(page: 1, name: keyValue, value: filter.value);
                     widget.submit();
                   }
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selected ? const Color(0xFFCBEFD0) : CColor.black.shade50,
+                    color: selected ? CColor.primary.shade100 : CColor.black.shade50,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: CSpace.mediumSmall),

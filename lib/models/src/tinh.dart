@@ -17,10 +17,12 @@ class MTinh {
     _totalDistrictShipDelay = json['totalDistrictShipDelay'];
     _totalDistrictShipStop = json['totalDistrictShipStop'];
   }
+
   num? _maTinh;
   String? _tenTinh;
   num? _totalDistrictShipDelay;
   num? _totalDistrictShipStop;
+
   MTinh copyWith({
     num? maTinh,
     String? tenTinh,
@@ -33,9 +35,13 @@ class MTinh {
         totalDistrictShipDelay: totalDistrictShipDelay ?? _totalDistrictShipDelay,
         totalDistrictShipStop: totalDistrictShipStop ?? _totalDistrictShipStop,
       );
+
   num get maTinh => _maTinh ?? 0;
+
   String get tenTinh => _tenTinh ?? '';
+
   num? get totalDistrictShipDelay => _totalDistrictShipDelay;
+
   num? get totalDistrictShipStop => _totalDistrictShipStop;
 
   Map<String, dynamic> toJson() {

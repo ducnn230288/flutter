@@ -11,16 +11,21 @@ void main() async {
   await dotenv.load(fileName: Environment.fileName);
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  runApp(EasyLocalization(supportedLocales: const [
-    // Locale('en'),
-    Locale('vi'),
-  ], path: 'assets/translations', fallbackLocale: const Locale('vi'), child: MyApp()));
+  runApp(EasyLocalization(
+      supportedLocales: const [
+        // Locale('en'),
+        Locale('vi'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('vi'),
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final Api _api = Api();
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
@@ -56,13 +61,15 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 labelLarge: CStyle.caption(
-                  style: const TextStyle(fontSize: CFontSize.subhead, fontWeight: FontWeight.w400),
+                  style: const TextStyle(
+                      fontSize: CFontSize.subhead, fontWeight: FontWeight.w400),
                 ),
               ),
-              scaffoldBackgroundColor: CColor.hintButton,
+              scaffoldBackgroundColor: CColor.black.shade50,
               primarySwatch: CColor.primary,
               unselectedWidgetColor: CColor.primary,
-              elevatedButtonTheme: ElevatedButtonThemeData(style: CStyle.button),
+              elevatedButtonTheme:
+                  ElevatedButtonThemeData(style: CStyle.button),
             ),
             routeInformationProvider: routes.routeInformationProvider,
             routeInformationParser: routes.routeInformationParser,

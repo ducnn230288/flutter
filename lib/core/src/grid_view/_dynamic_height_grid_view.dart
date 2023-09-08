@@ -1,5 +1,5 @@
-
 part of 'index.dart';
+
 /// GridView with dynamic height
 ///
 /// Usage is almost same as [GridView.count]
@@ -138,7 +138,7 @@ class _GridRow extends HookWidget {
             (crossAxisCount * 2) - 1,
             (rowIndex) {
               final rowNum = rowIndex + 1;
-              if (rowNum % 2 == 0){
+              if (rowNum % 2 == 0) {
                 return SizedBox(width: crossAxisSpacing);
               }
               final rowItemIndex = ((rowNum + 1) ~/ 2) - 1;

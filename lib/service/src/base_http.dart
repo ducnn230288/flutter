@@ -58,7 +58,7 @@ class BaseHttp {
       data: body,
       queryParameters: null,
       type: EHttpType.post,
-    ).timeout(Duration(seconds: timeOut), onTimeout: (){
+    ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
   }
@@ -80,7 +80,7 @@ class BaseHttp {
       data: body,
       queryParameters: null,
       type: EHttpType.put,
-    ).timeout(Duration(seconds: timeOut), onTimeout: (){
+    ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
   }
@@ -105,7 +105,7 @@ class BaseHttp {
       data: null,
       queryParameters: queryParameters,
       type: EHttpType.get,
-    ).timeout(Duration(seconds: timeOut), onTimeout: (){
+    ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
   }
@@ -125,7 +125,7 @@ class BaseHttp {
       data: null,
       queryParameters: null,
       type: EHttpType.delete,
-    ).timeout(Duration(seconds: timeOut), onTimeout: (){
+    ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
   }

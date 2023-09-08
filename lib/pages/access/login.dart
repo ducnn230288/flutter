@@ -50,7 +50,10 @@ class LoginPage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(33),
                 boxShadow: [
-                  BoxShadow(color: CColor.hintColor.withOpacity(0.4), blurRadius: 6, offset: const Offset(1, 1))
+                  BoxShadow(
+                      color: CColor.black.shade300.withOpacity(0.4),
+                      blurRadius: 6,
+                      offset: const Offset(1, 1))
                 ],
               ),
               child: Column(
@@ -61,7 +64,9 @@ class LoginPage extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: CSpace.superLarge),
                     child: Text(
                       'Đăng nhập',
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title1),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: CFontSize.title1),
                     ),
                   ),
                   WForm(list: listFormItem),
@@ -70,7 +75,9 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                          onPressed: () => context.read<BlocC>().savedBool(name: 'rememberMe'),
+                          onPressed: () => context
+                              .read<BlocC>()
+                              .savedBool(name: 'rememberMe'),
                           child: Row(
                             children: [
                               SizedBox(
@@ -79,10 +86,17 @@ class LoginPage extends StatelessWidget {
                                 child: BlocBuilder<BlocC, BlocS>(
                                   builder: (context, state) {
                                     return Checkbox(
-                                      side: BorderSide(width: 1, color: CColor.primary),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                                      value: state.value['rememberMe'] != null && state.value['rememberMe'],
-                                      onChanged: (bool? value) => context.read<BlocC>().savedBool(name: 'rememberMe'),
+                                      side: BorderSide(
+                                          width: 1, color: CColor.primary),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                      value:
+                                          state.value['rememberMe'] != null &&
+                                              state.value['rememberMe'],
+                                      onChanged: (bool? value) => context
+                                          .read<BlocC>()
+                                          .savedBool(name: 'rememberMe'),
                                     );
                                   },
                                 ),
@@ -90,13 +104,16 @@ class LoginPage extends StatelessWidget {
                               const SizedBox(width: 10),
                               Text(
                                 'pages.login.login.Remember me'.tr(),
-                                style: TextStyle(fontSize: CFontSize.footnote, color: CColor.hintColor),
+                                style: TextStyle(
+                                    fontSize: CFontSize.footnote,
+                                    color: CColor.black.shade300),
                               ),
                             ],
                           )),
                       TextButton(
                         onPressed: () => context.goNamed(CRoute.forgotPassword),
-                        child: Text('${'pages.login.login.Forgot password'.tr()}?'),
+                        child: Text(
+                            '${'pages.login.login.Forgot password'.tr()}?'),
                       )
                     ],
                   ),
@@ -107,15 +124,21 @@ class LoginPage extends StatelessWidget {
                         Text.rich(
                           TextSpan(
                             children: [
-                              const TextSpan(text: 'Bằng cách đăng nhập, bạn đã đồng ý với các\n'),
+                              const TextSpan(
+                                  text:
+                                      'Bằng cách đăng nhập, bạn đã đồng ý với các\n'),
                               TextSpan(
                                 text: ' Điều khoản dịch vụ',
-                                style: TextStyle(color: CColor.primary, fontSize: CFontSize.footnote),
+                                style: TextStyle(
+                                    color: CColor.primary,
+                                    fontSize: CFontSize.footnote),
                               ),
                               const TextSpan(text: ' và '),
                               TextSpan(
                                 text: 'Điều kiện bảo mật ',
-                                style: TextStyle(color: CColor.primary, fontSize: CFontSize.footnote),
+                                style: TextStyle(
+                                    color: CColor.primary,
+                                    fontSize: CFontSize.footnote),
                               ),
                               const TextSpan(text: 'của ứng dụng Uberental')
                             ],
@@ -125,28 +148,36 @@ class LoginPage extends StatelessWidget {
                         ),
                         const SizedBox(height: CSpace.large * 2),
                         BlocConsumer<BlocC, BlocS>(
-                            listenWhen: (context, state) => state.status == AppStatus.success,
-                            listener: (context, state) => GoRouter.of(context).go(CRoute.home),
+                            listenWhen: (context, state) =>
+                                state.status == AppStatus.success,
+                            listener: (context, state) =>
+                                GoRouter.of(context).go(CRoute.home),
                             builder: (context, state) => ElevatedButton(
                                 onPressed: () => context.read<BlocC>().submit(
                                     notification: false,
                                     api: (value, page, size, sort) =>
-                                        RepositoryProvider.of<Api>(context).auth.login(body: value),
-                                    submit: (data) => context.read<AuthC>().save(data: data)),
+                                        RepositoryProvider.of<Api>(context)
+                                            .auth
+                                            .login(body: value),
+                                    submit: (data) =>
+                                        context.read<AuthC>().save(data: data)),
                                 child: Text('pages.login.login.Log in'.tr()))),
                         const SizedBox(height: CSpace.large * 2),
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                              text: "pages.login.login.You don't have an account yet?".tr(),
+                              text:
+                                  "pages.login.login.You don't have an account yet?"
+                                      .tr(),
                               children: [
                                 TextSpan(
                                     text: 'pages.login.login.Register'.tr(),
                                     style: TextStyle(color: CColor.primary),
                                     recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.pushNamed(CRoute.register))
+                                      ..onTap = () =>
+                                          context.pushNamed(CRoute.register))
                               ],
-                              style: TextStyle(color: CColor.hintColor)),
+                              style: TextStyle(color: CColor.black.shade300)),
                         ),
                       ],
                     ),

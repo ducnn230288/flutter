@@ -56,12 +56,14 @@ class WDate extends StatefulWidget {
 class _WDateState extends State<WDate> {
   @override
   Widget build(BuildContext context) {
-    final double width =
-        (CSpace.width / (widget.mode == DateRangePickerSelectionMode.single ? 1.15 : 2)) - (2 * CSpace.superLarge);
+    final double width = (CSpace.width /
+            (widget.mode == DateRangePickerSelectionMode.single ? 1.15 : 2)) -
+        (2 * CSpace.superLarge);
 
     return WInput(
       controller: widget.controller,
-      hintText: widget.hintText ?? 'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),
+      hintText: widget.hintText ??
+          'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),
       rulesRequired: 'widgets.form.date.rulesRequired'.tr(),
       label: widget.label,
       value: widget.value,
@@ -71,7 +73,8 @@ class _WDateState extends State<WDate> {
       required: widget.required,
       enabled: widget.enabled,
       stackedLabel: widget.stackedLabel,
-      suffix: Icon(Icons.calendar_month_rounded, color: CColor.hintColor, size: CFontSize.title2),
+      suffix: Icon(Icons.calendar_month_rounded,
+          color: CColor.black.shade300, size: CFontSize.title2),
       focus: true,
       focusNode: focusNode,
       onTap: (text) {
@@ -101,23 +104,36 @@ class _WDateState extends State<WDate> {
                       child: Column(
                         children: [
                           SfDateRangePicker(
-                            maxDate: widget.selectDateType == SelectDateType.before ? DateTime.now() : null,
-                            minDate: widget.selectDateType == SelectDateType.after ? DateTime.now() : null,
+                            maxDate:
+                                widget.selectDateType == SelectDateType.before
+                                    ? DateTime.now()
+                                    : null,
+                            minDate:
+                                widget.selectDateType == SelectDateType.after
+                                    ? DateTime.now()
+                                    : null,
                             initialSelectedDate: selectedDateSingle,
                             initialSelectedDates: selectedDateMultiple != null
-                                ? [selectedDateMultiple!.startDate!, selectedDateMultiple!.endDate!]
+                                ? [
+                                    selectedDateMultiple!.startDate!,
+                                    selectedDateMultiple!.endDate!
+                                  ]
                                 : null,
-                            initialDisplayDate: widget.mode == DateRangePickerSelectionMode.single
+                            initialDisplayDate: widget.mode ==
+                                    DateRangePickerSelectionMode.single
                                 ? selectedDateSingle
                                 : selectedDateMultiple != null
                                     ? selectedDateMultiple!.startDate
                                     : null,
                             initialSelectedRange: selectedDateMultiple,
-                            headerStyle: DateRangePickerHeaderStyle(textStyle: CStyle.title),
+                            headerStyle: DateRangePickerHeaderStyle(
+                                textStyle: CStyle.title),
                             view: DateRangePickerView.month,
                             selectionMode: widget.mode,
-                            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                              SchedulerBinding.instance.addPostFrameCallback((duration) async {
+                            onSelectionChanged:
+                                (DateRangePickerSelectionChangedArgs args) {
+                              SchedulerBinding.instance
+                                  .addPostFrameCallback((duration) async {
                                 intermediateDate = args.value;
                               });
                             },
@@ -133,16 +149,18 @@ class _WDateState extends State<WDate> {
                                         width: width,
                                         child: Text(
                                           '   ${'widgets.form.date.Time from'.tr()}',
-                                          style:
-                                              const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.subhead),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: CFontSize.subhead),
                                         ),
                                       ),
                                       SizedBox(
                                         width: width,
                                         child: Text(
                                           '   ${'widgets.form.date.Time to'.tr()}',
-                                          style:
-                                              const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.subhead),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: CFontSize.subhead),
                                         ),
                                       ),
                                     ],
@@ -153,38 +171,51 @@ class _WDateState extends State<WDate> {
                                       Container(
                                         height: 90,
                                         width: width,
-                                        padding: const EdgeInsets.symmetric(horizontal: CSpace.medium),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: CSpace.medium),
                                         child: CupertinoTheme(
                                           data: CupertinoThemeData(
                                             textTheme: CupertinoTextThemeData(
                                               dateTimePickerTextStyle:
-                                                  TextStyle(fontSize: CFontSize.paragraph2, color: CColor.black),
+                                                  TextStyle(
+                                                      fontSize:
+                                                          CFontSize.paragraph2,
+                                                      color: CColor.black),
                                             ),
                                           ),
                                           child: CupertinoDatePicker(
                                             mode: CupertinoDatePickerMode.time,
                                             use24hFormat: true,
                                             initialDateTime: timeFrom,
-                                            onDateTimeChanged: (DateTime value) => intermediateTimeFrom = value,
+                                            onDateTimeChanged:
+                                                (DateTime value) =>
+                                                    intermediateTimeFrom =
+                                                        value,
                                           ),
                                         ),
                                       ),
                                       Container(
                                         height: 90,
                                         width: width,
-                                        padding: const EdgeInsets.symmetric(horizontal: CSpace.medium),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: CSpace.medium),
                                         child: CupertinoTheme(
                                           data: CupertinoThemeData(
                                             textTheme: CupertinoTextThemeData(
                                               dateTimePickerTextStyle:
-                                                  TextStyle(fontSize: CFontSize.paragraph2, color: CColor.black),
+                                                  TextStyle(
+                                                      fontSize:
+                                                          CFontSize.paragraph2,
+                                                      color: CColor.black),
                                             ),
                                           ),
                                           child: CupertinoDatePicker(
                                             mode: CupertinoDatePickerMode.time,
                                             use24hFormat: true,
                                             initialDateTime: timeTo,
-                                            onDateTimeChanged: (DateTime value) => intermediateTimeTo = value,
+                                            onDateTimeChanged:
+                                                (DateTime value) =>
+                                                    intermediateTimeTo = value,
                                           ),
                                         ),
                                       )
@@ -201,10 +232,12 @@ class _WDateState extends State<WDate> {
                                   onTap: () => context.pop(),
                                   highlightColor: Colors.white,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: CSpace.medium),
                                     child: Text(
                                       'widgets.form.upload.Cancel'.tr(),
-                                      style: TextStyle(color: CColor.hintColor),
+                                      style: TextStyle(
+                                          color: CColor.black.shade300),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -216,20 +249,28 @@ class _WDateState extends State<WDate> {
                                   onTap: () async {
                                     if (widget.onChanged != null) {
                                       initializeDateFormatting();
-                                      if (widget.mode == DateRangePickerSelectionMode.single) {
+                                      if (widget.mode ==
+                                          DateRangePickerSelectionMode.single) {
                                         if (intermediateDate != null) {
                                           selectedDateSingle = intermediateDate;
                                         }
                                         if (selectedDateSingle == null) {
-                                          UDialog().showError(text: 'widgets.form.date.Error message'.tr());
+                                          UDialog().showError(
+                                              text:
+                                                  'widgets.form.date.Error message'
+                                                      .tr());
                                           return;
                                         }
                                         widget.controller.text =
-                                            Convert.dateLocation(selectedDateSingle!.toIso8601String());
-                                        widget.onChanged!(selectedDateSingle!.toIso8601String());
+                                            Convert.dateLocation(
+                                                selectedDateSingle!
+                                                    .toIso8601String());
+                                        widget.onChanged!(selectedDateSingle!
+                                            .toIso8601String());
                                       } else {
                                         if (intermediateDate != null) {
-                                          selectedDateMultiple = intermediateDate;
+                                          selectedDateMultiple =
+                                              intermediateDate;
                                         }
                                         if (intermediateTimeFrom != null) {
                                           timeFrom = intermediateTimeFrom!;
@@ -238,29 +279,49 @@ class _WDateState extends State<WDate> {
                                           timeTo = intermediateTimeTo!;
                                         }
                                         if (selectedDateMultiple == null) {
-                                          UDialog().showError(text: 'widgets.form.date.Error message'.tr());
+                                          UDialog().showError(
+                                              text:
+                                                  'widgets.form.date.Error message'
+                                                      .tr());
                                           return;
                                         }
-                                        if (selectedDateMultiple!.startDate == null ||
-                                            selectedDateMultiple!.endDate == null) {
-                                          selectedDateMultiple = PickerDateRange(
-                                            selectedDateMultiple!.startDate ?? selectedDateMultiple!.endDate,
-                                            selectedDateMultiple!.endDate ?? selectedDateMultiple!.startDate,
+                                        if (selectedDateMultiple!.startDate ==
+                                                null ||
+                                            selectedDateMultiple!.endDate ==
+                                                null) {
+                                          selectedDateMultiple =
+                                              PickerDateRange(
+                                            selectedDateMultiple!.startDate ??
+                                                selectedDateMultiple!.endDate,
+                                            selectedDateMultiple!.endDate ??
+                                                selectedDateMultiple!.startDate,
                                           );
                                         }
 
-                                        final DateTime startDate = selectedDateMultiple!.startDate!.copyWith(
-                                          hour: isShowTime ? timeFrom.hour : null,
-                                          minute: isShowTime ? timeFrom.minute : null,
+                                        final DateTime startDate =
+                                            selectedDateMultiple!.startDate!
+                                                .copyWith(
+                                          hour:
+                                              isShowTime ? timeFrom.hour : null,
+                                          minute: isShowTime
+                                              ? timeFrom.minute
+                                              : null,
                                         );
-                                        final DateTime endDate = selectedDateMultiple!.endDate!.copyWith(
+                                        final DateTime endDate =
+                                            selectedDateMultiple!.endDate!
+                                                .copyWith(
                                           hour: isShowTime ? timeTo.hour : null,
-                                          minute: isShowTime ? timeTo.minute : null,
+                                          minute:
+                                              isShowTime ? timeTo.minute : null,
                                         );
 
-                                        selectedDateMultiple = PickerDateRange(startDate, endDate);
-                                        widget.controller.text = Convert.dateTimeMultiple(
-                                            [startDate.toIso8601String(), endDate.toIso8601String()]);
+                                        selectedDateMultiple =
+                                            PickerDateRange(startDate, endDate);
+                                        widget.controller.text =
+                                            Convert.dateTimeMultiple([
+                                          startDate.toIso8601String(),
+                                          endDate.toIso8601String()
+                                        ]);
                                         widget.onChanged!(
                                             '${selectedDateMultiple!.startDate!.toIso8601String()}|${selectedDateMultiple!.endDate!.toIso8601String()}');
                                       }
@@ -268,17 +329,21 @@ class _WDateState extends State<WDate> {
                                       UDialog().stopLoading();
                                       context.pop({
                                         'intermediateDate': intermediateDate,
-                                        'intermediateTimeFrom': intermediateTimeFrom,
+                                        'intermediateTimeFrom':
+                                            intermediateTimeFrom,
                                         'intermediateTimeTo': intermediateTimeTo
                                       });
                                     }
                                   },
                                   highlightColor: Colors.white,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: CSpace.medium),
                                     child: Text(
                                       'widgets.form.date.Save'.tr(),
-                                      style: TextStyle(color: CColor.primary, fontWeight: FontWeight.w600),
+                                      style: TextStyle(
+                                          color: CColor.primary,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -306,7 +371,8 @@ class _WDateState extends State<WDate> {
   PickerDateRange? selectedDateMultiple;
   DateTime timeFrom = DateTime.now();
   DateTime timeTo = DateTime.now();
-  late final bool isShowTime = widget.showTime && widget.mode != DateRangePickerSelectionMode.single;
+  late final bool isShowTime =
+      widget.showTime && widget.mode != DateRangePickerSelectionMode.single;
   dynamic intermediateDate;
   DateTime? intermediateTimeFrom;
   DateTime? intermediateTimeTo;
@@ -323,8 +389,10 @@ class _WDateState extends State<WDate> {
         timeFrom = DateTime.parse(dateTime[0]);
         timeTo = DateTime.parse(dateTime[1]);
         selectedDateMultiple = PickerDateRange(timeFrom, timeTo);
-        widget.controller.text = Convert.dateTimeMultiple(
-            [selectedDateMultiple!.startDate!.toIso8601String(), selectedDateMultiple!.endDate!.toIso8601String()]);
+        widget.controller.text = Convert.dateTimeMultiple([
+          selectedDateMultiple!.startDate!.toIso8601String(),
+          selectedDateMultiple!.endDate!.toIso8601String()
+        ]);
       }
     }
     super.initState();

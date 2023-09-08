@@ -37,7 +37,10 @@ class RegisterPage extends StatelessWidget {
         type: EFormItemType.select,
         name: 'role',
         label: 'pages.login.register.Account Type'.tr(),
-        items: [MOption(label: 'Order Side', value: 'ORDERER'), MOption(label: 'Farmer Side', value: 'FARMER')],
+        items: [
+          MOption(label: 'Order Side', value: 'ORDERER'),
+          MOption(label: 'Farmer Side', value: 'FARMER')
+        ],
       ),
       MFormItem(label: 'Thông tin cá nhân', type: EFormItemType.title),
       MFormItem(
@@ -48,7 +51,10 @@ class RegisterPage extends StatelessWidget {
         type: EFormItemType.select,
         name: 'gender',
         label: 'pages.login.register.Gender'.tr(),
-        items: [MOption(label: 'Nam', value: 'MALE'), MOption(label: 'Nữ', value: 'FEMALE')],
+        items: [
+          MOption(label: 'Nam', value: 'MALE'),
+          MOption(label: 'Nữ', value: 'FEMALE')
+        ],
       ),
       MFormItem(
         name: 'phoneNumber',
@@ -87,21 +93,25 @@ class RegisterPage extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () => cubit.submit(
                         api: (value, page, size, sort) =>
-                            RepositoryProvider.of<Api>(context).auth.register(body: value),
+                            RepositoryProvider.of<Api>(context)
+                                .auth
+                                .register(body: value),
                         submit: (data) => context.goNamed(CRoute.login)),
                     child: Text('pages.login.login.Register'.tr())),
                 const SizedBox(height: CSpace.large * 2),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                      text: "${'pages.login.register.Do you already have an account?'.tr()} ",
+                      text:
+                          "${'pages.login.register.Do you already have an account?'.tr()} ",
                       children: [
                         TextSpan(
                             text: 'pages.login.login.Log in'.tr(),
                             style: TextStyle(color: CColor.primary),
-                            recognizer: TapGestureRecognizer()..onTap = () => {Navigator.pop(context)})
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => {Navigator.pop(context)})
                       ],
-                      style: TextStyle(color: CColor.hintColor)),
+                      style: TextStyle(color: CColor.black.shade300)),
                 ),
               ],
             ),

@@ -36,6 +36,7 @@ class MData<T> {
       _content = data;
     }
   }
+
   num? _page;
   num? _totalPages;
   num? _size;
@@ -43,6 +44,7 @@ class MData<T> {
   num? _totalElements;
   List<T>? _content;
   T? _data;
+
   MData<T> copyWith({
     num? page,
     num? totalPages,
@@ -61,12 +63,19 @@ class MData<T> {
         content: content ?? _content,
         data: data ?? _data,
       );
+
   num? get page => _page;
+
   num? get totalPages => _totalPages;
+
   num? get size => _size;
+
   num? get numberOfElements => _numberOfElements;
+
   num? get totalElements => _totalElements;
+
   List<T> get content => _content ?? [];
+
   T? get data => _data;
 
   Map<String, dynamic> toJson() {

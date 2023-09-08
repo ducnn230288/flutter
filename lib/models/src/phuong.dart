@@ -17,10 +17,12 @@ class MPhuong {
     _districtCode = json['districtCode'];
     _communeFullName = json['communeFullName'];
   }
+
   num? _communeCode;
   String? _communeName;
   num? _districtCode;
   String? _communeFullName;
+
   MPhuong copyWith({
     num? communeCode,
     String? communeName,
@@ -33,9 +35,13 @@ class MPhuong {
         districtCode: districtCode ?? _districtCode,
         communeFullName: communeFullName ?? _communeFullName,
       );
+
   num? get communeCode => _communeCode;
+
   String get communeName => _communeName ?? '';
+
   num? get districtCode => _districtCode;
+
   String? get communeFullName => _communeFullName;
 
   Map<String, dynamic> toJson() {

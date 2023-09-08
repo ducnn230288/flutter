@@ -77,7 +77,6 @@ class MFilter {
 
   bool get changeLabel => _changeLabel ?? false;
 
-
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['label'] = _label;

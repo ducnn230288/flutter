@@ -30,7 +30,9 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     emit(state.copyWith(status: status));
   }
 
-  void setValue({required Map<String, dynamic> value, AppStatus status = AppStatus.init}) {
+  void setValue(
+      {required Map<String, dynamic> value,
+      AppStatus status = AppStatus.init}) {
     emit(state.copyWith(value: {...state.value, ...value}, status: status));
   }
 
@@ -46,7 +48,9 @@ class BlocC<T> extends Cubit<BlocS<T>> {
 
   Future<void> setSize(
       {required int size,
-      required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
+      required Function(Map<String, dynamic> value, int page, int size,
+              Map<String, dynamic> sort)
+          api,
       required Function format}) async {
     try {
       inProcess();
@@ -57,7 +61,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
         state.sort,
       );
       if (result != null) {
-        MData<T> data = MData.fromJson(result.data, format);
+        MData<T> data = MData<T>.fromJson(result.data, format);
         emit(state.copyWith(size: size, data: data, status: AppStatus.success));
       }
     } catch (e) {
@@ -66,27 +70,34 @@ class BlocC<T> extends Cubit<BlocS<T>> {
   }
 
   Future<void> refreshPage(
-      {required Future<MApi?> apiId, required int index, required Function(dynamic json) format}) async {
+      {required Future<MApi?> apiId,
+      required int index,
+      required Function(dynamic json) format}) async {
     inProcess();
     MApi? result = await apiId;
     // //Lấy totalElements mới nhất
     if (result != null) {
       MData<T>? newData;
       if (result.code != 404) {
-        state.data.content.replaceRange(index, index + 1, [format(result.data)]);
+        state.data.content
+            .replaceRange(index, index + 1, [format(result.data)]);
       } else {
         state.data.content.removeAt(index);
         if (state.data.totalElements != null) {
-          newData = state.data.copyWith(totalElements: state.data.totalElements! - 1);
+          newData =
+              state.data.copyWith(totalElements: state.data.totalElements! - 1);
         }
       }
-      emit(state.copyWith(status: AppStatus.success, data: newData ?? state.data));
+      emit(state.copyWith(
+          status: AppStatus.success, data: newData ?? state.data));
     }
   }
 
   Future<void> setPage(
       {required int page,
-      required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
+      required Function(Map<String, dynamic> value, int page, int size,
+              Map<String, dynamic> sort)
+          api,
       Function? format}) async {
     try {
       inProcess();
@@ -97,7 +108,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
         state.sort,
       );
       if (result != null) {
-        MData<T> data = MData.fromJson(result.data, format);
+        MData<T> data = MData<T>.fromJson(result.data, format);
         emit(state.copyWith(page: page, data: data, status: AppStatus.success));
       }
     } catch (e) {
@@ -113,7 +124,9 @@ class BlocC<T> extends Cubit<BlocS<T>> {
   }
 
   Future<void> increasePage(
-      {required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
+      {required Function(Map<String, dynamic> value, int page, int size,
+              Map<String, dynamic> sort)
+          api,
       required Function format}) async {
     try {
       MApi? result = await api(
@@ -123,12 +136,15 @@ class BlocC<T> extends Cubit<BlocS<T>> {
         state.sort,
       );
       if (result != null) {
-        MData<T> data = MData.fromJson(result.data, format);
+        MData<T> data = MData<T>.fromJson(result.data, format);
         if (data.content.isNotEmpty) {
           for (var i = 0; i < data.content.length; i++) {
             state.data.content.add(data.content[i]);
           }
-          emit(state.copyWith(status: AppStatus.success, data: state.data, page: state.page + 1));
+          emit(state.copyWith(
+              status: AppStatus.success,
+              data: state.data,
+              page: state.page + 1));
         }
       }
     } catch (e) {
@@ -154,9 +170,11 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     emit(state.copyWith(value: state.value));
   }
 
-  Future<void> submit<T>(
+  Future<void> submit(
       {Function? submit,
-      required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
+      required Function(Map<String, dynamic> value, int page, int size,
+              Map<String, dynamic> sort)
+          api,
       bool getData = false,
       bool onlyApi = false,
       bool showDialog = true,
@@ -173,7 +191,8 @@ class BlocC<T> extends Cubit<BlocS<T>> {
           await dialogs.delay();
           dialogs.startLoading();
         }
-        MApi? result = await api(state.value, state.page, state.size, state.sort);
+        MApi? result =
+            await api(state.value, state.page, state.size, state.sort);
         if (showDialog) {
           dialogs.stopLoading();
         }
@@ -184,20 +203,24 @@ class BlocC<T> extends Cubit<BlocS<T>> {
                   text: result.message,
                   onDismiss: (context) {
                     if (submit != null) submit(result.data);
-                    emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+                    emit(state.copyWith(
+                        status: AppStatus.success,
+                        key: GlobalKey<FormState>()));
                   });
             } else {
               if (submit != null) submit(result.data);
-              emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+              emit(state.copyWith(
+                  status: AppStatus.success, key: GlobalKey<FormState>()));
             }
           } else {
             if (format != null) {
-              dynamic data = MData.fromJson(result.data, format);
+              dynamic data = MData<T>.fromJson(result.data, format);
               if (submit != null) submit(data);
               emit(state.copyWith(status: AppStatus.success, data: data));
             } else {
               if (submit != null) submit(result.data);
-              emit(state.copyWith(status: AppStatus.success, value: {key: result.data}));
+              emit(state.copyWith(
+                  status: AppStatus.success, value: {key: result.data}));
             }
           }
         }

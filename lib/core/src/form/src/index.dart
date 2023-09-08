@@ -12,8 +12,10 @@ import '/utils/index.dart';
 class WForm extends StatefulWidget {
   final List<MFormItem> list;
   final Widget Function(Map<String, Widget> items)? builder;
-  final void Function(Map<String, TextEditingController> listController)? onInit;
-  final void Function(Map<String, TextEditingController> listController)? onChangedController;
+  final void Function(Map<String, TextEditingController> listController)?
+      onInit;
+  final void Function(Map<String, TextEditingController> listController)?
+      onChangedController;
 
   const WForm({
     Key? key,
@@ -52,12 +54,15 @@ class _WFormState extends State<WForm> {
       for (int index = 0; index < widget.list.length; index++) {
         final MFormItem item = state.list[index];
         late Widget child;
-        if (item.value != '' && listController[item.name] != null && state.status != AppStatus.success) {
+        if (item.value != '' &&
+            listController[item.name] != null &&
+            state.status != AppStatus.success) {
           if (item.type != EFormItemType.upload) {
             if (item.type == EFormItemType.selectMultiple) {
               final List listValue = item.value.split(',');
               if (listValue.length > 1) {
-                listController[item.name]!.text = 'Đã chọn: ${listValue.length}';
+                listController[item.name]!.text =
+                    'Đã chọn: ${listValue.length}';
               } else if (item.value.split(',').length > 0) {
                 listController[item.name]!.text = listValue[0];
               }
@@ -69,9 +74,11 @@ class _WFormState extends State<WForm> {
             case EFormItemType.date:
               state.value[item.name] = item.value;
               if (item.mode == DateRangePickerSelectionMode.single) {
-                listController[item.name]!.text = Convert.dateLocation(item.value ?? '');
+                listController[item.name]!.text =
+                    Convert.dateLocation(item.value ?? '');
               } else {
-                listController[item.name]!.text = Convert.dateTimeMultiple(item.value ?? '');
+                listController[item.name]!.text =
+                    Convert.dateTimeMultiple(item.value ?? '');
               }
               break;
             case EFormItemType.select:
@@ -79,7 +86,8 @@ class _WFormState extends State<WForm> {
               state.value[item.name] = item.code;
               break;
             case EFormItemType.upload:
-              state.value[item.name] = item.value?.map((v) => v.toJson()).toList() ?? [];
+              state.value[item.name] =
+                  item.value?.map((v) => v.toJson()).toList() ?? [];
               break;
             case EFormItemType.selectMultiple:
               state.value[item.name] = item.code.split(',');
@@ -90,10 +98,13 @@ class _WFormState extends State<WForm> {
             default:
               if (item.number) {
                 if (item.value.toString().contains(' ')) {
-                  state.value[item.name] = item.value.toString().replaceAll(' ', '');
-                } else if (item.formatNumberType == FormatNumberType.inputFormatters) {
+                  state.value[item.name] =
+                      item.value.toString().replaceAll(' ', '');
+                } else if (item.formatNumberType ==
+                    FormatNumberType.inputFormatters) {
                   state.value[item.name] = item.value;
-                  listController[item.name]!.text = Convert.thousands(item.value);
+                  listController[item.name]!.text =
+                      Convert.thousands(item.value);
                 }
               } else {
                 state.value[item.name] = item.value;
@@ -109,7 +120,9 @@ class _WFormState extends State<WForm> {
             child = Container(
               margin: const EdgeInsets.only(bottom: CSpace.small),
               alignment: Alignment.topLeft,
-              child: Text(item.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title2)),
+              child: Text(item.label,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: CFontSize.title2)),
             );
             break;
           case EFormItemType.checkbox:
@@ -125,10 +138,14 @@ class _WFormState extends State<WForm> {
             break;
           case EFormItemType.separation:
             child = Container(
-              margin: const EdgeInsets.only(bottom: CSpace.small, top: CSpace.small / 2),
+              margin: const EdgeInsets.only(
+                  bottom: CSpace.small, top: CSpace.small / 2),
               child: Row(
                 children: [
-                  Text(item.label, style: TextStyle(fontWeight: FontWeight.w400, color: CColor.hintColor)),
+                  Text(item.label,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: CColor.black.shade300)),
                   const SizedBox(width: 10),
                   Expanded(child: line())
                 ],
@@ -148,15 +165,21 @@ class _WFormState extends State<WForm> {
               prefix: item.prefix,
               maxCount: item.maxCountUpload,
               onChanged: (dynamic value) {
-                if (item.onChange != null) item.onChange!(item.uploadType == UploadType.single ? value[0] : value);
-                cubit.saved(value: item.uploadType == UploadType.single ? value[0] : value, name: item.name);
+                if (item.onChange != null)
+                  item.onChange!(
+                      item.uploadType == UploadType.single ? value[0] : value);
+                cubit.saved(
+                    value:
+                        item.uploadType == UploadType.single ? value[0] : value,
+                    name: item.name);
               },
             );
             break;
           case EFormItemType.select:
             child = item.show
                 ? WSelect(
-                    controller: listController[item.name] ?? TextEditingController(),
+                    controller:
+                        listController[item.name] ?? TextEditingController(),
                     label: item.label,
                     name: item.name,
                     hintText: item.hintText,
@@ -178,7 +201,8 @@ class _WFormState extends State<WForm> {
                     icon: item.icon,
                     format: item.format,
                     api: item.api ?? (_, __, ___, ____) {},
-                    itemSelect: item.itemSelect ?? (dynamic content, int index) {},
+                    itemSelect:
+                        item.itemSelect ?? (dynamic content, int index) {},
                     showSearch: item.showSearch ?? true,
                     selectLabel: item.selectLabel ?? () {},
                     selectValue: item.selectValue ?? () {},
@@ -189,7 +213,8 @@ class _WFormState extends State<WForm> {
           case EFormItemType.selectMultiple:
             child = item.show
                 ? WSelectMultiple(
-                    controller: listController[item.name] ?? TextEditingController(),
+                    controller:
+                        listController[item.name] ?? TextEditingController(),
                     name: item.name,
                     label: item.label,
                     hintText: item.hintText,
@@ -209,7 +234,8 @@ class _WFormState extends State<WForm> {
                     icon: item.icon,
                     format: item.format,
                     api: item.api ?? (_, __, ___, ____) {},
-                    itemSelect: item.itemSelect ?? (dynamic content, int index) {},
+                    itemSelect:
+                        item.itemSelect ?? (dynamic content, int index) {},
                     showSearch: item.showSearch ?? true,
                     selectLabel: item.selectLabel ?? () {},
                     selectValue: item.selectValue ?? () {},
@@ -221,7 +247,8 @@ class _WFormState extends State<WForm> {
             child = item.show
                 ? WDate(
                     selectDateType: item.selectDateType,
-                    controller: listController[item.name] ?? TextEditingController(),
+                    controller:
+                        listController[item.name] ?? TextEditingController(),
                     label: item.label,
                     hintText: item.hintText,
                     value: item.mode == DateRangePickerSelectionMode.single
@@ -251,7 +278,8 @@ class _WFormState extends State<WForm> {
           case EFormItemType.time:
             child = item.show
                 ? WTime(
-                    controller: listController[item.name] ?? TextEditingController(),
+                    controller:
+                        listController[item.name] ?? TextEditingController(),
                     label: item.label,
                     hintText: item.hintText,
                     value: item.code ?? '',
@@ -298,13 +326,16 @@ class _WFormState extends State<WForm> {
                       ),
                     ),
                   item.child!,
-                  SizedBox(height: index != state.list.length - 1 ? CSpace.medium : 0),
+                  SizedBox(
+                      height:
+                          index != state.list.length - 1 ? CSpace.medium : 0),
                 ],
               );
             } else {
               child = item.show
                   ? WInput(
-                      controller: listController[item.name] ?? TextEditingController(),
+                      controller:
+                          listController[item.name] ?? TextEditingController(),
                       label: item.label,
                       hintText: item.hintText,
                       name: item.name,
@@ -340,7 +371,9 @@ class _WFormState extends State<WForm> {
           child: widget.builder?.call(items) ??
               Column(
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[...items.entries.map((e) => e.value).toList()],
+                children: <Widget>[
+                  ...items.entries.map((e) => e.value).toList()
+                ],
               ));
     });
   }

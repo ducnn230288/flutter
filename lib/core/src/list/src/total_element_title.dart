@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/constants/index.dart';
 import '/cubit/index.dart';
 
-totalElementTitle({
+totalElementTitle<T>({
   String title = 'Tổng cộng',
   int? totalElements,
   required String suffix,
@@ -18,9 +18,11 @@ totalElementTitle({
       children: [
         Text(
           '$title: ',
-          style: TextStyle(fontSize: CFontSize.caption2, color: CColor.black.shade400).merge(textStyle),
+          style: TextStyle(
+                  fontSize: CFontSize.caption2, color: CColor.black.shade400)
+              .merge(textStyle),
         ),
-        BlocBuilder<BlocC, BlocS>(
+        BlocBuilder<BlocC<T>, BlocS<T>>(
           builder: (context, state) {
             if (state.data.totalElements == null && totalElements == null) {
               return Container(
@@ -37,13 +39,17 @@ totalElementTitle({
                           ? ''
                           : state.data.totalElements.toString())
                   .padLeft(2, '0'),
-              style: TextStyle(fontSize: textStyle?.fontSize ?? CFontSize.caption2, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  fontSize: textStyle?.fontSize ?? CFontSize.caption2,
+                  fontWeight: FontWeight.w600),
             );
           },
         ),
         Text(
           ' $suffix',
-          style: TextStyle(fontSize: CFontSize.caption2, color: CColor.black.shade400).merge(textStyle),
+          style: TextStyle(
+                  fontSize: CFontSize.caption2, color: CColor.black.shade400)
+              .merge(textStyle),
         ),
       ],
     );

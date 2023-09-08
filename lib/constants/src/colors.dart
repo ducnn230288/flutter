@@ -32,7 +32,7 @@ class CColor {
       800: Color(0xFF05330C),
       900: Color(0xFF021705),
     },
-  ); // 15 - 6 - 0
+  );
   static MaterialColor black = const MaterialColor(
     0xFF2C2C2c,
     <int, Color>{
@@ -47,71 +47,74 @@ class CColor {
       800: Color(0xFF0D0D0D),
       900: Color(0xFF000000),
     },
-  ); // 17 - 5 - 0
-
+  );
   static MaterialColor warning = const MaterialColor(
-    0xFFE08A09,
+    0xFFeab308,
     <int, Color>{
-      50: Color(0xFFFFFEFD),
-      100: Color(0xFFFEF2E0),
-      200: Color(0xFFFBD9A5),
-      300: Color(0xFFF9C06A),
-      400: Color(0xFFF7A730),
-      500: Color(0xFFE08A09),
-      600: Color(0xFFB46F07),
-      700: Color(0xFF885405),
-      800: Color(0xFF5C3804),
-      900: Color(0xFF2F1D02),
+      50: Color(0xFFfefce8),
+      100: Color(0xFFfef9c3),
+      200: Color(0xFFfef08a),
+      300: Color(0xFFfde047),
+      400: Color(0xFFfacc15),
+      500: Color(0xFFeab308),
+      600: Color(0xFFca8a04),
+      700: Color(0xFFa16207),
+      800: Color(0xFF854d0e),
+      900: Color(0xFF713f12),
     },
-  ); // 12 - 9 - 0
-
+  );
   static MaterialColor danger = const MaterialColor(
-    0xFFE04A09,
+    0xFFef4444,
     <int, Color>{
-      50: Color(0xFFFFFEFD),
-      100: Color(0xFFFEE9E0),
-      200: Color(0xFFFBBFA5),
-      300: Color(0xFFF9966A),
-      400: Color(0xFFF76C30),
-      500: Color(0xFFE04A09),
-      600: Color(0xFFB43B07),
-      700: Color(0xFF882D05),
-      800: Color(0xFF5C1E04),
-      900: Color(0xFF2F1002),
+      50: Color(0xFFfff7ed),
+      100: Color(0xFFfee2e2),
+      200: Color(0xFFfecaca),
+      300: Color(0xFFfca5a5),
+      400: Color(0xFFf87171),
+      500: Color(0xFFef4444),
+      600: Color(0xFFdc2626),
+      700: Color(0xFFb91c1c),
+      800: Color(0xFF991b1b),
+      900: Color(0xFF7f1d1d),
     },
-  ); // 12 - 9 - 0
-
-  static MaterialColor red = const MaterialColor(
-    0xFFE70A0A,
+  );
+  static MaterialColor blue = const MaterialColor(
+    0xFF3b82f6,
     <int, Color>{
-      50: Color(0xFFFFEBEE),
-      100: Color(0xFFFFCDD2),
-      200: Color(0xFFEF9A9A),
-      300: Color(0xFFE57373),
-      400: Color(0xFFEF5350),
-      500: Color(0xFFE70A0A), // primary color
-      600: Color(0xFFE53935),
-      700: Color(0xFFD32F2F),
-      800: Color(0xFFC62828),
-      900: Color(0xFFB71C1C),
+      50: Color(0xFFeff6ff),
+      100: Color(0xFFdbeafe),
+      200: Color(0xFFbfdbfe),
+      300: Color(0xFF93c5fd),
+      400: Color(0xFF60a5fa),
+      500: Color(0xFF3b82f6),
+      600: Color(0xFF2563eb),
+      700: Color(0xFF1d4ed8),
+      800: Color(0xFF1e40af),
+      900: Color(0xFF1e3a8a),
+    },
+  );
+  static MaterialColor pink = const MaterialColor(
+    0xFFec4899,
+    <int, Color>{
+      50: Color(0xFFfdf2f8),
+      100: Color(0xFFfce7f3),
+      200: Color(0xFFfbcfe8),
+      300: Color(0xFFf9a8d4),
+      400: Color(0xFFf472b6),
+      500: Color(0xFFec4899),
+      600: Color(0xFFdb2777),
+      700: Color(0xFFbe185d),
+      800: Color(0xFF9d174d),
+      900: Color(0xFF831843),
     },
   );
 
   static Color statusColor(String status) {
-    const Color hintColor = Color(0xFFABABAB);
-    const Color pendingColor = Color(0xFFE08A09);
-    const Color approvedColor = Color(0xFF0E9CD9);
-    const Color workingColor = Color(0xFF08CBD8);
-    const Color confirmColor = Color(0xFFF4C712);
-    const Color refundColor = Color(0xFFF569AD);
-    const Color completeColor = Color(0xFF0C8720);
-    const Color accentColor = Color(0xFFE04A09);
-
     switch (status) {
       case 'DRAFT':
       case 'CANCELED':
       case 'UN_CONFIRM':
-        return hintColor;
+        return black.shade300;
 
       case 'ADMIN_REJECTED':
       case 'REJECT':
@@ -124,7 +127,7 @@ class CColor {
       case 'CLOSE_PROPOSAL':
       case 'NO_KYC_VERIFY':
       case 'EXPIRED':
-        return accentColor;
+        return danger;
 
       case 'PUBLISHED':
       case 'ACTIVE':
@@ -137,7 +140,7 @@ class CColor {
       case 'VERIFIED':
       case 'COMPLETED':
       case 'USER_TRANSFER_CONFIRMED':
-        return approvedColor;
+        return blue;
 
       case 'UN_USED':
       case 'WAIT_CONFIRM':
@@ -145,19 +148,15 @@ class CColor {
       case 'WAIT_TRANSFER':
       case 'CUSTOMER':
       case 'WAIT_FOR_APPROVAL':
-        return pendingColor;
+        return warning;
 
       case 'ASSIGNED':
-        return refundColor;
+        return pink;
 
       case 'LOCKED':
       case 'LOCK_PROPOSAL':
-        return Colors.teal;
+        return green;
     }
     return primary;
   }
-
-  static const Color hintButton = Color(0xFFF3F3F3);
-
-  static Color hintColor = CColor.black.shade300;
 }

@@ -37,6 +37,7 @@ class MUpload {
     _file = json?['fileUrl'] ?? json?['file'] ?? json['physicalPath'] ?? '';
     _fileUrl = ((_file as String).indexOf('http') < 0 ? Environment.fileUrl : '') + _file!;
   }
+
   String? _id;
   String? _description;
   String? _entityType;
@@ -47,6 +48,7 @@ class MUpload {
   int? _minQuantity;
   String? _fileUrl;
   String? _file;
+
   MUpload copyWith({
     String? id,
     String? description,
@@ -71,15 +73,25 @@ class MUpload {
         fileUrl: fileUrl ?? _fileUrl,
         file: file ?? _file,
       );
+
   String get id => _id ?? '';
+
   String get description => _description ?? '';
+
   String get entityType => _entityType ?? '';
+
   String get docType => _docType ?? '';
+
   String get docTypeName => _docTypeName ?? '';
+
   num get order => _order ?? 0;
+
   int get maxQuantity => _maxQuantity ?? 1;
+
   int get minQuantity => _minQuantity ?? 1;
+
   String get fileUrl => _fileUrl ?? '';
+
   String get file => _file ?? '';
 
   Map<String, dynamic> toJson() {

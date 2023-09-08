@@ -12,8 +12,8 @@ class Role {
 
   static bool _isOrder = false;
 
-  static void initState(BuildContext context){
-    _isOrder = context.read<AuthC>().state.user?.profileType.contains('ORDERER') ?? false ;
+  static void initState(BuildContext context) {
+    _isOrder = context.read<AuthC>().state.user?.profileType.contains('ORDERER') ?? false;
     _isAdmin = context.read<AuthC>().state.user?.profileType.contains('ADMIN') ?? false;
     _isFarmer = context.read<AuthC>().state.user?.profileType.contains('FARMER') ?? false;
   }

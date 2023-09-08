@@ -28,7 +28,8 @@ itemList(
                 ? SizedBox(
                     width: CHeight.mediumSmall * 1.8,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(CSpace.small), // Image border
+                      borderRadius: BorderRadius.circular(CSpace.small),
+                      // Image border
                       child: leading,
                     ),
                   )

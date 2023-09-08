@@ -37,7 +37,8 @@ drawer() {
                           children: [
                             InkWell(
                               splashColor: CColor.primary.shade100,
-                              onTap: () => context.pushNamed(CRoute.myAccountInfo),
+                              onTap: () =>
+                                  context.pushNamed(CRoute.myAccountInfo),
                               child: Container(
                                 width: widthDrawer,
                                 color: Colors.transparent,
@@ -50,7 +51,8 @@ drawer() {
                                     ),
                                     state.status == AppStatus.success
                                         ? Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 height: CFontSize.title3,
@@ -60,7 +62,10 @@ drawer() {
                                                   child: Text(
                                                     state.user!.name,
                                                     style: const TextStyle(
-                                                        fontSize: CFontSize.title3, fontWeight: FontWeight.w600),
+                                                        fontSize:
+                                                            CFontSize.title3,
+                                                        fontWeight:
+                                                            FontWeight.w600),
                                                   ),
                                                 ),
                                               ),
@@ -68,11 +73,15 @@ drawer() {
                                                 height: CFontSize.subhead,
                                                 width: widthInfo,
                                                 alignment: Alignment.centerLeft,
-                                                child: state.user?.userName != ''
+                                                child: state.user?.userName !=
+                                                        ''
                                                     ? FittedBox(
                                                         child: Text(
                                                           state.user!.userName,
-                                                          style: TextStyle(color: CColor.hintColor),
+                                                          style: TextStyle(
+                                                              color: CColor
+                                                                  .black
+                                                                  .shade300),
                                                         ),
                                                       )
                                                     : Container(),
@@ -87,7 +96,8 @@ drawer() {
                             state.zalo != null
                                 ? InkWell(
                                     onTap: () async {
-                                      await launchUrl(Uri(scheme: 'tel', path: state.zalo));
+                                      await launchUrl(
+                                          Uri(scheme: 'tel', path: state.zalo));
                                     },
                                     child: Column(
                                       children: [
@@ -101,17 +111,23 @@ drawer() {
                                             ),
                                             child: Row(
                                               children: [
-                                                const Icon(Icons.phone, color: Colors.black, size: 16),
+                                                const Icon(Icons.phone,
+                                                    color: Colors.black,
+                                                    size: 16),
                                                 const Flexible(
                                                   flex: 1,
                                                   child: Text(
                                                     ' Hotline: ',
-                                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     maxLines: 10,
                                                   ),
                                                 ),
-                                                Text(Convert.phoneNumber(state.zalo!))
+                                                Text(Convert.phoneNumber(
+                                                    state.zalo!))
                                               ],
                                             )),
                                         line(color: CColor.black.shade100)
@@ -140,7 +156,8 @@ drawer() {
                                   scrollSettings: () async {},
                                   title: Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left: CSpace.mediumSmall),
+                                      padding: const EdgeInsets.only(
+                                          left: CSpace.mediumSmall),
                                       child: Text(
                                         drawer.name!,
                                         style: const TextStyle(
@@ -153,25 +170,33 @@ drawer() {
                                       ),
                                     ),
                                   ),
-                                  titlePadding:
-                                      const EdgeInsets.fromLTRB(0, CSpace.medium, CSpace.medium, CSpace.medium),
+                                  titlePadding: const EdgeInsets.fromLTRB(
+                                      0,
+                                      CSpace.medium,
+                                      CSpace.medium,
+                                      CSpace.medium),
                                   trailing: CIcon.arrowRight,
                                   children: [
                                     line(color: CColor.black.shade100),
                                     ListView.separated(
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         separatorBuilder: (_, index) {
-                                          return line(color: CColor.black.shade100);
+                                          return line(
+                                              color: CColor.black.shade100);
                                         },
                                         itemCount: drawer.subChild?.length ?? 0,
                                         itemBuilder: (_, index) {
                                           return InkWell(
                                             onTap: () {
-                                              context.goNamed(drawer.subChild![index].urlRewrite!);
+                                              context.goNamed(drawer
+                                                  .subChild![index]
+                                                  .urlRewrite!);
                                             },
                                             child: Container(
-                                                padding: const EdgeInsets.fromLTRB(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
                                                   CSpace.large,
                                                   CSpace.medium,
                                                   CSpace.medium,
@@ -189,7 +214,8 @@ drawer() {
                                 );
                               }
                               return InkWell(
-                                onTap: () => context.goNamed(drawer.urlRewrite!),
+                                onTap: () =>
+                                    context.goNamed(drawer.urlRewrite!),
                                 child: Container(
                                     alignment: Alignment.centerLeft,
                                     padding: const EdgeInsets.fromLTRB(
@@ -205,7 +231,9 @@ drawer() {
                                             drawer.name!,
                                             style: TextStyle(
                                               fontWeight:
-                                                  drawer.subChild!.isNotEmpty ? FontWeight.w600 : FontWeight.w400,
+                                                  drawer.subChild!.isNotEmpty
+                                                      ? FontWeight.w600
+                                                      : FontWeight.w400,
                                               fontSize: CFontSize.callOut,
                                             ),
                                             overflow: TextOverflow.ellipsis,
@@ -218,7 +246,10 @@ drawer() {
                             },
                             format: DrawerData.fromJson,
                             separator: line(color: CColor.black.shade100),
-                            api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).drawer.get(),
+                            api: (filter, page, size, sort) =>
+                                RepositoryProvider.of<Api>(context)
+                                    .drawer
+                                    .get(),
                           ),
                         ),
                       )
@@ -236,7 +267,8 @@ drawer() {
                     ? UDialog().showConfirm(
                         text: 'Đăng xuất tài khoản khỏi ứng dụng?',
                         btnOkOnPress: () async {
-                          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
                           sharedPreferences.clear();
                           await UDialog().delay();
                           context.goNamed(CRoute.login);

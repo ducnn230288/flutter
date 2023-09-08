@@ -6,6 +6,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class WQRScan extends StatefulWidget {
   final Function onLoad;
+
   const WQRScan({Key? key, required this.onLoad}) : super(key: key);
 
   @override

@@ -48,56 +48,56 @@ class _UserDetailsState extends State<UserDetails> {
               // ],
               MFormItem(label: 'Thao tác', dataType: DataType.separation),
               // if (isFarmer)
-                // MFormItem(
-                //   child: button(
-                //     label: 'Hồ sơ Farmer',
-                //     width: 113,
-                //     color: const Color(0xFFA855F7),
-                //     title: 'Xem hồ sơ',
-                //     icon: Icons.badge,
-                //     onPressed: ()=> context.pushNamed(
-                //       CRoute.farmerProfile,
-                //       queryParams: {
-                //         'data': jsonEncode(data.profileFarmer),
-                //         'title': 'Hồ sơ Farmer',
-                //       },
-                //     ),
-                //   ),
-                // ),
-                // MFormItem(
-                //   child: button(
-                //     label: 'Ví điện tử',
-                //     width: 93,
-                //     color: const Color(0xFFF59E0B),
-                //     title: 'Xem ví',
-                //     icon: Icons.wallet,
-                //     onPressed: () => context.pushNamed(
-                //       CRoute.wallet,
-                //       queryParams: {'title': 'Ví của ${data.name}', 'id': data.id},
-                //     ),
-                //   ),
-                // ),
-                MFormItem(
-                  child: button(
-                    label: 'Kích hoạt',
-                    width: data.isLockedOut ? 115 : 85,
-                    color: data.isLockedOut ? const Color(0xFF0EA5E9) : CColor.danger,
-                    title: data.isLockedOut ? 'Mở khóa' : 'Khóa',
-                    icon: data.isLockedOut ? Icons.lock_open : Icons.lock_outline,
-                    onPressed: () => UDialog().showConfirm(
-                        title: '${data.isLockedOut ? 'Mở khóa' : 'Khóa'} tài khoản',
-                        text: 'Bạn có chắc chắn muốn ${data.isLockedOut ? 'MỞ KHÓA' : 'KHÓA'} tài khoản này không?',
-                        btnOkOnPress: () {
-                          context.pop();
-                          context.read<BlocC>().submit(
-                              onlyApi: true,
-                              submit: (_) => context.pop(),
-                              api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context)
-                                  .user
-                                  .action(id: data.id, action: data.isLockedOut ? 'unlock' : 'lock'));
-                        }),
-                  ),
+              // MFormItem(
+              //   child: button(
+              //     label: 'Hồ sơ Farmer',
+              //     width: 113,
+              //     color: const Color(0xFFA855F7),
+              //     title: 'Xem hồ sơ',
+              //     icon: Icons.badge,
+              //     onPressed: ()=> context.pushNamed(
+              //       CRoute.farmerProfile,
+              //       queryParams: {
+              //         'data': jsonEncode(data.profileFarmer),
+              //         'title': 'Hồ sơ Farmer',
+              //       },
+              //     ),
+              //   ),
+              // ),
+              // MFormItem(
+              //   child: button(
+              //     label: 'Ví điện tử',
+              //     width: 93,
+              //     color: const Color(0xFFF59E0B),
+              //     title: 'Xem ví',
+              //     icon: Icons.wallet,
+              //     onPressed: () => context.pushNamed(
+              //       CRoute.wallet,
+              //       queryParams: {'title': 'Ví của ${data.name}', 'id': data.id},
+              //     ),
+              //   ),
+              // ),
+              MFormItem(
+                child: button(
+                  label: 'Kích hoạt',
+                  width: data.isLockedOut ? 115 : 85,
+                  color: data.isLockedOut ? CColor.green : CColor.danger,
+                  title: data.isLockedOut ? 'Mở khóa' : 'Khóa',
+                  icon: data.isLockedOut ? Icons.lock_open : Icons.lock_outline,
+                  onPressed: () => UDialog().showConfirm(
+                      title: '${data.isLockedOut ? 'Mở khóa' : 'Khóa'} tài khoản',
+                      text: 'Bạn có chắc chắn muốn ${data.isLockedOut ? 'MỞ KHÓA' : 'KHÓA'} tài khoản này không?',
+                      btnOkOnPress: () {
+                        context.pop();
+                        context.read<BlocC>().submit(
+                            onlyApi: true,
+                            submit: (_) => context.pop(),
+                            api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context)
+                                .user
+                                .action(id: data.id, action: data.isLockedOut ? 'unlock' : 'lock'));
+                      }),
                 ),
+              ),
             ];
             return WList<dynamic>(
                 items: formItems, item: (data, index) => DataDetails(data: data), status: AppStatus.success);
@@ -134,7 +134,7 @@ class _UserDetailsState extends State<UserDetails> {
   }) {
     return Row(
       children: [
-        Expanded(child: Text(label, style: TextStyle(color: CColor.hintColor))),
+        Expanded(child: Text(label, style: TextStyle(color: CColor.black.shade300))),
         SizedBox(
           width: width,
           height: 32,

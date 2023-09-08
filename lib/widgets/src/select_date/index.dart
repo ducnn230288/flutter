@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '/constants/index.dart';
-import '/utils/index.dart';
 import '/core/index.dart';
+import '/utils/index.dart';
 
 part '_title.dart';
 
@@ -27,13 +27,12 @@ class SelectDate extends StatefulWidget {
 class _SelectDateState extends State<SelectDate> {
   @override
   Widget build(BuildContext context) {
-    const Color strokeColor = Color(0xffc2c2c2);
     return Container(
       margin: widget.margin,
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          border: Border.all(width: 0.5, color: strokeColor),
+          border: Border.all(width: 0.5, color: CColor.black.shade100),
           borderRadius: BorderRadius.circular(3),
           color: Colors.white,
           // boxShadow: [Utils.mediumBoxShadow],
@@ -45,8 +44,9 @@ class _SelectDateState extends State<SelectDate> {
             Container(
               height: 40,
               width: 40,
-              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1, color: strokeColor)),
-              child: Icon(Icons.date_range, size: 20, color: CColor.hintColor),
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1, color: CColor.black.shade100)),
+              child: Icon(Icons.date_range, size: 20, color: CColor.black.shade300),
             ),
             _dateTitle(title: 'Đến', date: _toDate, onPressed: toDate),
             InkWell(
@@ -80,12 +80,12 @@ class _SelectDateState extends State<SelectDate> {
   DateTime _initialToDate = DateTime.now();
 
   @override
-  void initState(){
-    if (widget.initialFromDate != null){
+  void initState() {
+    if (widget.initialFromDate != null) {
       _initialFromDate = widget.initialFromDate!;
       _fromDate = Convert.date(_initialFromDate.toIso8601String());
     }
-    if (widget.initialToDate != null){
+    if (widget.initialToDate != null) {
       _initialToDate = widget.initialToDate!;
       _toDate = Convert.date(_initialToDate.toIso8601String());
     }

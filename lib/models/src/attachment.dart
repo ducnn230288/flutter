@@ -17,10 +17,12 @@ class MAttachment {
     _fileUrl = json['fileUrl'];
     _description = json['description'];
   }
+
   String? _id;
   String? _docType;
   String? _fileUrl;
   String? _description;
+
   MAttachment copyWith({
     String? id,
     String? docType,
@@ -33,9 +35,13 @@ class MAttachment {
         fileUrl: fileUrl ?? _fileUrl,
         description: description ?? _description,
       );
+
   String? get id => _id;
+
   String? get docType => _docType;
+
   String? get fileUrl => _fileUrl;
+
   String? get description => _description;
 
   Map<String, dynamic> toJson() {

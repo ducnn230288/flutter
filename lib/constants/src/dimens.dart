@@ -87,6 +87,9 @@ class CHeight {
 
   static const double medium = 48.0;
   static const double mediumSmall = 40.0;
+
+  static const double small = 36.0;
+  static const double superSmall = 30.0;
 }
 
 class CRadius {

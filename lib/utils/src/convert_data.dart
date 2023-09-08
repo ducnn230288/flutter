@@ -6,9 +6,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'snack_bar.dart';
 
 class Convert {
-  static String dateTime(String dateTime, {String separator = '/'}) {
+  static String dateTime(String dateTime, {String separator = '/', bool returnTime = true}) {
     if (dateTime == '') return '';
-    return DateFormat('HH:mm dd${separator}MM${separator}yyyy', 'vi').format(DateTime.parse(dateTime));
+    return DateFormat('${returnTime ? 'HH:mm' : ''} dd${separator}MM${separator}yyyy', 'vi')
+        .format(DateTime.parse(dateTime));
   }
 
   static String dateTimeAgo(String dateTime, {String separator = '/'}) {

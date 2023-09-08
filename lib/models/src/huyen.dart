@@ -20,11 +20,13 @@ class MHuyen {
     _provinceCode = json['provinceCode'];
     _districtFullName = json['districtFullName'];
   }
+
   num? _districtCode;
   String? _districtName;
   String? _description;
   num? _provinceCode;
   String? _districtFullName;
+
   MHuyen copyWith({
     num? districtCode,
     String? districtName,
@@ -39,10 +41,15 @@ class MHuyen {
         provinceCode: provinceCode ?? _provinceCode,
         districtFullName: districtFullName ?? _districtFullName,
       );
+
   num get districtCode => _districtCode ?? 0;
+
   String get districtName => _districtName ?? '';
+
   String? get description => _description;
+
   num? get provinceCode => _provinceCode;
+
   String? get districtFullName => _districtFullName;
 
   Map<String, dynamic> toJson() {

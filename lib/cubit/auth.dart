@@ -18,7 +18,8 @@ class AuthC extends Cubit<AuthS> {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(CPref.token) ?? '';
 
-    RepositoryProvider.of<Api>(context).setLanguage(language: context.locale.toString());
+    RepositoryProvider.of<Api>(context)
+        .setLanguage(language: context.locale.toString() == 'vi' ? 'vn' : context.locale.toString());
     MApi? res = await RepositoryProvider.of<Api>(context).auth.zalo();
 
     if ((token).isEmpty) {
@@ -28,6 +29,7 @@ class AuthC extends Cubit<AuthS> {
         try {
           MApi? result = await RepositoryProvider.of<Api>(context).auth.info(token: token);
           if (result != null && result.isSuccess) {
+            result.data['userModel']['listRole'] = result.data['listRole'];
             final MUser user = MUser.fromJson(result.data['userModel']);
             emit(state.copyWith(status: AppStatus.success, user: user, zalo: res?.data['value']));
           } else {

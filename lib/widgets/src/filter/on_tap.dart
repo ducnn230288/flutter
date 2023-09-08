@@ -30,7 +30,8 @@ class OnTapFilter {
           return AlertDialog(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            insetPadding: const EdgeInsets.symmetric(vertical: CSpace.superLarge * 2),
+            insetPadding:
+                const EdgeInsets.symmetric(vertical: CSpace.superLarge * 2),
             contentPadding: EdgeInsets.zero,
             content: Container(
               height: CSpace.height * 0.8,
@@ -46,7 +47,8 @@ class OnTapFilter {
                     height: CHeight.medium,
                     decoration: BoxDecoration(
                       color: CColor.primary,
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(CRadius.large)),
+                      borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(CRadius.large)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,7 +65,8 @@ class OnTapFilter {
                         IconButton(
                             splashRadius: CRadius.large,
                             onPressed: () => context.pop(),
-                            icon: const Icon(Icons.close_rounded, color: Colors.white))
+                            icon: const Icon(Icons.close_rounded,
+                                color: Colors.white))
                       ],
                     ),
                   ),
@@ -79,21 +82,27 @@ class OnTapFilter {
                                   filter.onTap!();
                                 } else {
                                   context.pop();
-                                  submit(selected ? null : filter.label, selected ? null : filter.value);
+                                  submit(selected ? null : filter.label,
+                                      selected ? null : filter.value);
                                 }
                               },
                               child: Column(
                                 children: [
                                   Padding(
-                                      padding: const EdgeInsets.all(CSpace.large),
+                                      padding:
+                                          const EdgeInsets.all(CSpace.large),
                                       child: Row(
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                              color: filter.color ?? (selected ? CColor.primary : CColor.hintColor),
+                                              color: filter.color ??
+                                                  (selected
+                                                      ? CColor.primary
+                                                      : CColor.black.shade300),
                                               shape: BoxShape.circle,
                                             ),
-                                            margin: const EdgeInsets.only(right: CSpace.mediumSmall),
+                                            margin: const EdgeInsets.only(
+                                                right: CSpace.mediumSmall),
                                             height: CRadius.mediumSmall,
                                             width: CRadius.mediumSmall,
                                           ),
@@ -101,8 +110,12 @@ class OnTapFilter {
                                             child: Text(
                                               filter.label,
                                               style: TextStyle(
-                                                fontWeight: selected ? FontWeight.w600 : null,
-                                                color: selected ? CColor.black : CColor.black.shade400,
+                                                fontWeight: selected
+                                                    ? FontWeight.w600
+                                                    : null,
+                                                color: selected
+                                                    ? CColor.black
+                                                    : CColor.black.shade400,
                                               ),
                                             ),
                                           ),
@@ -115,7 +128,9 @@ class OnTapFilter {
                                         ],
                                       )),
                                   if (index < filters.length - 1)
-                                    line(margin: const EdgeInsets.symmetric(horizontal: CSpace.large))
+                                    line(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: CSpace.large))
                                 ],
                               ),
                             );
@@ -129,7 +144,8 @@ class OnTapFilter {
                           context.pop();
                           submit(null, null);
                         },
-                        child: Text('Đặt lại bộ lọc', style: TextStyle(color: CColor.primary)),
+                        child: Text('Đặt lại bộ lọc',
+                            style: TextStyle(color: CColor.primary)),
                       ),
                     ),
                 ],
@@ -160,12 +176,15 @@ class OnTapFilter {
               return AlertDialog(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
-                insetPadding: const EdgeInsets.symmetric(vertical: CSpace.superLarge * 4, horizontal: 0),
+                insetPadding: const EdgeInsets.symmetric(
+                    vertical: CSpace.superLarge * 4, horizontal: 0),
                 contentPadding: EdgeInsets.zero,
                 content: Container(
                   height: size.height * 0.8,
                   width: size.width - 2 * CSpace.large,
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(CRadius.large)),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(CRadius.large)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -173,7 +192,8 @@ class OnTapFilter {
                         height: CHeight.medium - 3,
                         decoration: BoxDecoration(
                           color: CColor.primary,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(CRadius.large)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(CRadius.large)),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -190,13 +210,16 @@ class OnTapFilter {
                             IconButton(
                                 splashRadius: CRadius.large,
                                 onPressed: () => context.pop(),
-                                icon: const Icon(Icons.close_rounded, color: Colors.white))
+                                icon: const Icon(Icons.close_rounded,
+                                    color: Colors.white))
                           ],
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
-                        margin: const EdgeInsets.symmetric(vertical: CSpace.large),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: CSpace.large),
+                        margin:
+                            const EdgeInsets.symmetric(vertical: CSpace.large),
                         child: BlocBuilder<BlocC, BlocS>(
                           builder: (context, state) {
                             return Form(
@@ -209,10 +232,17 @@ class OnTapFilter {
                                     name: 'fromDate',
                                     onTap: () => selectDate(
                                       name: 'fromDate',
-                                      initialSelectedDate: fromDate ?? (check ? DateTime.parse(value[0]) : null),
-                                      limit: check ? value[1] : state.value['toDate'],
+                                      initialSelectedDate: fromDate ??
+                                          (check
+                                              ? DateTime.parse(value[0])
+                                              : null),
+                                      limit: check
+                                          ? value[1]
+                                          : state.value['toDate'],
                                     ),
-                                    value: check ? value[0] : state.value['toDate'],
+                                    value: check
+                                        ? value[0]
+                                        : state.value['toDate'],
                                   ),
                                   const SizedBox(height: CSpace.medium),
                                   textFormField(
@@ -221,10 +251,17 @@ class OnTapFilter {
                                     name: 'toDate',
                                     onTap: () => selectDate(
                                       name: 'toDate',
-                                      initialSelectedDate: toDate ?? (check ? DateTime.parse(value[1]) : null),
-                                      limit: check ? value[0] : state.value['fromDate'],
+                                      initialSelectedDate: toDate ??
+                                          (check
+                                              ? DateTime.parse(value[1])
+                                              : null),
+                                      limit: check
+                                          ? value[0]
+                                          : state.value['fromDate'],
                                     ),
-                                    value: check ? value[1] : state.value['toDate'],
+                                    value: check
+                                        ? value[1]
+                                        : state.value['toDate'],
                                   ),
                                 ],
                               ),
@@ -243,28 +280,37 @@ class OnTapFilter {
                                     child: ElevatedButton(
                                         style: CStyle.buttonHint,
                                         onPressed: () {
-                                          context.read<BlocC>().submit(api: (filter, page, size, sort) {
+                                          context.read<BlocC>().submit(
+                                              api: (filter, page, size, sort) {
                                             context.pop();
                                             context.pop();
                                             context.pop();
                                             return submit(null);
                                           });
                                         },
-                                        child: Text('Đặt lại bộ lọc', style: TextStyle(color: CColor.primary)))),
+                                        child: Text('Đặt lại bộ lọc',
+                                            style: TextStyle(
+                                                color: CColor.primary)))),
                               if (check) const HSpacer(CSpace.large),
-                              Expanded(child: BlocBuilder<BlocC, BlocS>(builder: (context, state) {
+                              Expanded(child: BlocBuilder<BlocC, BlocS>(
+                                  builder: (context, state) {
                                 return ElevatedButton(
                                     onPressed: () {
-                                      context.read<BlocC>().submit(api: (filter, page, size, sort) {
+                                      context.read<BlocC>().submit(
+                                          api: (filter, page, size, sort) {
                                         context.pop();
                                         context.pop();
                                         context.pop();
-                                        return submit(filter.values.toList().map((e) => e.toString()).toList());
+                                        return submit(filter.values
+                                            .toList()
+                                            .map((e) => e.toString())
+                                            .toList());
                                       });
                                     },
                                     child: Text(
                                       submitText,
-                                      style: const TextStyle(fontWeight: FontWeight.w600),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600),
                                     ));
                               })),
                             ],
@@ -302,10 +348,12 @@ class OnTapFilter {
                     minDate: name == 'toDate' ? limitDate : null,
                     initialSelectedDate: initialSelectedDate,
                     initialDisplayDate: initialSelectedDate,
-                    headerStyle: DateRangePickerHeaderStyle(textStyle: CStyle.title),
+                    headerStyle:
+                        DateRangePickerHeaderStyle(textStyle: CStyle.title),
                     view: DateRangePickerView.month,
                     selectionMode: DateRangePickerSelectionMode.single,
-                    onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+                    onSelectionChanged:
+                        (DateRangePickerSelectionChangedArgs args) {
                       if (name == 'toDate') {
                         toDate = args.value;
                       } else {
@@ -330,14 +378,16 @@ class OnTapFilter {
     final TextEditingController textEditingController = TextEditingController();
     final OutlineInputBorder borderStyle = OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(CSpace.medium)),
-      borderSide: BorderSide(color: CColor.primary.shade200.withOpacity(0.2), width: 3),
+      borderSide:
+          BorderSide(color: CColor.primary.shade200.withOpacity(0.2), width: 3),
     );
     final OutlineInputBorder errorBorderStyle = OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(CSpace.medium)),
       borderSide: BorderSide(color: CColor.danger.shade200, width: 3),
     );
     if (value != null) {
-      textEditingController.text = DateFormat('dd MMMM, yyyy', 'vi').format(DateTime.parse(value));
+      textEditingController.text =
+          DateFormat('dd MMMM, yyyy', 'vi').format(DateTime.parse(value));
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,8 +399,11 @@ class OnTapFilter {
           onTap: () async {
             var dateTime = await onTap();
             if (dateTime != null) {
-              textEditingController.text = DateFormat('dd MMMM, yyyy', 'vi').format(dateTime);
-              context.read<BlocC>().saved(name: name, value: dateTime.toIso8601String());
+              textEditingController.text =
+                  DateFormat('dd MMMM, yyyy', 'vi').format(dateTime);
+              context
+                  .read<BlocC>()
+                  .saved(name: name, value: dateTime.toIso8601String());
             }
           },
           readOnly: true,
@@ -358,15 +411,18 @@ class OnTapFilter {
           style: TextStyle(color: CColor.primary),
           validator: (value) {
             if (value == '') {
-              return 'widgets.form.input.rulesRequired'.tr(args: [label.toLowerCase()]);
+              return 'widgets.form.input.rulesRequired'
+                  .tr(args: [label.toLowerCase()]);
             }
             return null;
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             hintText: 'dd/MM/YYYY',
-            hintStyle: TextStyle(color: CColor.black.shade400, fontSize: CFontSize.paragraph1),
-            suffixIcon: Icon(Icons.calendar_month_rounded, color: CColor.primary),
+            hintStyle: TextStyle(
+                color: CColor.black.shade400, fontSize: CFontSize.paragraph1),
+            suffixIcon:
+                Icon(Icons.calendar_month_rounded, color: CColor.primary),
             border: borderStyle,
             enabledBorder: borderStyle,
             focusedBorder: borderStyle,

@@ -43,7 +43,8 @@ class CustomTabBar extends StatefulWidget {
       this.fontWeight,
       this.code,
       this.initial,
-      this.margin,  this.onChangeIndex})
+      this.margin,
+      this.onChangeIndex})
       : super(key: key);
 
   @override
@@ -96,7 +97,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
             width: _width,
             margin: EdgeInsets.only(left: _index * _width),
             decoration: BoxDecoration(
-                color: widget.selectBackgroundColor ?? const Color(0xffe3e3e3),
+                color: widget.selectBackgroundColor ?? CColor.black.shade50,
                 borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(_index == 0 ? 0.9 * widget.radius : 0),
                   right: Radius.circular(_index == widget.title.length - 1 ? 0.9 * widget.radius : 0),

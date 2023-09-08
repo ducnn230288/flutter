@@ -26,7 +26,7 @@ class ExpansionTileCard extends StatefulWidget {
     this.colorCurve = Curves.easeIn,
     this.paddingCurve = Curves.easeIn,
     this.isThreeLine = false,
-    this.shadowColor = const Color(0xffaaaaaa),
+    this.shadowColor = const Color(0xFFA8A8A8),
     this.animateTrailing = false,
     this.titlePadding,
     this.scrollSettings,

@@ -90,7 +90,8 @@ class _WInputState extends State<WInput> {
 
   @override
   Widget build(BuildContext context) {
-    final bool inputFormatters = widget.number && widget.formatNumberType == FormatNumberType.inputFormatters;
+    final bool inputFormatters = widget.number &&
+        widget.formatNumberType == FormatNumberType.inputFormatters;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -104,7 +105,7 @@ class _WInputState extends State<WInput> {
                   children: [
                     TextSpan(
                       text: widget.required ? ' *' : '',
-                      style: TextStyle(color: CColor.red),
+                      style: TextStyle(color: CColor.danger),
                     )
                   ],
                   style: TextStyle(
@@ -125,7 +126,8 @@ class _WInputState extends State<WInput> {
           },
           readOnly: widget.onTap != null,
           textInputAction: TextInputAction.next,
-          style: TextStyle(fontSize: CFontSize.body, color: CColor.black.shade700),
+          style:
+              TextStyle(fontSize: CFontSize.body, color: CColor.black.shade700),
           onChanged: (String text) {
             if (inputFormatters) {
               text = text.replaceAll(' ', '');
@@ -136,23 +138,32 @@ class _WInputState extends State<WInput> {
           },
           validator: (value) {
             if (widget.required && value == '') {
-              return (widget.rulesRequired ?? 'widgets.form.input.rulesRequired')
-                  .tr(args: [('${widget.label != '' ? widget.label : widget.hintText}').toLowerCase()]);
+              return (widget.rulesRequired ??
+                      'widgets.form.input.rulesRequired')
+                  .tr(args: [
+                ('${widget.label != '' ? widget.label : widget.hintText}')
+                    .toLowerCase()
+              ]);
             }
             return null;
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
           obscureText: visible,
           keyboardType: widget.number
-              ? const TextInputType.numberWithOptions(decimal: true, signed: true)
+              ? const TextInputType.numberWithOptions(
+                  decimal: true, signed: true)
               : widget.maxLines > 1
                   ? TextInputType.multiline
                   : null,
           decoration: InputDecoration(
             counterText: widget.label != '' ? widget.label : widget.hintText,
-            counterStyle: const TextStyle(fontSize: 0.5, color: Colors.transparent),
-            hintText: widget.hintText ?? 'widgets.form.input.Enter'.tr(args: [widget.label.toLowerCase()]),
-            hintStyle: TextStyle(fontSize: CFontSize.body, color: CColor.black.shade200),
+            counterStyle:
+                const TextStyle(fontSize: 0.5, color: Colors.transparent),
+            hintText: widget.hintText ??
+                'widgets.form.input.Enter'
+                    .tr(args: [widget.label.toLowerCase()]),
+            hintStyle: TextStyle(
+                fontSize: CFontSize.body, color: CColor.black.shade200),
             prefixIcon: widget.icon != null
                 ? Container(
                     padding: const EdgeInsets.all(CSpace.medium),
@@ -180,13 +191,17 @@ class _WInputState extends State<WInput> {
                 : widget.name == 'fullTextSearch'
                     ? BlocBuilder<BlocC, BlocS>(
                         buildWhen: (bf, at) =>
-                            (bf.value['fullTextSearch'] == '' && at.value['fullTextSearch'] != '') ||
-                            (bf.value['fullTextSearch'] != '' && at.value['fullTextSearch'] == ''),
+                            (bf.value['fullTextSearch'] == '' &&
+                                at.value['fullTextSearch'] != '') ||
+                            (bf.value['fullTextSearch'] != '' &&
+                                at.value['fullTextSearch'] == ''),
                         builder: (context, state) {
                           if (state.value['fullTextSearch'] == null ||
                               state.value['fullTextSearch'] == '' ||
-                              (state.value['fullTextSearch'].runtimeType != String &&
-                                  state.value['fullTextSearch']?['value'] == '') ||
+                              (state.value['fullTextSearch'].runtimeType !=
+                                      String &&
+                                  state.value['fullTextSearch']?['value'] ==
+                                      '') ||
                               controller.text == '') {
                             return const HSpacer(0);
                           }
@@ -201,7 +216,7 @@ class _WInputState extends State<WInput> {
                             child: Icon(
                               Icons.cancel,
                               size: CFontSize.title3,
-                              color: CColor.hintColor,
+                              color: CColor.black.shade300,
                               semanticLabel: 'Clear',
                             ),
                           );
@@ -226,7 +241,9 @@ class _WInputState extends State<WInput> {
           inputFormatters: inputFormatters ? [ThousandFormatter()] : null,
         ),
         if (widget.subtitle != null)
-          Text(widget.subtitle!, style: TextStyle(fontSize: CFontSize.footnote, color: CColor.black.shade400)),
+          Text(widget.subtitle!,
+              style: TextStyle(
+                  fontSize: CFontSize.footnote, color: CColor.black.shade400)),
         SizedBox(height: widget.space ? CSpace.small : 0),
       ],
     );
@@ -238,7 +255,8 @@ class ThousandFormatter extends TextInputFormatter {
   static const decimalSeparator = '.';
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     }
@@ -246,12 +264,14 @@ class ThousandFormatter extends TextInputFormatter {
     String oldValueText = oldValue.text.replaceAll(separator, '');
     String newValueText = newValue.text.replaceAll(separator, '');
 
-    if (oldValue.text.endsWith(separator) && oldValue.text.length == newValue.text.length + 1) {
+    if (oldValue.text.endsWith(separator) &&
+        oldValue.text.length == newValue.text.length + 1) {
       newValueText = newValueText.substring(0, newValueText.length - 1);
     }
 
     if (oldValueText != newValueText) {
-      int selectionIndex = newValue.text.length - newValue.selection.extentOffset;
+      int selectionIndex =
+          newValue.text.length - newValue.selection.extentOffset;
       final chars = newValueText.split('');
 
       String newString = '';

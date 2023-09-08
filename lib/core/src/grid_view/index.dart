@@ -50,7 +50,9 @@ class _GridRefreshState<T> extends State<GridRefresh> {
         key: _refreshIndicatorKey,
         onRefresh: () async {
           Future block = context.read<BlocC<T>>().stream.first;
-          await context.read<BlocC<T>>().setPage(page: 1, api: widget.api, format: widget.format);
+          await context
+              .read<BlocC<T>>()
+              .setPage(page: 1, api: widget.api, format: widget.format);
           await block;
         },
         child: BlocBuilder<BlocC<T>, BlocS<T>>(
@@ -65,7 +67,8 @@ class _GridRefreshState<T> extends State<GridRefresh> {
                   Container(
                     height: 150,
                     alignment: Alignment.center,
-                    child: Text('Danh sách trống', style: TextStyle(color: CColor.hintColor)),
+                    child: Text('Danh sách trống',
+                        style: TextStyle(color: CColor.black.shade300)),
                   ),
                 ],
               );
@@ -81,13 +84,16 @@ class _GridRefreshState<T> extends State<GridRefresh> {
                 if (index < state.data.content.length) {
                   return InkWell(
                     splashColor: CColor.primary.shade100,
-                    onTap: widget.onTap != null ? () => widget.onTap!(state.data.content[index]) : null,
+                    onTap: widget.onTap != null
+                        ? () => widget.onTap!(state.data.content[index])
+                        : null,
                     child: widget.item(state.data.content[index], index),
                   );
                 } else {
                   return StreamBuilder<bool>(
                     stream: _streamController.stream,
-                    builder: (_, snapshot) => (snapshot.data ?? false) ? WLoading() : Container(),
+                    builder: (_, snapshot) =>
+                        (snapshot.data ?? false) ? WLoading() : Container(),
                   );
                 }
               },
@@ -98,9 +104,11 @@ class _GridRefreshState<T> extends State<GridRefresh> {
     );
   }
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
-  final StreamController<bool> _streamController = StreamController<bool>.broadcast();
+  final StreamController<bool> _streamController =
+      StreamController<bool>.broadcast();
   late final String currentUrl;
   late final BlocC<T> cubit;
   bool isLoadMore = false;
@@ -122,10 +130,14 @@ class _GridRefreshState<T> extends State<GridRefresh> {
   }
 
   void _scrollListener() async {
-    if (_scrollController.position.extentAfter < 50 && cubit.state.data.content.length >= 20 && !isLoadMore) {
+    if (_scrollController.position.extentAfter < 50 &&
+        cubit.state.data.content.length >= 20 &&
+        !isLoadMore) {
       isLoadMore = true;
       _streamController.add(true);
-      await context.read<BlocC<T>>().increasePage(api: widget.api, format: widget.format);
+      await context
+          .read<BlocC<T>>()
+          .increasePage(api: widget.api, format: widget.format);
       _streamController.add(false);
       isLoadMore = false;
     }
@@ -143,7 +155,9 @@ class _GridRefreshState<T> extends State<GridRefresh> {
       location = location.substring(0, location.indexOf('?'));
     }
     if (currentUrl == location) {
-      context.read<BlocC<T>>().setSize(size: 20, api: widget.api, format: widget.format);
+      context
+          .read<BlocC<T>>()
+          .setSize(size: 20, api: widget.api, format: widget.format);
     }
   }
 }

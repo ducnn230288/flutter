@@ -32,12 +32,14 @@ class MApi {
       _errorDetail = json['errorDetail'] ?? '';
     }
   }
+
   num? _code;
   String? _message;
   num? _totalTime;
   bool? _isSuccess;
   dynamic _data;
   String? _errorDetail;
+
   MApi copyWith({
     num? code,
     String? message,
@@ -54,11 +56,17 @@ class MApi {
         data: data ?? _data,
         errorDetail: errorDetail ?? _errorDetail,
       );
+
   num? get code => _code;
+
   String? get message => _message;
+
   num? get totalTime => _totalTime;
+
   bool get isSuccess => _isSuccess ?? false;
+
   dynamic get data => _data;
+
   String? get errorDetail => _errorDetail;
 
   Map<String, dynamic> toJson() {

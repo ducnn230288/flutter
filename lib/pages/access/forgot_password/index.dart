@@ -24,13 +24,14 @@ class ForgotPassword extends StatelessWidget {
             const Center(
               child: Text(
                 'Quên mật khẩu?',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title2),
+                style: TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: CFontSize.title2),
               ),
             ),
             const VSpacer(CSpace.superLarge),
             Text(
               'Đừng lo, hãy nhập email đã đăng ký của bạn bên dưới để nhận mã OTP xác nhận lấy lại mật khẩu',
-              style: TextStyle(color: CColor.hintColor),
+              style: TextStyle(color: CColor.black.shade300),
               textAlign: TextAlign.center,
             ),
             const VSpacer(CSpace.superLarge),
@@ -47,10 +48,14 @@ class ForgotPassword extends StatelessWidget {
             ElevatedButton(
                 onPressed: () => context.read<BlocC>().submit(
                     api: (value, _, __, ___) =>
-                        RepositoryProvider.of<Api>(context).auth.forgotPassword(email: value['email']),
+                        RepositoryProvider.of<Api>(context)
+                            .auth
+                            .forgotPassword(email: value['email']),
                     submit: (data) => context.goNamed(
                           CRoute.otpVerification,
-                          queryParams: {'email': context.read<BlocC>().state.value['email']},
+                          queryParams: {
+                            'email': context.read<BlocC>().state.value['email']
+                          },
                         )),
                 child: const Text('Gửi'))
           ],
@@ -61,7 +66,9 @@ class ForgotPassword extends StatelessWidget {
           padding: const EdgeInsets.all(CSpace.large),
           child: TextButton(
             onPressed: () => context.pop(),
-            child: Text('Quay lại đăng nhập', style: TextStyle(color: CColor.black, fontWeight: FontWeight.w500)),
+            child: Text('Quay lại đăng nhập',
+                style: TextStyle(
+                    color: CColor.black, fontWeight: FontWeight.w500)),
           ),
         ),
       ),

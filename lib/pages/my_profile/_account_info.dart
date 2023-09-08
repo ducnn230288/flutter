@@ -28,7 +28,8 @@ class _AccountInfoState extends State<_AccountInfo> {
     ];
 
     final double widthImage = CSpace.width * 0.3;
-    int optIndex = opts.indexWhere((element) => element.value.toLowerCase() == widget.user.gender.toLowerCase());
+    int optIndex = opts.indexWhere((element) =>
+        element.value.toLowerCase() == widget.user.gender.toLowerCase());
 
     List<MFormItem> listFormItem = [
       MFormItem(
@@ -76,7 +77,7 @@ class _AccountInfoState extends State<_AccountInfo> {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [CColor.primary, const Color(0xFF05991D)],
+                    colors: [CColor.primary.shade600, CColor.primary],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),
@@ -90,7 +91,12 @@ class _AccountInfoState extends State<_AccountInfo> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.white, width: 2),
                         color: CColor.primary,
-                        boxShadow: const [BoxShadow(color: Colors.grey, offset: Offset(0.5, 0.5), blurRadius: 1)],
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(0.5, 0.5),
+                              blurRadius: 1)
+                        ],
                         shape: BoxShape.circle,
                       ),
                       child: FittedBox(
@@ -129,12 +135,15 @@ class _AccountInfoState extends State<_AccountInfo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: CSpace.large, top: CSpace.small / 2),
+                      margin: const EdgeInsets.only(
+                          bottom: CSpace.large, top: CSpace.small / 2),
                       child: Row(
                         children: [
                           Text(
                             'Thông tin ngân hàng',
-                            style: TextStyle(fontWeight: FontWeight.w400, color: CColor.hintColor),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: CColor.black.shade300),
                           ),
                           const SizedBox(width: 10),
                           Expanded(child: line())
@@ -159,11 +168,15 @@ class _AccountInfoState extends State<_AccountInfo> {
         const VSpacer(CSpace.medium),
         Text(
           widget.user.userName,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.body, color: Colors.white),
+          style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: CFontSize.body,
+              color: Colors.white),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: CSpace.small),
-          child: Text(widget.user.profileType, style: const TextStyle(color: Colors.white)),
+          child: Text(widget.user.profileType,
+              style: const TextStyle(color: Colors.white)),
         ),
       ],
     );

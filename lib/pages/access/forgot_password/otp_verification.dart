@@ -30,10 +30,17 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           const VSpacer(CSpace.mediumSmall),
           Text.rich(TextSpan(
             children: [
-              const TextSpan(text: 'Để xác nhận số điện thoại là của bạn, nhập mã gồm '),
-              TextSpan(text: '6', style: TextStyle(color: CColor.primary, fontWeight: FontWeight.bold)),
+              const TextSpan(
+                  text: 'Để xác nhận số điện thoại là của bạn, nhập mã gồm '),
+              TextSpan(
+                  text: '6',
+                  style: TextStyle(
+                      color: CColor.primary, fontWeight: FontWeight.bold)),
               const TextSpan(text: ' chữ số vừa được gửi đến địa chỉ email: '),
-              TextSpan(text: widget.email, style: TextStyle(color: CColor.primary, fontWeight: FontWeight.bold))
+              TextSpan(
+                  text: widget.email,
+                  style: TextStyle(
+                      color: CColor.primary, fontWeight: FontWeight.bold))
             ],
           )),
           const VSpacer(40),
@@ -52,11 +59,14 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           const VSpacer(40),
           Text(
             'Bạn có thể cần phải chờ tối đa 1 phút để nhận được mã',
-            style: TextStyle(color: CColor.hintColor, fontSize: CFontSize.footnote),
+            style: TextStyle(
+                color: CColor.black.shade300, fontSize: CFontSize.footnote),
             textAlign: TextAlign.center,
           ),
           const VSpacer(40),
-          ElevatedButton(onPressed: checkToken, child: Text('pages.login.otp_verification.Confirm'.tr())),
+          ElevatedButton(
+              onPressed: checkToken,
+              child: Text('pages.login.otp_verification.Confirm'.tr())),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -64,8 +74,11 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                 onPressed: () => context.read<BlocC>().submit(
                     onlyApi: true,
                     api: (_, __, ___, ____) =>
-                        RepositoryProvider.of<Api>(context).auth.forgotPassword(email: widget.email)),
-                child: const Text('Gửi lại mã xác nhận', style: TextStyle(fontSize: CFontSize.body)),
+                        RepositoryProvider.of<Api>(context)
+                            .auth
+                            .forgotPassword(email: widget.email)),
+                child: const Text('Gửi lại mã xác nhận',
+                    style: TextStyle(fontSize: CFontSize.body)),
               ),
             ],
           ),
@@ -75,7 +88,8 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
   }
 
   final TextEditingController _controller = TextEditingController();
-  final double _size = (CSpace.width - 4 * CSpace.large - 5 * CSpace.medium) / 6;
+  final double _size =
+      (CSpace.width - 4 * CSpace.large - 5 * CSpace.medium) / 6;
   late final PinTheme _defaultPinTheme;
 
   @override
@@ -83,11 +97,19 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     _defaultPinTheme = PinTheme(
       height: _size,
       width: _size,
-      textStyle: TextStyle(color: CColor.primary, fontSize: CFontSize.title2, fontWeight: FontWeight.w600),
+      textStyle: TextStyle(
+          color: CColor.primary,
+          fontSize: CFontSize.title2,
+          fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: const [BoxShadow(color: Color.fromRGBO(17, 12, 34, 0.12), offset: Offset(0, 2), blurRadius: 1)],
+        boxShadow: const [
+          BoxShadow(
+              color: Color.fromRGBO(17, 12, 34, 0.12),
+              offset: Offset(0, 2),
+              blurRadius: 1)
+        ],
       ),
     );
     super.initState();
@@ -97,10 +119,11 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     if (_controller.text.length == 6) {
       context.read<BlocC>().submit(
           onlyApi: true,
-          api: (_, __, ___, ____) =>
-              RepositoryProvider.of<Api>(context).auth.verifyForgotPassword(resetPasswordToken: _controller.text),
-          submit: (data) =>
-              context.pushNamed(CRoute.resetPassword, queryParams: {'resetPasswordToken': _controller.text}));
+          api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context)
+              .auth
+              .verifyForgotPassword(resetPasswordToken: _controller.text),
+          submit: (data) => context.pushNamed(CRoute.resetPassword,
+              queryParams: {'resetPasswordToken': _controller.text}));
     }
   }
 }

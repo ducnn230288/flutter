@@ -14,9 +14,6 @@ import '/utils/index.dart';
 import '/widgets/index.dart';
 
 part '_end_drawer.dart';
-
-part '_filter.dart';
-
 part '_popup.dart';
 
 class User extends StatefulWidget {
@@ -54,24 +51,44 @@ class _UserState extends State<User> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextSearch(
+                TextSearch<MUser>(
                   margin: const EdgeInsets.symmetric(horizontal: CSpace.large),
                   api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
                   format: MUser.fromJson,
                 ),
-                const _Filter(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall, horizontal: CSpace.large),
+                  child: WidgetFilter<MUser>(
+                    filter: [
+                      MFilter(label: 'Tất cả', value: ''),
+                      isInternalUser
+                          ? MFilter(label: 'CSKH', value: 'CSKH')
+                          : MFilter(label: 'Order Side', value: 'ORDERER'),
+                      isInternalUser
+                          ? MFilter(label: 'Kế toán', value: 'KT')
+                          : MFilter(label: 'Farmer Side', value: 'FARMER'),
+                    ],
+                    submit: () => context.read<BlocC<MUser>>().submit(
+                        getData: true,
+                        notification: false,
+                        api: (filter, page, size, sort) =>
+                            RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size),
+                        format: MUser.fromJson),
+                    keyValue: 'roleCode',
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(right: CSpace.large),
-                  child: totalElementTitle(suffix: 'tài khoản'),
+                  child: totalElementTitle<MUser>(suffix: 'tài khoản'),
                 )
               ],
             ),
           ),
           Expanded(
-            child: WList<dynamic>(
+            child: WList<MUser>(
               apiId: (item) => user.details(id: item.id),
-              item: (item, int index) {
-                final cubit = context.read<BlocC>();
+              item: (data, int index) {
+                final cubit = context.read<BlocC<MUser>>();
                 final content = cubit.state.data.content.cast<MUser>().toList();
                 String? createdOnDate = DateTime.tryParse(content[index].createdOnDate) != null
                     ? Convert.date(content[index].createdOnDate)
@@ -91,7 +108,6 @@ class _UserState extends State<User> {
                     createdOnDate = null;
                   }
                 }
-                final MUser data = item;
                 const double widthSpace = 35;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +118,7 @@ class _UserState extends State<User> {
                         padding: const EdgeInsets.only(left: CSpace.large, bottom: CSpace.mediumSmall),
                         child: Text(
                           createdOnDate,
-                          style: TextStyle(fontSize: CFontSize.footnote, color: CColor.hintColor),
+                          style: TextStyle(fontSize: CFontSize.footnote, color: CColor.black.shade300),
                         ),
                       ),
                     SwipeActionCell(
@@ -141,11 +157,11 @@ class _UserState extends State<User> {
                                     title: 'Xác nhận trước khi xoá',
                                     text: 'Thao tác này sẽ làm mất đi dữ liệu của bạn. Bạn có chắc chắn thực hiện?',
                                     btnOkOnPress: () async {
-                                      context.read<BlocC>().submit(
+                                      context.read<BlocC<MUser>>().submit(
                                             onlyApi: true,
                                             submit: (_) {
                                               context.pop();
-                                              context.read<BlocC>().refreshPage(
+                                              context.read<BlocC<MUser>>().refreshPage(
                                                     index: index,
                                                     apiId: user.details(id: data.id),
                                                     format: MUser.fromJson,
@@ -200,7 +216,7 @@ class _UserState extends State<User> {
                                             if (data.isLockedOut)
                                               Padding(
                                                 padding: const EdgeInsets.only(right: 5),
-                                                child: Icon(Icons.lock, color: CColor.red, size: CFontSize.subhead),
+                                                child: Icon(Icons.lock, color: CColor.danger, size: CFontSize.subhead),
                                               ),
                                           ],
                                         ),
@@ -219,7 +235,7 @@ class _UserState extends State<User> {
                                             child: Text(
                                               data.userName,
                                               style: TextStyle(
-                                                color: CColor.hintColor,
+                                                color: CColor.black.shade300,
                                                 fontSize: CFontSize.footnote,
                                               ),
                                             ),
@@ -270,16 +286,16 @@ class _UserState extends State<User> {
         ),
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
-      endDrawer: _EndDrawer(cubit: context.read<BlocC>()),
+      endDrawer: _EndDrawer(cubit: context.read<BlocC<MUser>>()),
     );
   }
 
   late final user = RepositoryProvider.of<Api>(context).user;
-  final Color isNotActiveColor = const Color(0xFF9CA3AF);
+  final Color isNotActiveColor = CColor.black.shade200;
   final bool isInternalUser =
       GoRouter.of(rootNavigatorKey.currentState!.context).location.contains(CRoute.internalUser);
 
-  void getData() => context.read<BlocC>().submit(
+  void getData() => context.read<BlocC<MUser>>().submit(
       getData: true,
       api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
       format: MUser.fromJson);
@@ -292,14 +308,14 @@ class _UserState extends State<User> {
         Container(
           height: size,
           padding: const EdgeInsets.only(left: 6, right: 20),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(size / 2), color: const Color(0xFFE5E5E5)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(size / 2), color: CColor.black.shade50),
           // alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 data.isEmailVerified ? 'Đã xác thực' : 'Chưa xác thực',
-                style: const TextStyle(fontSize: 9, color: Color(0xFF6B7280)),
+                style: TextStyle(fontSize: 9, color: CColor.black.shade300),
               ),
             ],
           ),
@@ -319,7 +335,9 @@ class _UserState extends State<User> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [BoxShadow(color: CColor.hintColor.withOpacity(0.4), offset: const Offset(1, 1), blurRadius: 4)],
+          boxShadow: [
+            BoxShadow(color: CColor.black.shade300.withOpacity(0.4), offset: const Offset(1, 1), blurRadius: 4)
+          ],
         ),
         child: child,
       );
