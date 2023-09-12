@@ -58,8 +58,7 @@ class WList<T> extends StatefulWidget {
 }
 
 class _WListState<T> extends State<WList<T>> {
-  final StreamController<bool> loadMoreController =
-      StreamController<bool>.broadcast();
+  final StreamController<bool> loadMoreController = StreamController<bool>.broadcast();
   bool isLoadMore = false;
   late ScrollController controller;
   final int size = 20;
@@ -122,15 +121,10 @@ class _WListState<T> extends State<WList<T>> {
     if (location.contains('?')) {
       location = location.substring(0, location.indexOf('?'));
     }
-    if (currentUrl == location &&
-        widget.items == null &&
-        item != null &&
-        index != null &&
-        widget.format != null) {
-      await context.read<BlocC<T>>().refreshPage(
-          index: index!,
-          apiId: widget.apiId!(item as T),
-          format: widget.format!);
+    if (currentUrl == location && widget.items == null && item != null && index != null && widget.format != null) {
+      await context
+          .read<BlocC<T>>()
+          .refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format!);
       index = null;
       item = null;
     }
@@ -140,18 +134,15 @@ class _WListState<T> extends State<WList<T>> {
     const int space = 100;
     if (widget.items != null) return;
     final BlocC cubit = context.read<BlocC<T>>();
-    final bool increasePage = cubit.state.data.content.length >= size &&
-        cubit.state.data.content.length < cubit.state.data.totalElements!;
-    if (controller.position.pixels >=
-            controller.position.maxScrollExtent - space &&
+    final bool increasePage =
+        cubit.state.data.content.length >= size && cubit.state.data.content.length < cubit.state.data.totalElements!;
+    if (controller.position.pixels >= controller.position.maxScrollExtent - space &&
         context.mounted &&
         increasePage &&
         !isLoadMore) {
       isLoadMore = true;
       loadMoreController.sink.add(true);
-      await cubit.increasePage(
-          api: widget.api ?? (_, __, ___, ____) {},
-          format: widget.format ?? MAttachment.fromJson);
+      await cubit.increasePage(api: widget.api ?? (_, __, ___, ____) {}, format: widget.format ?? MAttachment.fromJson);
       loadMoreController.sink.add(false);
       isLoadMore = false;
     }
@@ -163,14 +154,11 @@ class _WListState<T> extends State<WList<T>> {
         buildWhen: (bf, at) => isLoadMore == false,
         builder: (context, state) {
           final int length =
-              state.data.content.isNotEmpty && state.status != AppStatus.fails
-                  ? state.data.content.length
-                  : 1;
+              state.data.content.isNotEmpty && state.status != AppStatus.fails ? state.data.content.length : 1;
           if (state.status == AppStatus.inProcess) return WLoading();
 
           return RefreshIndicator(
-            notificationPredicate:
-                widget.items == null ? (_) => true : (_) => false,
+            notificationPredicate: widget.items == null ? (_) => true : (_) => false,
             onRefresh: () async {
               if (widget.items == null) {
                 await context.read<BlocC<T>>().setPage(
@@ -188,25 +176,21 @@ class _WListState<T> extends State<WList<T>> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: widget.crossAxisAlignment,
                 children: [
-                  if (widget.inputDisplayType == InputDisplayType.outside)
-                    widget.top ?? Container(),
+                  if (widget.inputDisplayType == InputDisplayType.outside) widget.top ?? Container(),
                   state.data.content.isNotEmpty
                       ? Flexible(
                           flex: widget.flex,
                           child: ListView.separated(
-                            physics: widget.physics ??
-                                const AlwaysScrollableScrollPhysics(),
+                            physics: widget.physics ?? const AlwaysScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            controller:
-                                widget.items == null ? controller : null,
+                            controller: widget.items == null ? controller : null,
                             itemBuilder: (_, index) {
                               if (state.status == AppStatus.fails) {
                                 return Container(
                                   height: 150,
                                   alignment: Alignment.center,
-                                  child: Text('Oops!, có lỗi xảy ra...',
-                                      style: TextStyle(
-                                          color: CColor.black.shade300)),
+                                  child:
+                                      Text('Oops!, có lỗi xảy ra...', style: TextStyle(color: CColor.black.shade300)),
                                 );
                               }
                               final item = state.data.content[index];
@@ -214,58 +198,49 @@ class _WListState<T> extends State<WList<T>> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: widget.crossAxisAlignment,
                                 children: [
-                                  if (index == 0 &&
-                                      widget.inputDisplayType ==
-                                          InputDisplayType.inside)
+                                  if (index == 0 && widget.inputDisplayType == InputDisplayType.inside)
                                     widget.top ?? Container(),
                                   state.data.content.isNotEmpty
                                       ? InkWell(
                                           splashColor: CColor.primary.shade100,
-                                          onTap: () async {
-                                            if (widget.onTap != null) {
-                                              this.index = index;
-                                              if (widget.apiId != null) {
-                                                this.item = item;
-                                              }
-                                              widget.onTap!(item);
-                                            }
-                                            if (widget.onTapMultiple != null) {
-                                              widget.onTapMultiple!(
-                                                  item, context);
-                                            }
-                                          },
+                                          onTap: (widget.onTap != null || widget.onTapMultiple != null)
+                                              ? () async {
+                                                  if (widget.onTap != null) {
+                                                    this.index = index;
+                                                    if (widget.apiId != null) {
+                                                      this.item = item;
+                                                    }
+                                                    widget.onTap!(item);
+                                                  } else if (widget.onTapMultiple != null) {
+                                                    widget.onTapMultiple!(item, context);
+                                                  }
+                                                }
+                                              : null,
                                           child: widget.item(item, index),
                                         )
                                       : const Padding(
-                                          padding: EdgeInsets.only(
-                                              top: CSpace.large),
+                                          padding: EdgeInsets.only(top: CSpace.large),
                                           child: Text('Danh sách trống'),
                                         ),
-                                  if (widget.items == null &&
-                                      index == length - 1)
+                                  if (widget.items == null && index == length - 1)
                                     StreamBuilder<bool>(
                                       stream: loadMoreController.stream,
                                       builder: (_, snapshot) {
-                                        if (snapshot.hasData &&
-                                            snapshot.data == true) {
+                                        if (snapshot.hasData && snapshot.data == true) {
                                           return WLoading();
                                         }
                                         return Container();
                                       },
                                     ),
-                                  if (index == length - 1 &&
-                                      widget.inputDisplayType ==
-                                          InputDisplayType.inside)
+                                  if (index == length - 1 && widget.inputDisplayType == InputDisplayType.inside)
                                     widget.bottom ?? Container(),
                                 ],
                               );
                             },
                             itemCount: length,
                             separatorBuilder: (_, int index) {
-                              if (widget.items?[index].runtimeType ==
-                                      MFormItem &&
-                                  (widget.items?[index]?.dataType ==
-                                      DataType.separation)) {
+                              if (widget.items?[index].runtimeType == MFormItem &&
+                                  (widget.items?[index]?.dataType == DataType.separation)) {
                                 return Container();
                               }
                               return widget.separator ?? Container();
@@ -280,8 +255,7 @@ class _WListState<T> extends State<WList<T>> {
                               return const Text('Danh sách trống');
                             },
                           )),
-                  if (widget.inputDisplayType == InputDisplayType.outside)
-                    widget.bottom ?? Container(),
+                  if (widget.inputDisplayType == InputDisplayType.outside) widget.bottom ?? Container(),
                 ],
               ),
             ),

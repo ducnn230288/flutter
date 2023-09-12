@@ -45,10 +45,11 @@ class _MyAccountPassState extends State<MyAccountPass> {
       body: CustomScrollView(
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.all(CSpace.large),
+            padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
             sliver: SliverToBoxAdapter(
               child: Column(
                 children: [
+                  SizedBox(height: 160, child: CIcon.resetPassword),
                   WForm(
                     list: listFormItem,
                     onInit: (items) {

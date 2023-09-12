@@ -7,7 +7,7 @@ line({double height = 0.5, double? width, Color? color, EdgeInsets? margin}) {
     height: height,
     width: width,
     margin: margin,
-    color: color ?? CColor.black.shade200,
+    color: color ?? CColor.black.shade100.withOpacity(0.8),
   );
 }
 
@@ -22,8 +22,7 @@ dottedLine(
   if (axis == Axis.vertical) {
     return Container(
       margin: margin,
-      height: heightVertical ??
-          MediaQuery.of(rootNavigatorKey.currentState!.context).size.width,
+      height: heightVertical ?? MediaQuery.of(rootNavigatorKey.currentState!.context).size.width,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           final boxHeight = constraints.constrainHeight();
@@ -32,10 +31,7 @@ dottedLine(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             direction: axis,
             children: List.generate(dashCount, (_) {
-              return Container(
-                  width: thickness,
-                  height: dashSize,
-                  color: color ?? CColor.black.shade300);
+              return Container(width: thickness, height: dashSize, color: color ?? CColor.black.shade300);
             }),
           );
         },
@@ -52,10 +48,7 @@ dottedLine(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           direction: axis,
           children: List.generate(dashCount, (_) {
-            return Container(
-                width: dashSize,
-                height: thickness,
-                color: color ?? CColor.black.shade200);
+            return Container(width: dashSize, height: thickness, color: color ?? CColor.black.shade200);
           }),
         );
       },

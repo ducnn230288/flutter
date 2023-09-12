@@ -151,11 +151,11 @@ class CColor {
         return warning;
 
       case 'ASSIGNED':
-        return pink;
+        return pink.shade700;
 
       case 'LOCKED':
       case 'LOCK_PROPOSAL':
-        return green;
+        return green.shade700;
     }
     return primary;
   }
