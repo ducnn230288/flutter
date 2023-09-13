@@ -5,8 +5,7 @@ import '/constants/index.dart';
 class USnackBar {
   USnackBar._();
 
-  static final ScaffoldMessengerState _scaffold =
-      ScaffoldMessenger.of(rootNavigatorKey.currentState!.context);
+  static final ScaffoldMessengerState _scaffold = ScaffoldMessenger.of(rootNavigatorKey.currentState!.context);
 
   static void smallSnackBar({
     required String title,
@@ -25,26 +24,19 @@ class USnackBar {
                 height: CFontSize.paragraph1,
                 width: CFontSize.paragraph1,
                 margin: const EdgeInsets.only(right: CSpace.mediumSmall),
-                child: const CircularProgressIndicator(
-                    color: Colors.white, strokeWidth: 1.5),
+                child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 1.5),
               ),
-            Text(title,
-                style: const TextStyle(
-                    color: Colors.white, fontSize: CFontSize.footnote)),
+            Text(title, style: const TextStyle(color: Colors.white, fontSize: CFontSize.footnote)),
           ],
         ),
       ),
       width: width,
       elevation: 0,
-      duration: isInfiniteTime
-          ? const Duration(minutes: 1)
-          : duration ?? const Duration(seconds: 2),
-      padding: const EdgeInsets.symmetric(
-          vertical: CSpace.mediumSmall, horizontal: 0),
+      duration: isInfiniteTime ? const Duration(minutes: 1) : duration ?? const Duration(seconds: 2),
+      padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall, horizontal: 0),
       behavior: SnackBarBehavior.floating,
       backgroundColor: CColor.black.shade300,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(CRadius.small)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.small)),
     ));
   }
 

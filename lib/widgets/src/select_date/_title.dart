@@ -1,10 +1,6 @@
 part of 'index.dart';
 
-_dateTitle(
-        {required String title,
-        required String date,
-        required Function() onPressed}) =>
-    Expanded(
+_dateTitle({required String title, required String date, required Function() onPressed}) => Expanded(
         child: InkWell(
       onTap: () {
         onPressed();
@@ -22,9 +18,7 @@ _dateTitle(
                       margin: const EdgeInsets.only(left: 4),
                       child: Text(
                         title,
-                        style: TextStyle(
-                            fontSize: CFontSize.caption2,
-                            color: CColor.black.shade300),
+                        style: TextStyle(fontSize: CFontSize.caption2, color: CColor.black.shade300),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),

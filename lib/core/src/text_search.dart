@@ -8,18 +8,11 @@ import '/utils/index.dart';
 
 class TextSearch<T> extends StatefulWidget {
   final String? hintText;
-  final Function(Map<String, dynamic> value, int page, int size,
-      Map<String, dynamic> sort) api;
+  final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
   final Function format;
   final EdgeInsets? margin;
 
-  const TextSearch(
-      {Key? key,
-      required this.api,
-      required this.format,
-      this.hintText,
-      this.margin})
-      : super(key: key);
+  const TextSearch({Key? key, required this.api, required this.format, this.hintText, this.margin}) : super(key: key);
 
   @override
   State<TextSearch> createState() => _TextSearchState<T>();
@@ -41,8 +34,7 @@ class _TextSearchState<T> extends State<TextSearch> {
         },
         decoration: InputDecoration(
             hintText: widget.hintText ?? 'Tìm kiếm',
-            hintStyle: TextStyle(
-                color: CColor.black.shade300, fontSize: CFontSize.body),
+            hintStyle: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.body),
             prefixIcon: CIcon.search,
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
             focusedBorder: borderStyle,
@@ -52,8 +44,7 @@ class _TextSearchState<T> extends State<TextSearch> {
             contentPadding: EdgeInsets.zero,
             suffixIcon: BlocBuilder<BlocC<T>, BlocS<T>>(
               builder: (context, state) {
-                if (state.value['fullTextSearch'] == null ||
-                    state.value['fullTextSearch'] == '') {
+                if (state.value['fullTextSearch'] == null || state.value['fullTextSearch'] == '') {
                   return const HSpacer(0);
                 } else {
                   return InkWell(
@@ -63,8 +54,7 @@ class _TextSearchState<T> extends State<TextSearch> {
                       controller.clear();
                     },
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: CSpace.medium),
+                      padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
                       child: CIcon.close,
                     ),
                   );

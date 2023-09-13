@@ -91,28 +91,24 @@ class WUploadState extends State<WUpload> {
                   Container(
                     height: 19,
                     margin: const EdgeInsets.only(left: CSpace.superSmall),
-                    child: Text('*',
-                        style: TextStyle(color: CColor.danger, fontSize: 20)),
+                    child: Text('*', style: TextStyle(color: CColor.danger, fontSize: 20)),
                   )
               ],
             ),
           ),
           BlocConsumer<BlocC<MUpload>, BlocS<MUpload>>(listener: (_, state) {
             if (state.status == AppStatus.inProcess) {
-              USnackBar.smallSnackBar(
-                  title: 'Đang tải ảnh lên...', isInfiniteTime: true);
+              USnackBar.smallSnackBar(title: 'Đang tải ảnh lên...', isInfiniteTime: true);
             } else {
               USnackBar.hideSnackBar();
             }
           }, builder: (context, state) {
             const int count = 4;
             final double imageSize = CSpace.width / count;
-            List<MUpload> listImage = (state.data.content)
-                .map((dynamic e) => MUpload.fromJson(jsonDecode(jsonEncode(e))))
-                .toList();
+            List<MUpload> listImage =
+                (state.data.content).map((dynamic e) => MUpload.fromJson(jsonDecode(jsonEncode(e)))).toList();
             return GridView.builder(
-                padding:
-                    const EdgeInsets.symmetric(vertical: CSpace.mediumSmall),
+                padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall),
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: count,
@@ -123,8 +119,7 @@ class WUploadState extends State<WUpload> {
                 shrinkWrap: true,
                 itemCount: state.data.content.length + 1,
                 itemBuilder: (_, index) {
-                  if (index == state.data.content.length)
-                    return addItem(context);
+                  if (index == state.data.content.length) return addItem(context);
                   return Stack(
                     clipBehavior: Clip.none,
                     alignment: AlignmentDirectional.center,
@@ -140,8 +135,7 @@ class WUploadState extends State<WUpload> {
                             ? null
                             : (description, idx) {
                                 final cubit = context.read<BlocC<MUpload>>();
-                                listImage[idx] = listImage[idx]
-                                    .copyWith(description: description);
+                                listImage[idx] = listImage[idx].copyWith(description: description);
                                 cubit.setData(
                                     data: MData.fromJson({
                                   'page': 1,
@@ -151,8 +145,7 @@ class WUploadState extends State<WUpload> {
                                   'totalElements': listImage.length,
                                   'content': listImage
                                 }, null));
-                                widget.onChanged(
-                                    listImage.map((e) => e.toJson()).toList());
+                                widget.onChanged(listImage.map((e) => e.toJson()).toList());
                               },
                       ),
                       Positioned(
@@ -165,13 +158,8 @@ class WUploadState extends State<WUpload> {
                               title: 'Xóa ảnh đã chọn',
                               text: 'Bạn có chắc muốn xóa ảnh hiện tại không?',
                               btnOkOnPress: () {
-                                List<MUpload> list = context
-                                    .read<BlocC<MUpload>>()
-                                    .state
-                                    .data
-                                    .content;
-                                if (widget.onDelete != null)
-                                  widget.onDelete!(list[index]);
+                                List<MUpload> list = context.read<BlocC<MUpload>>().state.data.content;
+                                if (widget.onDelete != null) widget.onDelete!(list[index]);
                                 list.removeAt(index);
                                 context.read<BlocC<MUpload>>().setData(
                                     data: MData(
@@ -182,16 +170,14 @@ class WUploadState extends State<WUpload> {
                                         totalElements: list.length,
                                         content: list),
                                     status: AppStatus.show);
-                                widget.onChanged(
-                                    list.map((e) => e.toJson()).toList());
+                                widget.onChanged(list.map((e) => e.toJson()).toList());
                                 context.pop();
                               }),
                           child: Container(
                             padding: const EdgeInsets.all(CSpace.small),
                             decoration: BoxDecoration(
                               color: CColor.danger,
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(CSpace.small)),
+                              borderRadius: const BorderRadius.all(Radius.circular(CSpace.small)),
                             ),
                             child: CIcon.closeWhite,
                           ),
@@ -209,11 +195,9 @@ class WUploadState extends State<WUpload> {
 
   Widget addItem(BuildContext context) {
     return BlocBuilder<BlocC<MUpload>, BlocS<MUpload>>(
-      builder: (context, state) => (state.data.content.isEmpty &&
-                  widget.uploadType == UploadType.single) ||
+      builder: (context, state) => (state.data.content.isEmpty && widget.uploadType == UploadType.single) ||
               widget.uploadType == UploadType.multiple
-          ? (widget.maxCount == null ||
-                  (state.data.content.length) < (widget.maxCount ?? 0))
+          ? (widget.maxCount == null || (state.data.content.length) < (widget.maxCount ?? 0))
               ? InkWell(
                   splashColor: CColor.primary.shade100,
                   onTap: () => _showModal(context),
@@ -248,18 +232,12 @@ class WUploadState extends State<WUpload> {
     } else if (isMultiImage) {
       final List<XFile> pickedFileList = await _picker.pickMultiImage();
       if (pickedFileList.isNotEmpty) {
-        await showConfirmImage(
-            imageFileList: pickedFileList,
-            isMultiImage: isMultiImage,
-            context: context);
+        await showConfirmImage(imageFileList: pickedFileList, isMultiImage: isMultiImage, context: context);
       }
     } else {
       final XFile? pickedFile = await _picker.pickImage(source: source);
       if (pickedFile != null) {
-        await addImage(
-            imageFileList: [pickedFile],
-            isMultiImage: isMultiImage,
-            context: context);
+        await addImage(imageFileList: [pickedFile], isMultiImage: isMultiImage, context: context);
       }
     }
   }
@@ -276,8 +254,7 @@ class WUploadState extends State<WUpload> {
           titlePadding: const EdgeInsets.all(0),
           actionsPadding: const EdgeInsets.symmetric(vertical: 0.0),
           contentPadding: const EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(CRadius.basic)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.basic)),
           content: SizedBox(
             width: CSpace.width * 0.9,
             child: GridView.builder(
@@ -292,15 +269,10 @@ class WUploadState extends State<WUpload> {
               itemCount: imageFileList!.length,
               itemBuilder: (context, index) => ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: index == 0
-                      ? const Radius.circular(CRadius.basic)
-                      : const Radius.circular(0),
-                  topRight: index == 1
-                      ? const Radius.circular(CRadius.basic)
-                      : const Radius.circular(0),
+                  topLeft: index == 0 ? const Radius.circular(CRadius.basic) : const Radius.circular(0),
+                  topRight: index == 1 ? const Radius.circular(CRadius.basic) : const Radius.circular(0),
                 ),
-                child: ExtendedImage.file(File(imageFileList[index].path),
-                    fit: BoxFit.cover),
+                child: ExtendedImage.file(File(imageFileList[index].path), fit: BoxFit.cover),
               ),
             ),
           ),
@@ -316,10 +288,7 @@ class WUploadState extends State<WUpload> {
                   'widgets.form.upload.Upload'.tr(),
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
-                onPressed: () => addImage(
-                    imageFileList: imageFileList,
-                    isMultiImage: isMultiImage,
-                    context: context)),
+                onPressed: () => addImage(imageFileList: imageFileList, isMultiImage: isMultiImage, context: context)),
           ],
         );
       },
@@ -344,14 +313,11 @@ class WUploadState extends State<WUpload> {
       if (widget.maxCount != null && count >= widget.maxCount!) {
         break;
       }
-      MUpload? data = await api.postUploadPhysicalBlob(
-          file: item,
-          prefix: widget.prefix ?? widget.docType,
-          obj: {
-            'docType': widget.docType,
-            'docTypeName': widget.label,
-            'prefix': widget.prefix ?? widget.docType,
-          });
+      MUpload? data = await api.postUploadPhysicalBlob(file: item, prefix: widget.prefix ?? widget.docType, obj: {
+        'docType': widget.docType,
+        'docTypeName': widget.label,
+        'prefix': widget.prefix ?? widget.docType,
+      });
       if (data != null) {
         if (widget.onAdd != null) widget.onAdd!(data);
         list.add(data);
@@ -383,29 +349,22 @@ class WUploadState extends State<WUpload> {
                   name: 'widgets.form.upload.Select image from gallery'.tr(),
                   onTap: () {
                     isVideo = false;
-                    _onImageButtonPressed(
-                        source: ImageSource.gallery, context: context);
+                    _onImageButtonPressed(source: ImageSource.gallery, context: context);
                   }),
               if (widget.uploadType == UploadType.multiple)
                 listTile(
                     svg: 'assets/svgs/upload/multiple-image.svg',
-                    name:
-                        'widgets.form.upload.Select multiple images from gallery'
-                            .tr(),
+                    name: 'widgets.form.upload.Select multiple images from gallery'.tr(),
                     onTap: () {
                       isVideo = false;
-                      _onImageButtonPressed(
-                          source: ImageSource.gallery,
-                          context: context,
-                          isMultiImage: true);
+                      _onImageButtonPressed(source: ImageSource.gallery, context: context, isMultiImage: true);
                     }),
               listTile(
                   svg: 'assets/svgs/upload/camera.svg',
                   name: 'widgets.form.upload.Take a photo'.tr(),
                   onTap: () {
                     isVideo = false;
-                    _onImageButtonPressed(
-                        source: ImageSource.camera, context: context);
+                    _onImageButtonPressed(source: ImageSource.camera, context: context);
                   }),
               // listTile(
               //     svg: 'assets/svgs/upload/video.svg',

@@ -75,17 +75,14 @@ class UDialog {
         context: context,
         builder: (context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(CRadius.large)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.large)),
               title: Text(
                 title ?? 'Thông báo',
                 style: TextStyle(fontSize: CFontSize.body, color: titleColor),
                 textAlign: TextAlign.center,
               ),
-              titlePadding: const EdgeInsets.fromLTRB(
-                  CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
-              contentPadding: const EdgeInsets.fromLTRB(
-                  CSpace.large, CSpace.large, CSpace.large, 0),
+              titlePadding: const EdgeInsets.fromLTRB(CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
+              contentPadding: const EdgeInsets.fromLTRB(CSpace.large, CSpace.large, CSpace.large, 0),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -95,8 +92,7 @@ class UDialog {
                     splashColor: CColor.primary.shade100,
                     onTap: () => context.pop(),
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: CSpace.medium),
+                      padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
                       width: 300,
                       child: Text(
                         textButton,
@@ -135,8 +131,7 @@ class UDialog {
         context: context,
         builder: (context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(CRadius.large)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.large)),
               title: showTitle
                   ? Text(
                       title ?? 'Thông báo',
@@ -144,10 +139,8 @@ class UDialog {
                       textAlign: TextAlign.center,
                     )
                   : null,
-              titlePadding: const EdgeInsets.fromLTRB(
-                  CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
-              contentPadding: const EdgeInsets.fromLTRB(
-                  CSpace.large, CSpace.large, CSpace.large, 0),
+              titlePadding: const EdgeInsets.fromLTRB(CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
+              contentPadding: const EdgeInsets.fromLTRB(CSpace.large, CSpace.large, CSpace.large, 0),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -161,8 +154,7 @@ class UDialog {
                           onTap: btnCancelOnPress ?? () => context.pop(),
                           highlightColor: Colors.white,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: CSpace.medium),
+                            padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
                             child: Text(
                               btnCancelText,
                               style: TextStyle(color: CColor.black.shade300),
@@ -177,8 +169,7 @@ class UDialog {
                           onTap: btnOkOnPress ?? () => context.pop(),
                           highlightColor: Colors.white,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: CSpace.medium),
+                            padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
                             child: Text(
                               btnOkText,
                               style: TextStyle(
@@ -204,9 +195,7 @@ class UDialog {
   Future<void> showForm({
     required String title,
     required List<MFormItem> formItem,
-    required Function(Map<String, dynamic> value, int page, int size,
-            Map<String, dynamic> sort)
-        api,
+    required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
     Function(Map<String, dynamic>)? onSubmit,
     Function()? submit,
     String textButton = 'Xác nhận',
@@ -216,22 +205,16 @@ class UDialog {
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(CRadius.large)),
-            title: Text(title,
-                style: const TextStyle(fontSize: CFontSize.body),
-                textAlign: TextAlign.center),
-            titlePadding: const EdgeInsets.fromLTRB(
-                CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
-            contentPadding: const EdgeInsets.fromLTRB(
-                CSpace.large, CSpace.large, CSpace.large, 0),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.large)),
+            title: Text(title, style: const TextStyle(fontSize: CFontSize.body), textAlign: TextAlign.center),
+            titlePadding: const EdgeInsets.fromLTRB(CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
+            contentPadding: const EdgeInsets.fromLTRB(CSpace.large, CSpace.large, CSpace.large, 0),
             insetPadding: const EdgeInsets.symmetric(horizontal: CSpace.large),
             content: BlocProvider(
               create: (context) => BlocC(),
               child: Container(
                 width: CSpace.width,
-                padding:
-                    const EdgeInsets.symmetric(vertical: CSpace.mediumSmall),
+                padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -240,8 +223,7 @@ class UDialog {
                     BlocBuilder<BlocC, BlocS>(
                       builder: (context, state) {
                         return BlocListener<BlocC, BlocS>(
-                          listenWhen: (context, state) =>
-                              state.status == AppStatus.success,
+                          listenWhen: (context, state) => state.status == AppStatus.success,
                           listener: (context, state) {
                             context.pop();
                             if (submit != null) {

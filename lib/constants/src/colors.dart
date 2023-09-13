@@ -12,10 +12,11 @@ class CColor {
       300: Color(0xFF3EEE5B),
       400: Color(0xFF12CD31),
       500: Color(0xFF05991D),
-      600: Color(0xFF0A6B19),
-      700: Color(0xFF074F13),
-      800: Color(0xFF05330C),
-      900: Color(0xFF021705),
+      600: Color(0xFF16a34a),
+      700: Color(0xFF15803d),
+      800: Color(0xFF166534),
+      900: Color(0xFF14532d),
+      950: Color(0xFF052e16),
     },
   ); // 15 - 6 - 0
   static MaterialColor green = const MaterialColor(
@@ -27,10 +28,11 @@ class CColor {
       300: Color(0xFF3EEE5B),
       400: Color(0xFF12CD31),
       500: Color(0xFF05991D),
-      600: Color(0xFF0A6B19),
-      700: Color(0xFF074F13),
-      800: Color(0xFF05330C),
-      900: Color(0xFF021705),
+      600: Color(0xFF16a34a),
+      700: Color(0xFF15803d),
+      800: Color(0xFF166534),
+      900: Color(0xFF14532d),
+      950: Color(0xFF052e16),
     },
   );
   static MaterialColor black = const MaterialColor(
@@ -40,12 +42,13 @@ class CColor {
       100: Color(0xFFC2C2C2),
       200: Color(0xFFA8A8A8),
       300: Color(0xFF8F8F8F),
-      400: Color(0xFF696969),
-      500: Color(0xFF333333),
-      600: Color(0xFF2C2C2c),
-      700: Color(0xFF1A1A1A),
-      800: Color(0xFF0D0D0D),
-      900: Color(0xFF000000),
+      400: Color(0xFF808080),
+      500: Color(0xFF737373),
+      600: Color(0xFF525252),
+      700: Color(0xFF404040),
+      800: Color(0xFF262626),
+      900: Color(0xFF171717),
+      950: Color(0xFF0a0a0a),
     },
   );
   static MaterialColor warning = const MaterialColor(
@@ -61,6 +64,7 @@ class CColor {
       700: Color(0xFFa16207),
       800: Color(0xFF854d0e),
       900: Color(0xFF713f12),
+      950: Color(0xFF422006),
     },
   );
   static MaterialColor danger = const MaterialColor(
@@ -76,6 +80,7 @@ class CColor {
       700: Color(0xFFb91c1c),
       800: Color(0xFF991b1b),
       900: Color(0xFF7f1d1d),
+      950: Color(0xFF450a0a),
     },
   );
   static MaterialColor blue = const MaterialColor(
@@ -91,21 +96,23 @@ class CColor {
       700: Color(0xFF1d4ed8),
       800: Color(0xFF1e40af),
       900: Color(0xFF1e3a8a),
+      950: Color(0xFF172554),
     },
   );
-  static MaterialColor pink = const MaterialColor(
-    0xFFec4899,
+  static MaterialColor purple = const MaterialColor(
+    0xFFa855f7,
     <int, Color>{
-      50: Color(0xFFfdf2f8),
-      100: Color(0xFFfce7f3),
-      200: Color(0xFFfbcfe8),
-      300: Color(0xFFf9a8d4),
-      400: Color(0xFFf472b6),
-      500: Color(0xFFec4899),
-      600: Color(0xFFdb2777),
-      700: Color(0xFFbe185d),
-      800: Color(0xFF9d174d),
-      900: Color(0xFF831843),
+      50: Color(0xFFfaf5ff),
+      100: Color(0xFFf3e8ff),
+      200: Color(0xFFe9d5ff),
+      300: Color(0xFFd8b4fe),
+      400: Color(0xFFc084fc),
+      500: Color(0xFFa855f7),
+      600: Color(0xFF9333ea),
+      700: Color(0xFF7e22ce),
+      800: Color(0xFF6b21a8),
+      900: Color(0xFF581c87),
+      950: Color(0xFF3b0764),
     },
   );
 
@@ -151,7 +158,7 @@ class CColor {
         return warning;
 
       case 'ASSIGNED':
-        return pink.shade700;
+        return purple;
 
       case 'LOCKED':
       case 'LOCK_PROPOSAL':

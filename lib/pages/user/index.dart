@@ -131,10 +131,8 @@ class _UserState extends State<User> {
                                 content: button(child: Icon(Icons.key, color: CColor.warning)),
                                 color: Colors.transparent,
                                 onTap: (handler) {
-                                  context.pushNamed(
-                                    CRoute.createCustomerUser,
-                                    queryParams: {'formType': FormType.password.name, 'data': jsonEncode(data)},
-                                  );
+                                  context.pushNamed(CRoute.createCustomerUser,
+                                      queryParams: {'formType': FormType.password.name}, extra: data);
                                 },
                               ),
                               SwipeAction(
@@ -144,7 +142,8 @@ class _UserState extends State<User> {
                                 onTap: (handler) {
                                   context.pushNamed(
                                     CRoute.createCustomerUser,
-                                    queryParams: {'formType': FormType.edit.name, 'data': jsonEncode(data)},
+                                    queryParams: {'formType': FormType.edit.name},
+                                    extra: data,
                                   );
                                 },
                               ),

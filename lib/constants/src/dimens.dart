@@ -85,6 +85,8 @@ class CSpace {
 class CHeight {
   CHeight._();
 
+  static const double large = 60.0;
+
   static const double medium = 48.0;
   static const double mediumSmall = 40.0;
 

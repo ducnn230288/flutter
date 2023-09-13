@@ -186,7 +186,7 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data.child != null) {
       return Container(
-        margin: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: horizontalPadding),
+        margin: EdgeInsets.only(top: verticalPadding, right: horizontalPadding, left: horizontalPadding),
         child: data.child!,
       );
     }

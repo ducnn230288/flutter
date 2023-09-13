@@ -52,7 +52,7 @@ class _UserDetailsState extends State<UserDetails> {
               //   child: button(
               //     label: 'Hồ sơ Farmer',
               //     width: 113,
-              //     color: const Color(0xFFA855F7),
+              //     color: CColor.purple,
               //     title: 'Xem hồ sơ',
               //     icon: Icons.badge,
               //     onPressed: ()=> context.pushNamed(
@@ -68,7 +68,7 @@ class _UserDetailsState extends State<UserDetails> {
               //   child: button(
               //     label: 'Ví điện tử',
               //     width: 93,
-              //     color: const Color(0xFFF59E0B),
+              //     color: CColor.warning.shade600,
               //     title: 'Xem ví',
               //     icon: Icons.wallet,
               //     onPressed: () => context.pushNamed(

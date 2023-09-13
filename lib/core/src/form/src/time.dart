@@ -16,6 +16,7 @@ class WTime extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final String? icon;
   final TextEditingController controller;
+  final double? height;
 
   const WTime({
     Key? key,
@@ -30,6 +31,7 @@ class WTime extends StatefulWidget {
     this.icon,
     required this.controller,
     this.hintText,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class _WTimeState extends State<WTime> {
   @override
   Widget build(BuildContext context) {
     return WInput(
+      height: widget.height,
       controller: widget.controller,
       label: widget.label,
       value: widget.value,

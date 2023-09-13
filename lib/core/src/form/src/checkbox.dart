@@ -30,8 +30,7 @@ class WCheckbox extends FormField<bool> {
                       builder: (context, stateC) {
                         late final cubit = context.read<BlocC>();
                         void setValue(bool? _) {
-                          final value = stateC.value[name] == null ||
-                              stateC.value[name] == false;
+                          final value = stateC.value[name] == null || stateC.value[name] == false;
                           state.didChange(value);
                           state.validate();
                           cubit.saved(value: value, name: name);
@@ -46,14 +45,8 @@ class WCheckbox extends FormField<bool> {
                                   width: 20,
                                   height: 20,
                                   child: Checkbox(
-                                    side: BorderSide(
-                                        width: 1,
-                                        color: state.hasError
-                                            ? CColor.danger
-                                            : CColor.primary),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0)),
+                                    side: BorderSide(width: 1, color: state.hasError ? CColor.danger : CColor.primary),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                                     value: stateC.value[name] ?? false,
                                     onChanged: setValue,
                                   ),
@@ -67,13 +60,10 @@ class WCheckbox extends FormField<bool> {
                   ),
                   state.hasError
                       ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: CSpace.medium),
+                          padding: const EdgeInsets.symmetric(horizontal: CSpace.medium),
                           child: Text(
                             state.errorText!,
-                            style: TextStyle(
-                                fontSize: CFontSize.caption2,
-                                color: CColor.danger),
+                            style: TextStyle(fontSize: CFontSize.caption2, color: CColor.danger),
                           ),
                         )
                       : const SizedBox()

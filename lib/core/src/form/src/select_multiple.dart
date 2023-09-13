@@ -29,6 +29,7 @@ class WSelectMultiple extends StatefulWidget {
   final Function selectValue;
   final TextEditingController controller;
   final List? items;
+  final double? height;
 
   const WSelectMultiple({
     Key? key,
@@ -53,6 +54,7 @@ class WSelectMultiple extends StatefulWidget {
     this.name = '',
     this.code = '',
     this.hintText,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class _WSelectMultipleState extends State<WSelectMultiple> {
   @override
   Widget build(BuildContext context) {
     return WInput(
+      height: widget.height,
       controller: widget.controller,
       label: widget.label,
       hintText: widget.hintText ?? 'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),

@@ -31,6 +31,7 @@ class WInput extends StatefulWidget {
   final FocusNode? focusNode;
   final FormatNumberType formatNumberType;
   final String? rulesRequired;
+  final double? height;
 
   const WInput({
     Key? key,
@@ -55,6 +56,7 @@ class WInput extends StatefulWidget {
     this.formatNumberType = FormatNumberType.inputFormatters,
     this.hintText,
     this.rulesRequired,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -90,8 +92,8 @@ class _WInputState extends State<WInput> {
 
   @override
   Widget build(BuildContext context) {
-    final bool inputFormatters = widget.number &&
-        widget.formatNumberType == FormatNumberType.inputFormatters;
+    final bool inputFormatters = widget.number && widget.formatNumberType == FormatNumberType.inputFormatters;
+    final height = widget.height != null ? ((widget.height! / CHeight.large) - 1) : 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -116,134 +118,129 @@ class _WInputState extends State<WInput> {
                   )),
             ),
           ),
-        TextFormField(
-          focusNode: focusNode,
-          controller: controller,
-          onTap: () {
-            if (!widget.focus && widget.onTap != null) {
-              widget.onTap!(controller.text);
-            }
-          },
-          readOnly: widget.onTap != null,
-          textInputAction: TextInputAction.next,
-          style:
-              TextStyle(fontSize: CFontSize.body, color: CColor.black.shade700),
-          onChanged: (String text) {
-            if (inputFormatters) {
-              text = text.replaceAll(' ', '');
-            }
-            if (widget.onChanged != null) {
-              widget.onChanged!(text);
-            }
-          },
-          validator: (value) {
-            if (widget.required && value == '') {
-              return (widget.rulesRequired ??
-                      'widgets.form.input.rulesRequired')
-                  .tr(args: [
-                ('${widget.label != '' ? widget.label : widget.hintText}')
-                    .toLowerCase()
-              ]);
-            }
-            return null;
-          },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          obscureText: visible,
-          keyboardType: widget.number
-              ? const TextInputType.numberWithOptions(
-                  decimal: true, signed: true)
-              : widget.maxLines > 1
-                  ? TextInputType.multiline
+        SizedBox(
+          height: widget.height,
+          child: TextFormField(
+            focusNode: focusNode,
+            controller: controller,
+            onTap: () {
+              if (!widget.focus && widget.onTap != null) {
+                widget.onTap!(controller.text);
+              }
+            },
+            readOnly: widget.onTap != null,
+            textInputAction: TextInputAction.next,
+            style: TextStyle(fontSize: CFontSize.body + (height * 3), color: CColor.black.shade700),
+            onChanged: (String text) {
+              if (inputFormatters) {
+                text = text.replaceAll(' ', '');
+              }
+              if (widget.onChanged != null) {
+                widget.onChanged!(text);
+              }
+            },
+            validator: (value) {
+              if (widget.required && value == '') {
+                return (widget.rulesRequired ?? 'widgets.form.input.rulesRequired')
+                    .tr(args: [('${widget.label != '' ? widget.label : widget.hintText}').toLowerCase()]);
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            obscureText: visible,
+            keyboardType: widget.number
+                ? const TextInputType.numberWithOptions(decimal: true, signed: true)
+                : widget.maxLines > 1
+                    ? TextInputType.multiline
+                    : null,
+            decoration: InputDecoration(
+              counterText: widget.label != '' ? widget.label : widget.hintText,
+              counterStyle: const TextStyle(fontSize: 0.5, color: Colors.transparent),
+              hintText: widget.hintText ?? 'widgets.form.input.Enter'.tr(args: [widget.label.toLowerCase()]),
+              hintStyle: TextStyle(
+                fontSize: CFontSize.body + (height * 3),
+                color: CColor.black.shade200,
+                height: widget.height != null ? 1.9 : null,
+              ),
+              prefixIcon: widget.icon != null
+                  ? Container(
+                      padding: EdgeInsets.all(CSpace.medium + (height * 10)),
+                      child: SvgPicture.asset(
+                        widget.icon ?? '',
+                        semanticsLabel: widget.hintText ?? widget.label,
+                        width: 0,
+                        color: CColor.black.shade400,
+                      ),
+                    )
                   : null,
-          decoration: InputDecoration(
-            counterText: widget.label != '' ? widget.label : widget.hintText,
-            counterStyle:
-                const TextStyle(fontSize: 0.5, color: Colors.transparent),
-            hintText: widget.hintText ??
-                'widgets.form.input.Enter'
-                    .tr(args: [widget.label.toLowerCase()]),
-            hintStyle: TextStyle(
-                fontSize: CFontSize.body, color: CColor.black.shade200),
-            prefixIcon: widget.icon != null
-                ? Container(
-                    padding: const EdgeInsets.all(CSpace.medium),
-                    child: SvgPicture.asset(
-                      widget.icon ?? '',
-                      semanticsLabel: widget.hintText ?? widget.label,
-                      width: 0,
-                      color: CColor.black.shade400,
-                    ),
-                  )
-                : null,
-            suffixIcon: widget.password
-                ? InkWell(
-                    canRequestFocus: false,
-                    splashColor: CColor.primary.shade100,
-                    onTap: () => setState(() {
-                      visible = !visible;
-                    }),
-                    child: Icon(
-                      visible ? Icons.visibility_off : Icons.visibility,
-                      color: CColor.black.shade200,
-                      semanticLabel: 'View',
-                    ),
-                  )
-                : widget.name == 'fullTextSearch'
-                    ? BlocBuilder<BlocC, BlocS>(
-                        buildWhen: (bf, at) =>
-                            (bf.value['fullTextSearch'] == '' &&
-                                at.value['fullTextSearch'] != '') ||
-                            (bf.value['fullTextSearch'] != '' &&
-                                at.value['fullTextSearch'] == ''),
-                        builder: (context, state) {
-                          if (state.value['fullTextSearch'] == null ||
-                              state.value['fullTextSearch'] == '' ||
-                              (state.value['fullTextSearch'].runtimeType !=
-                                      String &&
-                                  state.value['fullTextSearch']?['value'] ==
-                                      '') ||
-                              controller.text == '') {
-                            return const HSpacer(0);
-                          }
-                          return InkWell(
-                            splashColor: CColor.primary.shade100,
-                            onTap: () {
-                              controller.clear();
-                              if (widget.onChanged != null) {
-                                widget.onChanged!('');
-                              }
-                            },
-                            child: Icon(
-                              Icons.cancel,
-                              size: CFontSize.title3,
-                              color: CColor.black.shade300,
-                              semanticLabel: 'Clear',
-                            ),
-                          );
-                        },
-                      )
-                    : widget.suffix,
-            border: borderStyle,
-            focusedBorder: borderStyle,
-            disabledBorder: borderStyle,
-            enabledBorder: borderStyle,
-            errorBorder: errorBorderStyle,
-            focusedErrorBorder: errorBorderStyle,
-            fillColor: Colors.transparent,
-            contentPadding: EdgeInsets.symmetric(
-              vertical: widget.maxLines > 1 ? CSpace.medium : 0,
-              horizontal: CSpace.medium,
+              suffixIconConstraints: BoxConstraints(
+                minWidth: widget.height != null ? widget.height! - CSpace.medium - (height * 10) : CHeight.medium,
+                minHeight: widget.height != null ? widget.height! - CSpace.medium - (height * 10) : CHeight.medium,
+              ),
+              suffixIcon: widget.password
+                  ? InkWell(
+                      canRequestFocus: false,
+                      splashColor: CColor.primary.shade100,
+                      onTap: () => setState(() {
+                        visible = !visible;
+                      }),
+                      child: Icon(
+                        visible ? Icons.visibility_off : Icons.visibility,
+                        color: CColor.black.shade200,
+                        semanticLabel: 'View',
+                      ),
+                    )
+                  : widget.name == 'fullTextSearch'
+                      ? BlocBuilder<BlocC, BlocS>(
+                          buildWhen: (bf, at) =>
+                              (bf.value['fullTextSearch'] == '' && at.value['fullTextSearch'] != '') ||
+                              (bf.value['fullTextSearch'] != '' && at.value['fullTextSearch'] == ''),
+                          builder: (context, state) {
+                            if (state.value['fullTextSearch'] == null ||
+                                state.value['fullTextSearch'] == '' ||
+                                (state.value['fullTextSearch'].runtimeType != String &&
+                                    state.value['fullTextSearch']?['value'] == '') ||
+                                controller.text == '') {
+                              return const HSpacer(0);
+                            }
+                            return InkWell(
+                              splashColor: CColor.primary.shade100,
+                              onTap: () {
+                                controller.clear();
+                                if (widget.onChanged != null) {
+                                  widget.onChanged!('');
+                                }
+                              },
+                              child: Icon(
+                                Icons.cancel,
+                                size: CFontSize.title3,
+                                color: CColor.black.shade300,
+                                semanticLabel: 'Clear',
+                              ),
+                            );
+                          },
+                        )
+                      : widget.suffix,
+              border: borderStyle,
+              focusedBorder: borderStyle,
+              disabledBorder: borderStyle,
+              enabledBorder: borderStyle,
+              errorBorder: errorBorderStyle,
+              focusedErrorBorder: errorBorderStyle,
+              fillColor: Colors.transparent,
+              contentPadding: EdgeInsets.symmetric(
+                vertical: widget.maxLines > 1 ? CSpace.medium : 0,
+                horizontal: CSpace.medium + (height * 10),
+              ),
+              filled: true,
             ),
-            filled: true,
+            minLines: widget.maxLines,
+            maxLines: widget.maxLines,
+            inputFormatters: inputFormatters ? [ThousandFormatter()] : null,
           ),
-          minLines: widget.maxLines,
-          maxLines: widget.maxLines,
-          inputFormatters: inputFormatters ? [ThousandFormatter()] : null,
         ),
         if (widget.subtitle != null)
-          Text(widget.subtitle!,
-              style: TextStyle(
-                  fontSize: CFontSize.footnote, color: CColor.black.shade400)),
+          Text(widget.subtitle!, style: TextStyle(fontSize: CFontSize.footnote, color: CColor.black.shade400)),
         SizedBox(height: widget.space ? CSpace.small : 0),
       ],
     );
@@ -255,8 +252,7 @@ class ThousandFormatter extends TextInputFormatter {
   static const decimalSeparator = '.';
 
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     }
@@ -264,14 +260,12 @@ class ThousandFormatter extends TextInputFormatter {
     String oldValueText = oldValue.text.replaceAll(separator, '');
     String newValueText = newValue.text.replaceAll(separator, '');
 
-    if (oldValue.text.endsWith(separator) &&
-        oldValue.text.length == newValue.text.length + 1) {
+    if (oldValue.text.endsWith(separator) && oldValue.text.length == newValue.text.length + 1) {
       newValueText = newValueText.substring(0, newValueText.length - 1);
     }
 
     if (oldValueText != newValueText) {
-      int selectionIndex =
-          newValue.text.length - newValue.selection.extentOffset;
+      int selectionIndex = newValue.text.length - newValue.selection.extentOffset;
       final chars = newValueText.split('');
 
       String newString = '';

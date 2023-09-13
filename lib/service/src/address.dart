@@ -12,22 +12,19 @@ class SAddress {
 
   SAddress(this.endpoint, this.headers, this.checkAuth);
 
-  Future<MApi?> getTinh() async => checkAuth(
-      result: await http.get(Uri.parse('$endpoint/tinh'), headers: headers));
+  Future<MApi?> getTinh() async => checkAuth(result: await http.get(Uri.parse('$endpoint/tinh'), headers: headers));
 
-  Future<MApi?> getHuyen({Map<String, dynamic> filter = const {}}) async =>
-      checkAuth(
-          result: await http.get(
-              Uri.parse('$endpoint/huyen').replace(queryParameters: {
-                'filter': jsonEncode(filter),
-              }),
-              headers: headers));
+  Future<MApi?> getHuyen({Map<String, dynamic> filter = const {}}) async => checkAuth(
+      result: await http.get(
+          Uri.parse('$endpoint/huyen').replace(queryParameters: {
+            'filter': jsonEncode(filter),
+          }),
+          headers: headers));
 
-  Future<MApi?> getPhuong({Map<String, dynamic> filter = const {}}) async =>
-      checkAuth(
-          result: await http.get(
-              Uri.parse('$endpoint/phuong').replace(queryParameters: {
-                'filter': jsonEncode(filter),
-              }),
-              headers: headers));
+  Future<MApi?> getPhuong({Map<String, dynamic> filter = const {}}) async => checkAuth(
+      result: await http.get(
+          Uri.parse('$endpoint/phuong').replace(queryParameters: {
+            'filter': jsonEncode(filter),
+          }),
+          headers: headers));
 }

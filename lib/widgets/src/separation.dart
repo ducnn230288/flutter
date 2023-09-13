@@ -7,8 +7,7 @@ class WSeparation extends StatelessWidget {
   final String title;
   final EdgeInsets? padding;
 
-  const WSeparation({Key? key, required this.title, this.padding})
-      : super(key: key);
+  const WSeparation({Key? key, required this.title, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +15,7 @@ class WSeparation extends StatelessWidget {
       padding: padding ?? EdgeInsets.zero,
       child: Row(
         children: [
-          Text(title,
-              style: TextStyle(
-                  fontWeight: FontWeight.w400, color: CColor.black.shade300)),
+          Text(title, style: TextStyle(fontWeight: FontWeight.w400, color: CColor.black.shade300)),
           const HSpacer(10),
           Expanded(child: line())
         ],

@@ -30,6 +30,7 @@ class WSelect extends StatefulWidget {
   final List? items;
   final Widget? suffix;
   final Function(dynamic)? onTap;
+  final double? height;
 
   const WSelect({
     Key? key,
@@ -55,6 +56,7 @@ class WSelect extends StatefulWidget {
     this.hintText,
     this.suffix,
     this.onTap,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -69,6 +71,7 @@ class _WSelectState extends State<WSelect> {
   Widget build(BuildContext context) {
     final value = context.read<BlocC>().state.value;
     return WInput(
+      height: widget.height,
       controller: widget.controller,
       label: widget.label,
       hintText: widget.hintText ?? 'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),

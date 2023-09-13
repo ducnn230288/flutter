@@ -26,8 +26,7 @@ class _EndDrawerState extends State<_EndDrawer> {
                 final blocC = context.read<BlocC>();
                 while (count < 1) {
                   blocC.saved(name: 'isLockedOut', value: value['isLockedOut']);
-                  blocC.saved(
-                      name: 'isEmailVerified', value: value['isEmailVerified']);
+                  blocC.saved(name: 'isEmailVerified', value: value['isEmailVerified']);
                   count++;
                 }
                 return ListView(
@@ -61,18 +60,13 @@ class _EndDrawerState extends State<_EndDrawer> {
                     Expanded(
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: const MaterialStatePropertyAll(
-                              Colors.transparent),
-                          shape: MaterialStatePropertyAll(
-                              RoundedRectangleBorder(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(0)),
-                                  side: BorderSide(
-                                      width: 1.0, color: CColor.primary))),
+                          backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
+                          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.all(Radius.circular(0)),
+                              side: BorderSide(width: 1.0, color: CColor.primary))),
                         ),
                         onPressed: () {
-                          Map<String, dynamic> newValue =
-                              Map.from(widget.cubit.state.value);
+                          Map<String, dynamic> newValue = Map.from(widget.cubit.state.value);
                           newValue.remove('fromDate');
                           newValue.remove('toDate');
                           newValue.remove('isLockedOut');
@@ -82,24 +76,19 @@ class _EndDrawerState extends State<_EndDrawer> {
                           }
                           getData(newValue);
                         },
-                        child: Text('Thiết lập lại',
-                            style: TextStyle(color: CColor.primary)),
+                        child: Text('Thiết lập lại', style: TextStyle(color: CColor.primary)),
                       ),
                     ),
                     const HSpacer(CSpace.mediumSmall),
                     Expanded(
                       child: ElevatedButton(
                         style: const ButtonStyle(
-                          shape:
-                              MaterialStatePropertyAll(RoundedRectangleBorder(
+                          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                           )),
                         ),
                         onPressed: () {
-                          widget.cubit.setValue(value: {
-                            ...widget.cubit.state.value,
-                            ...blocC.state.value
-                          });
+                          widget.cubit.setValue(value: {...widget.cubit.state.value, ...blocC.state.value});
                           getData(null);
                         },
                         child: const Text('Áp dụng'),
@@ -116,21 +105,18 @@ class _EndDrawerState extends State<_EndDrawer> {
   }
 
   final bool isCustomerAccount =
-      GoRouter.of(rootNavigatorKey.currentState!.context)
-          .location
-          .contains(CRoute.customerUser);
+      GoRouter.of(rootNavigatorKey.currentState!.context).location.contains(CRoute.customerUser);
 
   int count = 0;
 
   void getData(Map<String, dynamic>? newValue) {
     widget.cubit.submit(
         getData: true,
-        api: (filter, page, size, sort) =>
-            RepositoryProvider.of<Api>(context).user.get(
-                  filter: newValue ?? filter,
-                  page: page,
-                  size: size,
-                ),
+        api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).user.get(
+              filter: newValue ?? filter,
+              page: page,
+              size: size,
+            ),
         format: MUser.fromJson,
         submit: (_) {
           context.pop();
@@ -158,16 +144,8 @@ class _EndDrawerState extends State<_EndDrawer> {
           spacing: CSpace.medium,
           runSpacing: CSpace.medium,
           children: [
-            button(
-                title: 'Đã xác thực',
-                key: 'isEmailVerified',
-                value: true,
-                width: 120),
-            button(
-                title: 'Chưa xác thực',
-                key: 'isEmailVerified',
-                value: false,
-                width: 130),
+            button(title: 'Đã xác thực', key: 'isEmailVerified', value: true, width: 120),
+            button(title: 'Chưa xác thực', key: 'isEmailVerified', value: false, width: 130),
           ],
         )
       ],
@@ -185,8 +163,7 @@ class _EndDrawerState extends State<_EndDrawer> {
           runSpacing: CSpace.medium,
           children: [
             button(title: 'Khóa', key: 'isLockedOut', value: true, width: 70),
-            button(
-                title: 'Mở khóa', key: 'isLockedOut', value: false, width: 90),
+            button(title: 'Mở khóa', key: 'isLockedOut', value: false, width: 90),
           ],
         )
       ],
@@ -210,8 +187,7 @@ class _EndDrawerState extends State<_EndDrawer> {
               backgroundColor: MaterialStatePropertyAll(CColor.black.shade50),
               shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  side: BorderSide(
-                      width: selected ? 1 : 0.00001, color: CColor.primary))),
+                  side: BorderSide(width: selected ? 1 : 0.00001, color: CColor.primary))),
             ),
             onPressed: () {
               final cubit = context.read<BlocC>();

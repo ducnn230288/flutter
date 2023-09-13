@@ -97,14 +97,11 @@ class CustomCheckboxState extends State<CustomCheckbox> {
           height: widget.size,
           width: widget.size,
           duration: const Duration(milliseconds: 1000),
-          margin: EdgeInsets.fromLTRB(widget.leftMargin, widget.topMargin,
-              widget.rightMargin, widget.bottomMargin),
+          margin: EdgeInsets.fromLTRB(widget.leftMargin, widget.topMargin, widget.rightMargin, widget.bottomMargin),
           curve: Curves.fastLinearToSlowEaseIn,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(widget.strokeRadius),
-              color: _isChecked
-                  ? widget.backgroundColor ?? CColor.primary
-                  : Colors.transparent,
+              color: _isChecked ? widget.backgroundColor ?? CColor.primary : Colors.transparent,
               border: Border.all(
                   width: widget.stroke,
                   color: _isChecked
