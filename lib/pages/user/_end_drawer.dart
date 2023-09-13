@@ -184,7 +184,7 @@ class _EndDrawerState extends State<_EndDrawer> {
           width: width,
           child: ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(CColor.black.shade50),
+              backgroundColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
               shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
                   side: BorderSide(width: selected ? 1 : 0.00001, color: CColor.primary))),

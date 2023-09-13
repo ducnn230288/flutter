@@ -91,7 +91,7 @@ class DataDetails extends StatelessWidget {
         );
       default:
         return Container(
-          color: CColor.primary.shade50.withOpacity(0.2),
+          color: CColor.black.shade100.withOpacity(0.1),
           child: Column(
             children: [
               Column(

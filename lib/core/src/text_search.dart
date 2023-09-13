@@ -39,7 +39,7 @@ class _TextSearchState<T> extends State<TextSearch> {
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
             focusedBorder: borderStyle,
             enabledBorder: borderStyle,
-            fillColor: CColor.black.shade50,
+            fillColor: CColor.black.shade100.withOpacity(0.2),
             filled: true,
             contentPadding: EdgeInsets.zero,
             suffixIcon: BlocBuilder<BlocC<T>, BlocS<T>>(

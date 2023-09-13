@@ -84,7 +84,7 @@ class _WidgetFilterState<T> extends State<WidgetFilter> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selected ? CColor.primary.shade100 : CColor.black.shade50,
+                    color: selected ? CColor.primary.shade100 : CColor.black.shade100.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: CSpace.mediumSmall),

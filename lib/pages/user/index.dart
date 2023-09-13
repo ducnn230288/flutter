@@ -307,7 +307,8 @@ class _UserState extends State<User> {
         Container(
           height: size,
           padding: const EdgeInsets.only(left: 6, right: 20),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(size / 2), color: CColor.black.shade50),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(size / 2), color: CColor.black.shade100.withOpacity(0.2)),
           // alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

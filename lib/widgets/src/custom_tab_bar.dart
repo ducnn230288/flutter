@@ -97,7 +97,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
             width: _width,
             margin: EdgeInsets.only(left: _index * _width),
             decoration: BoxDecoration(
-                color: widget.selectBackgroundColor ?? CColor.black.shade50,
+                color: widget.selectBackgroundColor ?? CColor.black.shade100.withOpacity(0.2),
                 borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(_index == 0 ? 0.9 * widget.radius : 0),
                   right: Radius.circular(_index == widget.title.length - 1 ? 0.9 * widget.radius : 0),

@@ -35,7 +35,7 @@ class CStyle {
       textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w400)));
 
   static ButtonStyle buttonWhite = button.copyWith(
-    shadowColor: MaterialStatePropertyAll(CColor.black.shade50),
+    shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
     elevation: const MaterialStatePropertyAll(0),
     backgroundColor: const MaterialStatePropertyAll(Colors.white),
     foregroundColor: MaterialStatePropertyAll(CColor.black),
@@ -44,7 +44,7 @@ class CStyle {
   );
 
   static ButtonStyle buttonOutline = button.copyWith(
-    shadowColor: MaterialStatePropertyAll(CColor.black.shade50),
+    shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
     elevation: const MaterialStatePropertyAll(0),
     backgroundColor: const MaterialStatePropertyAll(Colors.white),
     foregroundColor: MaterialStatePropertyAll(CColor.primary),
@@ -57,7 +57,7 @@ class CStyle {
   );
 
   static ButtonStyle buttonHint = button.copyWith(
-      backgroundColor: MaterialStatePropertyAll(CColor.black.shade50),
+      backgroundColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
       elevation: const MaterialStatePropertyAll(0),
       shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(radius)),
@@ -65,7 +65,7 @@ class CStyle {
 
   static ButtonStyle buttonDanger = button.copyWith(
     elevation: const MaterialStatePropertyAll(0),
-    shadowColor: MaterialStatePropertyAll(CColor.black.shade50),
+    shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
     backgroundColor: MaterialStatePropertyAll(CColor.danger),
     foregroundColor: const MaterialStatePropertyAll(Colors.white),
     shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
@@ -74,7 +74,7 @@ class CStyle {
 
   static ButtonStyle buttonStyle({ButtonStyle? buttonStyle}) => button
       .copyWith(
-        shadowColor: buttonStyle?.shadowColor ?? MaterialStatePropertyAll(CColor.black.shade50),
+        shadowColor: buttonStyle?.shadowColor ?? MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
         backgroundColor: buttonStyle?.backgroundColor ?? MaterialStatePropertyAll(CColor.danger),
         foregroundColor: buttonStyle?.foregroundColor ?? const MaterialStatePropertyAll(Colors.white),
         shape: buttonStyle?.shape ??
