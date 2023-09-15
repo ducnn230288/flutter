@@ -61,7 +61,7 @@
     "form": {
       "input": {
         "rulesRequired": "Enter {}",
-        "Please check": "Please check",
+        "Please choose file": "Please choose file",
         "Enter": "Enter {}",
         "Choose": "Choose {}"
       },

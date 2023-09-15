@@ -110,7 +110,7 @@ GoRoute homeRoute() => GoRoute(
               GoRoute(
                 name: CRoute.createInternalUser,
                 path: CRoute.createInternalUser,
-                builder: (BuildContext context, GoRouterState state) => blocForm(
+                builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(
                   child: CreateUser(
                     data: state.extra as MUser?,
                     formType: FormType.values.firstWhere(
@@ -123,7 +123,7 @@ GoRoute homeRoute() => GoRoute(
                 name: CRoute.internalUserDetails,
                 path: CRoute.internalUserDetails,
                 builder: (BuildContext context, GoRouterState state) =>
-                    blocForm(child: UserDetails(id: state.queryParams['id']!)),
+                    blocForm<MUser>(child: UserDetails(id: state.queryParams['id']!)),
               ),
             ],
           ),
@@ -135,7 +135,7 @@ GoRoute homeRoute() => GoRoute(
                 GoRoute(
                   name: CRoute.createCustomerUser,
                   path: CRoute.createCustomerUser,
-                  builder: (BuildContext context, GoRouterState state) => blocForm(
+                  builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(
                     child: CreateUser(
                       data: state.extra as MUser?,
                       formType: FormType.values.firstWhere(
@@ -148,7 +148,7 @@ GoRoute homeRoute() => GoRoute(
                   name: CRoute.customerUserDetails,
                   path: CRoute.customerUserDetails,
                   builder: (BuildContext context, GoRouterState state) =>
-                      blocForm(child: UserDetails(id: state.queryParams['id']!)),
+                      blocForm<MUser>(child: UserDetails(id: state.queryParams['id']!)),
                 ),
               ]),
         ]);

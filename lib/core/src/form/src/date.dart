@@ -29,6 +29,7 @@ class WDate extends StatefulWidget {
   final SelectDateType selectDateType;
   final DateRangePickerSelectionMode mode;
   final double? height;
+  final double? width;
 
   const WDate({
     Key? key,
@@ -49,6 +50,7 @@ class WDate extends StatefulWidget {
     this.hintText,
     this.mode = DateRangePickerSelectionMode.single,
     this.height,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class _WDateState extends State<WDate> {
 
     return WInput(
       height: widget.height,
+      width: widget.width,
       controller: widget.controller,
       hintText: widget.hintText ?? 'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),
       rulesRequired: 'widgets.form.date.rulesRequired'.tr(),

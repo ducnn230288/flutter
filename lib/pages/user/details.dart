@@ -22,7 +22,7 @@ class _UserDetailsState extends State<UserDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'Chi tiết tài khoản'),
-      body: BlocBuilder<BlocC, BlocS>(
+      body: BlocBuilder<BlocC<MUser>, BlocS<MUser>>(
         builder: (context, state) {
           if (state.status == AppStatus.success) {
             final MUser data = state.value['account'];
@@ -89,7 +89,7 @@ class _UserDetailsState extends State<UserDetails> {
                       text: 'Bạn có chắc chắn muốn ${data.isLockedOut ? 'MỞ KHÓA' : 'KHÓA'} tài khoản này không?',
                       btnOkOnPress: () {
                         context.pop();
-                        context.read<BlocC>().submit(
+                        context.read<BlocC<MUser>>().submit(
                             onlyApi: true,
                             submit: (_) => context.pop(),
                             api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context)
@@ -99,8 +99,9 @@ class _UserDetailsState extends State<UserDetails> {
                 ),
               ),
             ];
-            return WList<dynamic>(
-                items: formItems, item: (data, index) => DataDetails(data: data), status: AppStatus.success);
+            return ListView(children: [
+              for (var i = 0; i < formItems.length; i++) DataDetails(data: formItems[i]),
+            ]);
           }
           return Center(child: WLoading());
         },
@@ -120,7 +121,7 @@ class _UserDetailsState extends State<UserDetails> {
   Future<void> getData() async {
     var result = await RepositoryProvider.of<Api>(context).user.details(id: widget.id);
     if (result != null) {
-      context.read<BlocC>().setValue(value: {'account': MUser.fromJson(result.data)}, status: AppStatus.success);
+      context.read<BlocC<MUser>>().setValue(value: {'account': MUser.fromJson(result.data)}, status: AppStatus.success);
     }
   }
 

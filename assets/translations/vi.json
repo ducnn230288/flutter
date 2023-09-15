@@ -62,6 +62,7 @@
       "input": {
         "rulesRequired": "Vui lòng nhập {}",
         "Please check": "Vui lòng chọn",
+        "Please choose file": "Vui lòng chọn tập tin",
         "Enter": "Nhập {}",
         "Choose": "Chọn {}"
       },

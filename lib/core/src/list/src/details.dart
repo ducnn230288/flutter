@@ -32,7 +32,7 @@ class DataDetails extends StatelessWidget {
       case DataType.separation:
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: CSpace.large, vertical: CSpace.medium),
-          color: CColor.black.shade100.withOpacity(0.4),
+          color: CColor.black.shade100.withOpacity(0.2),
           alignment: Alignment.topLeft,
           child: Text(data.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.body)),
         );
@@ -91,7 +91,7 @@ class DataDetails extends StatelessWidget {
         );
       default:
         return Container(
-          color: CColor.black.shade100.withOpacity(0.1),
+          color: Colors.white,
           child: Column(
             children: [
               Column(

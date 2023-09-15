@@ -16,7 +16,7 @@ class CreateUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<BlocC>();
+    final cubit = context.read<BlocC<MUser>>();
     final bool isInternalUser = GoRouter.of(context).location.contains(CRoute.internalUser);
     List<MFormItem> listFormItem = [
       MFormItem(label: 'Thông tin đăng ký', type: EFormItemType.title),
@@ -82,7 +82,7 @@ class CreateUser extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(CSpace.large),
         children: [
-          WForm(list: listFormItem),
+          WForm<MUser>(list: listFormItem),
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -90,7 +90,7 @@ class CreateUser extends StatelessWidget {
           padding: const EdgeInsets.all(CSpace.large),
           child: ElevatedButton(
               onPressed: () {
-                final value = context.read<BlocC>().state.value;
+                final value = context.read<BlocC<MUser>>().state.value;
                 switch (formType) {
                   case FormType.create:
                     cubit.submit(

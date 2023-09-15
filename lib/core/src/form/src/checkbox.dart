@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/constants/index.dart';
 import '/cubit/bloc.dart';
 
-class WCheckbox extends FormField<bool> {
+class WCheckbox<T> extends FormField<bool> {
   WCheckbox({
     super.key,
     required FormFieldSetter<bool> onChanged,
@@ -18,6 +18,7 @@ class WCheckbox extends FormField<bool> {
               if (required && value != true) {
                 return 'widgets.form.input.Please check'.tr();
               }
+              return null;
             },
             initialValue: false,
             builder: (FormFieldState<bool> state) {
@@ -26,9 +27,9 @@ class WCheckbox extends FormField<bool> {
                 children: [
                   SizedBox(
                     height: 35,
-                    child: BlocBuilder<BlocC, BlocS>(
+                    child: BlocBuilder<BlocC<T>, BlocS<T>>(
                       builder: (context, stateC) {
-                        late final cubit = context.read<BlocC>();
+                        late final cubit = context.read<BlocC<T>>();
                         void setValue(bool? _) {
                           final value = stateC.value[name] == null || stateC.value[name] == false;
                           state.didChange(value);

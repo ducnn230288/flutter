@@ -37,7 +37,7 @@ class CStyle {
   static ButtonStyle buttonWhite = button.copyWith(
     shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
     elevation: const MaterialStatePropertyAll(0),
-    backgroundColor: const MaterialStatePropertyAll(Colors.white),
+    backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
     foregroundColor: MaterialStatePropertyAll(CColor.black),
     shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: Colors.transparent))),
@@ -46,7 +46,7 @@ class CStyle {
   static ButtonStyle buttonOutline = button.copyWith(
     shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
     elevation: const MaterialStatePropertyAll(0),
-    backgroundColor: const MaterialStatePropertyAll(Colors.white),
+    backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
     foregroundColor: MaterialStatePropertyAll(CColor.primary),
     shape: MaterialStatePropertyAll(RoundedRectangleBorder(
         borderRadius: const BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: CColor.primary))),

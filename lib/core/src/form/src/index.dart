@@ -9,7 +9,7 @@ import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
 
-class WForm extends StatefulWidget {
+class WForm<T> extends StatefulWidget {
   final List<MFormItem> list;
   final Widget Function(Map<String, Widget> items)? builder;
   final void Function(Map<String, TextEditingController> listController)? onInit;
@@ -24,12 +24,12 @@ class WForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<WForm> createState() => _WFormState();
+  State<WForm> createState() => _WFormState<T>();
 }
 
-class _WFormState extends State<WForm> {
+class _WFormState<T> extends State<WForm> {
   final Map<String, TextEditingController> listController = {};
-  late final cubit = context.read<BlocC>();
+  late final cubit = context.read<BlocC<T>>();
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _WFormState extends State<WForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BlocC, BlocS>(builder: (context, state) {
+    return BlocBuilder<BlocC<T>, BlocS<T>>(builder: (context, state) {
       Map<String, Widget> items = {};
       for (int index = 0; index < widget.list.length; index++) {
         final MFormItem item = state.list[index];
@@ -136,8 +136,9 @@ class _WFormState extends State<WForm> {
             );
             break;
           case EFormItemType.upload:
-            child = WUpload(
+            child = FUpload(
               required: item.required,
+              name: item.name,
               uploadType: item.uploadType,
               list: item.value != null && item.value != '' ? item.value : [],
               label: item.label,
@@ -155,7 +156,7 @@ class _WFormState extends State<WForm> {
             break;
           case EFormItemType.select:
             child = item.show
-                ? WSelect(
+                ? WSelect<T>(
                     controller: listController[item.name] ?? TextEditingController(),
                     label: item.label,
                     name: item.name,
@@ -303,7 +304,7 @@ class _WFormState extends State<WForm> {
               );
             } else {
               child = item.show
-                  ? WInput(
+                  ? WInput<T>(
                       controller: listController[item.name] ?? TextEditingController(),
                       label: item.label,
                       hintText: item.hintText,

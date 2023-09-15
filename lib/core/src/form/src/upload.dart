@@ -14,6 +14,64 @@ import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
 
+class FUpload<T> extends FormField<List> {
+  FUpload({
+    super.key,
+    required FormFieldSetter<List> onChanged,
+    required String name,
+    required bool required,
+    UploadType uploadType = UploadType.multiple,
+    List? list,
+    String label = '',
+    bool space = true,
+    int maxQuantity = 1,
+    int minQuantity = 1,
+    String docType = 'post',
+    String? prefix,
+    int? maxCount,
+  }) : super(
+            onSaved: onChanged,
+            validator: (value) {
+              if (required && (value == null || value.isEmpty)) {
+                return 'widgets.form.input.Please choose file'.tr();
+              }
+              return null;
+            },
+            initialValue: [],
+            builder: (FormFieldState<List> state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  WUpload(
+                      uploadType: uploadType,
+                      list: list,
+                      label: label,
+                      space: space,
+                      maxQuantity: maxQuantity,
+                      minQuantity: minQuantity,
+                      docType: docType,
+                      prefix: prefix,
+                      maxCount: maxCount,
+                      onChanged: (dynamic value) {
+                        state.didChange(value);
+                        state.validate();
+                        onChanged(value);
+                        print(value);
+                      }),
+                  state.hasError
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: CSpace.medium),
+                          child: Text(
+                            state.errorText!,
+                            style: TextStyle(fontSize: CFontSize.caption2, color: CColor.danger),
+                          ),
+                        )
+                      : const SizedBox()
+                ],
+              );
+            });
+}
+
 class WUpload extends StatefulWidget {
   final String label;
   final String docType;

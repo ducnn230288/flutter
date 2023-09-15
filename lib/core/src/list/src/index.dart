@@ -249,7 +249,7 @@ class _WListState<T> extends State<WList<T>> {
                         )
                       : Padding(
                           padding: const EdgeInsets.only(top: CSpace.large),
-                          child: BlocSelector<BlocC, BlocS, int>(
+                          child: BlocSelector<BlocC<T>, BlocS<T>, int>(
                             selector: (state) => state.data.content.length,
                             builder: (context, state) {
                               return const Text('Danh sách trống');

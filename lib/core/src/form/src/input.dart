@@ -9,7 +9,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 
-class WInput extends StatefulWidget {
+class WInput<T> extends StatefulWidget {
   final String label;
   final String name;
   final String value;
@@ -32,6 +32,7 @@ class WInput extends StatefulWidget {
   final FormatNumberType formatNumberType;
   final String? rulesRequired;
   final double? height;
+  final double? width;
 
   const WInput({
     Key? key,
@@ -57,13 +58,14 @@ class WInput extends StatefulWidget {
     this.hintText,
     this.rulesRequired,
     this.height,
+    this.width,
   }) : super(key: key);
 
   @override
-  State<WInput> createState() => _WInputState();
+  State<WInput> createState() => _WInputState<T>();
 }
 
-class _WInputState extends State<WInput> {
+class _WInputState<T> extends State<WInput> {
   late final TextEditingController controller;
   late final OutlineInputBorder borderStyle = OutlineInputBorder(
     borderRadius: const BorderRadius.all(Radius.circular(CRadius.small)),
@@ -120,6 +122,7 @@ class _WInputState extends State<WInput> {
           ),
         SizedBox(
           height: widget.height,
+          width: widget.width,
           child: TextFormField(
             focusNode: focusNode,
             controller: controller,
@@ -191,7 +194,7 @@ class _WInputState extends State<WInput> {
                       ),
                     )
                   : widget.name == 'fullTextSearch'
-                      ? BlocBuilder<BlocC, BlocS>(
+                      ? BlocBuilder<BlocC<T>, BlocS<T>>(
                           buildWhen: (bf, at) =>
                               (bf.value['fullTextSearch'] == '' && at.value['fullTextSearch'] != '') ||
                               (bf.value['fullTextSearch'] != '' && at.value['fullTextSearch'] == ''),

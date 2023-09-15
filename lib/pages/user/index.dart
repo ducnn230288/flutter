@@ -31,14 +31,24 @@ class _UserState extends State<User> {
         title: 'Tài khoản ${isInternalUser ? 'nội bộ' : 'người dùng'}',
         actions: [
           Builder(builder: (context) {
-            return GestureDetector(
-              child: Container(
-                height: 40,
-                width: 40,
-                color: Colors.transparent,
-                child: const Icon(Icons.filter_alt_outlined, color: Colors.white),
-              ),
-              onTap: () => Scaffold.of(context).openEndDrawer(),
+            return BlocBuilder<BlocC<MUser>, BlocS<MUser>>(
+              builder: (context, state) {
+                return GestureDetector(
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    color: Colors.transparent,
+                    child: Icon(
+                        (state.value['dateRange'] != null ||
+                                state.value['isLockedOut'] != null ||
+                                state.value['isEmailVerified'] != null)
+                            ? Icons.filter_alt
+                            : Icons.filter_alt_outlined,
+                        color: Colors.white),
+                  ),
+                  onTap: () => Scaffold.of(context).openEndDrawer(),
+                );
+              },
             );
           }),
         ],
@@ -285,7 +295,7 @@ class _UserState extends State<User> {
         ),
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
-      endDrawer: _EndDrawer(cubit: context.read<BlocC<MUser>>()),
+      endDrawer: const _EndDrawer<MUser>(),
     );
   }
 

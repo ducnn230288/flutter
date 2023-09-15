@@ -7,7 +7,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/utils/index.dart';
 
-class WSelect extends StatefulWidget {
+class WSelect<T> extends StatefulWidget {
   final String name;
   final String label;
   final String? hintText;
@@ -31,6 +31,7 @@ class WSelect extends StatefulWidget {
   final Widget? suffix;
   final Function(dynamic)? onTap;
   final double? height;
+  final double? width;
 
   const WSelect({
     Key? key,
@@ -57,21 +58,23 @@ class WSelect extends StatefulWidget {
     this.suffix,
     this.onTap,
     this.height,
+    this.width,
   }) : super(key: key);
 
   @override
-  State<WSelect> createState() => _WSelectState();
+  State<WSelect> createState() => _WSelectState<T>();
 }
 
-class _WSelectState extends State<WSelect> {
+class _WSelectState<T> extends State<WSelect> {
   FocusNode focusNode = FocusNode();
   int count = 0;
 
   @override
   Widget build(BuildContext context) {
-    final value = context.read<BlocC>().state.value;
+    final value = context.read<BlocC<T>>().state.value;
     return WInput(
       height: widget.height,
+      width: widget.width,
       controller: widget.controller,
       label: widget.label,
       hintText: widget.hintText ?? 'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),

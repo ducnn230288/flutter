@@ -1,18 +1,16 @@
 part of 'index.dart';
 
-class _EndDrawer extends StatefulWidget {
-  final BlocC cubit;
-
-  const _EndDrawer({Key? key, required this.cubit}) : super(key: key);
+class _EndDrawer<T> extends StatefulWidget {
+  const _EndDrawer({Key? key}) : super(key: key);
 
   @override
-  State<_EndDrawer> createState() => _EndDrawerState();
+  State<_EndDrawer> createState() => _EndDrawerState<T>();
 }
 
-class _EndDrawerState extends State<_EndDrawer> {
+class _EndDrawerState<T> extends State<_EndDrawer> {
   @override
   Widget build(BuildContext context) {
-    final value = widget.cubit.state.value;
+    final value = context.read<BlocC<T>>().state.value;
     return Drawer(
       width: CSpace.width * 0.85,
       backgroundColor: Colors.white,
@@ -34,15 +32,20 @@ class _EndDrawerState extends State<_EndDrawer> {
                   children: [
                     Text('Chọn ngày tham gia', style: CStyle.title),
                     const VSpacer(CSpace.large),
-                    WForm(
-                      list: [
-                        MFormItem(
-                          name: 'dateRange',
-                          value: value['dateRange'] ?? '',
-                          type: EFormItemType.date,
-                          mode: DateRangePickerSelectionMode.range,
-                        )
-                      ],
+                    WDate(
+                      controller: TextEditingController(),
+                      value: (value['dateRange'] ?? ''),
+                      space: false,
+                      mode: DateRangePickerSelectionMode.range,
+                      onChanged: (value) {
+                        dynamic val = value;
+                        if (value.contains('|')) {
+                          val = value.split('|');
+                        }
+                        blocC.addValue(value: value, name: 'dateRange');
+                        blocC.addValue(value: val[0], name: 'fromDate');
+                        blocC.addValue(value: val[1], name: 'toDate');
+                      },
                     ),
                     status(),
                     const VSpacer(CSpace.superLarge),
@@ -66,7 +69,7 @@ class _EndDrawerState extends State<_EndDrawer> {
                               side: BorderSide(width: 1.0, color: CColor.primary))),
                         ),
                         onPressed: () {
-                          Map<String, dynamic> newValue = Map.from(widget.cubit.state.value);
+                          Map<String, dynamic> newValue = Map.from(context.read<BlocC<T>>().state.value);
                           newValue.remove('fromDate');
                           newValue.remove('toDate');
                           newValue.remove('isLockedOut');
@@ -88,7 +91,9 @@ class _EndDrawerState extends State<_EndDrawer> {
                           )),
                         ),
                         onPressed: () {
-                          widget.cubit.setValue(value: {...widget.cubit.state.value, ...blocC.state.value});
+                          context
+                              .read<BlocC<T>>()
+                              .setValue(value: {...context.read<BlocC<T>>().state.value, ...blocC.state.value});
                           getData(null);
                         },
                         child: const Text('Áp dụng'),
@@ -110,7 +115,7 @@ class _EndDrawerState extends State<_EndDrawer> {
   int count = 0;
 
   void getData(Map<String, dynamic>? newValue) {
-    widget.cubit.submit(
+    context.read<BlocC<T>>().submit(
         getData: true,
         api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).user.get(
               filter: newValue ?? filter,
@@ -121,12 +126,12 @@ class _EndDrawerState extends State<_EndDrawer> {
         submit: (_) {
           context.pop();
           if (newValue != null) {
-            widget.cubit.removeKey(name: 'fromDate');
-            widget.cubit.removeKey(name: 'toDate');
-            widget.cubit.removeKey(name: 'isLockedOut');
-            widget.cubit.removeKey(name: 'dateRange');
+            context.read<BlocC<T>>().removeKey(name: 'fromDate');
+            context.read<BlocC<T>>().removeKey(name: 'toDate');
+            context.read<BlocC<T>>().removeKey(name: 'isLockedOut');
+            context.read<BlocC<T>>().removeKey(name: 'dateRange');
             if (isCustomerAccount) {
-              widget.cubit.removeKey(name: 'isEmailVerified');
+              context.read<BlocC<T>>().removeKey(name: 'isEmailVerified');
             }
           }
         });
