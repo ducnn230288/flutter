@@ -55,10 +55,8 @@ class _PopUpItem extends StatelessWidget {
               final user = RepositoryProvider.of<Api>(context).user;
               switch (item.code) {
                 case 'EDIT':
-                  context.goNamed(
-                    CRoute.createInternalUser,
-                    queryParams: {'formType': FormType.edit.name, 'data': jsonEncode(data)},
-                  );
+                  context.goNamed(CRoute.createInternalUser,
+                      queryParams: {'formType': FormType.edit.name}, extra: data);
                   break;
                 case 'DELETE':
                   UDialog().showConfirm(
@@ -81,10 +79,8 @@ class _PopUpItem extends StatelessWidget {
                   );
                   break;
                 case 'PASSWORD':
-                  context.goNamed(
-                    CRoute.createInternalUser,
-                    queryParams: {'formType': FormType.password.name, 'data': jsonEncode(data)},
-                  );
+                  context.goNamed(CRoute.createInternalUser,
+                      queryParams: {'formType': FormType.password.name}, extra: data);
               }
             },
             itemBuilder: (_) => popupMenu(),

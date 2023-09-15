@@ -27,7 +27,7 @@ class _MyAccountPassState extends State<MyAccountPass> {
         password: true,
       ),
       MFormItem(
-        name: 'password1',
+        name: 'password',
         label: 'Mật khẩu mới',
         icon: 'assets/form/password.svg',
         password: true,
@@ -60,11 +60,12 @@ class _MyAccountPassState extends State<MyAccountPass> {
                   ElevatedButton(
                     onPressed: () => context.read<BlocC>().submit(
                           api: (value, _, __, ___) {
-                            Map<String, dynamic> newValue = {};
-                            value.forEach((key, value) {
-                              newValue[key == 'password1' ? 'password' : key] = value;
-                            });
-                            return RepositoryProvider.of<Api>(context).auth.updatePassword(body: newValue);
+                            if (value['password'] != value['confirmPassword']) {
+                              UDialog().stopLoading();
+                              UDialog().showError(text: 'Nhập lại mật khẩu sai');
+                              return null;
+                            }
+                            return RepositoryProvider.of<Api>(context).auth.updatePassword(body: value);
                           },
                           submit: (_) => lstControllers.forEach((key, value) {
                             value.value = const TextEditingValue(text: '');
