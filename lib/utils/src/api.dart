@@ -34,9 +34,6 @@ class Api {
       rootNavigatorKey.currentState!.context.read<AuthC>().logout();
       return null;
     }
-    if (result.statusCode == 404) {
-      return MApi(code: 404);
-    }
     MApi response = MApi.fromJson(jsonDecode(result.body));
     if (!response.isSuccess) {
       Timer(const Duration(milliseconds: 50), () {

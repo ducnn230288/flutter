@@ -110,7 +110,7 @@ class CreateUser extends StatelessWidget {
                         newValue.remove('confirmPassword');
                         return RepositoryProvider.of<Api>(context).user.register(body: newValue);
                       },
-                      submit: (data) => context.pop(),
+                      submit: (data) => context.pop(true),
                     );
                     break;
                   case FormType.edit:

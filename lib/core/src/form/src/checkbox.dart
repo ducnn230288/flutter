@@ -9,6 +9,7 @@ class WCheckbox<T> extends FormField<bool> {
   WCheckbox({
     super.key,
     required FormFieldSetter<bool> onChanged,
+    required bool value,
     required String name,
     required Widget child,
     required bool required,
@@ -20,7 +21,7 @@ class WCheckbox<T> extends FormField<bool> {
               }
               return null;
             },
-            initialValue: false,
+            initialValue: value,
             builder: (FormFieldState<bool> state) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

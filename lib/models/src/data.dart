@@ -27,7 +27,7 @@ class MData<T> {
       if (data != null && data is List) {
         _content = [];
         for (var v in data) {
-          _content?.add(format(v));
+          _content?.add(v.runtimeType == T ? v : format(v));
         }
       } else {
         _data = format(data);

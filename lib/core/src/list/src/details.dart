@@ -31,19 +31,24 @@ class DataDetails extends StatelessWidget {
     switch (data.dataType) {
       case DataType.separation:
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: CSpace.large, vertical: CSpace.medium),
+          padding: const EdgeInsets.symmetric(
+              horizontal: CSpace.large, vertical: CSpace.medium),
           color: CColor.black.shade100.withOpacity(0.2),
           alignment: Alignment.topLeft,
-          child: Text(data.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.body)),
+          child: Text(data.label,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w600, fontSize: CFontSize.body)),
         );
       case DataType.image:
         if (data.value.runtimeType != List<MUpload>) {
-          AppConsole.dump('data.value.runtimeType is not List<MUpload>', name: 'runTimeType');
+          AppConsole.dump('data.value.runtimeType is not List<MUpload>',
+              name: 'runTimeType');
           return Container();
         }
         return Padding(
           padding: EdgeInsets.symmetric(
-            vertical: data.label != '' ? verticalPadding ?? CSpace.superSmall : 0,
+            vertical:
+                data.label != '' ? verticalPadding ?? CSpace.superSmall : 0,
             horizontal: horizontalPadding ?? CSpace.large,
           ),
           child: Column(
@@ -59,7 +64,8 @@ class DataDetails extends StatelessWidget {
               ),
               data.value.isNotEmpty
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: CSpace.mediumSmall),
                       child: GridView.builder(
                         physics: const ScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -83,7 +89,8 @@ class DataDetails extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         '(${'widgets.list.details.Empty'.tr()})',
-                        style: TextStyle(color: CColor.black.shade300, fontSize: fontSize),
+                        style: TextStyle(
+                            color: CColor.black.shade300, fontSize: fontSize),
                       ),
                     )
             ],
@@ -103,11 +110,14 @@ class DataDetails extends StatelessWidget {
                       if (data.icon != null)
                         Padding(
                           padding: EdgeInsets.symmetric(
-                            vertical: data.label != '' ? verticalPadding ?? CSpace.large - 5 : 0,
+                            vertical: data.label != ''
+                                ? verticalPadding ?? CSpace.medium
+                                : 0,
                             horizontal: horizontalPadding ?? CSpace.large,
                           ),
                           child: Container(
-                            padding: const EdgeInsets.only(top: CSpace.small, right: CSpace.small),
+                            padding: const EdgeInsets.only(
+                                top: CSpace.small, right: CSpace.small),
                             child: SvgPicture.asset(
                               data.icon ?? '',
                               semanticsLabel: data.label,
@@ -117,22 +127,33 @@ class DataDetails extends StatelessWidget {
                       if (data.label != '')
                         Padding(
                           padding: EdgeInsets.only(
-                            top: data.label != '' ? verticalPadding ?? CSpace.large - 5 : 0,
-                            bottom: data.label != '' ? verticalPadding ?? CSpace.large - 5 : 0,
+                            top: data.label != ''
+                                ? verticalPadding ?? CSpace.large - 5
+                                : 0,
+                            bottom: data.label != ''
+                                ? verticalPadding ?? CSpace.large - 5
+                                : 0,
                             left: horizontalPadding ?? CSpace.large,
                           ),
                           child: Text('${data.label}  ',
-                              style: TextStyle(color: CColor.black.shade300, fontSize: fontSize)),
+                              style: TextStyle(
+                                  color: CColor.black.shade300,
+                                  fontSize: fontSize)),
                         ),
                       if (data.dataType != DataType.column)
                         Expanded(
                           child: Container(
-                            alignment: data.label != '' ? Alignment.centerRight : Alignment.centerLeft,
+                            alignment: data.label != ''
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
                             child: Content(
                               data: data,
                               fontSize: fontSize,
-                              verticalPadding: data.label != '' ? verticalPadding ?? CSpace.large - 5 : 0,
-                              horizontalPadding: horizontalPadding ?? CSpace.large,
+                              verticalPadding: data.label != ''
+                                  ? verticalPadding ?? CSpace.medium
+                                  : 0,
+                              horizontalPadding:
+                                  horizontalPadding ?? CSpace.large,
                             ),
                           ),
                         )
@@ -143,7 +164,8 @@ class DataDetails extends StatelessWidget {
                         ? DescriptionTextWidget(
                             text: data.value,
                             style: TextStyle(
-                              fontWeight: data.bold ? FontWeight.w600 : FontWeight.w400,
+                              fontWeight:
+                                  data.bold ? FontWeight.w600 : FontWeight.w400,
                               color: data.color,
                               fontSize: fontSize,
                             ),
@@ -155,12 +177,14 @@ class DataDetails extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 '(${'widgets.list.details.Empty'.tr()})',
-                                style: TextStyle(color: CColor.black.shade300, fontSize: fontSize),
+                                style: TextStyle(
+                                    color: CColor.black.shade300,
+                                    fontSize: fontSize),
                               ),
                             ),
                 ],
               ),
-              showBorder ? line() : SizedBox(),
+              if (showBorder) line(),
             ],
           ),
         );
@@ -186,7 +210,10 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data.child != null) {
       return Container(
-        margin: EdgeInsets.only(top: verticalPadding, right: horizontalPadding, left: horizontalPadding),
+        margin: EdgeInsets.only(
+            top: verticalPadding,
+            right: horizontalPadding,
+            left: horizontalPadding),
         child: data.child!,
       );
     }
@@ -217,7 +244,9 @@ class Content extends StatelessWidget {
               onLongPress: () {
                 if (data.dataType == DataType.phone) {
                   Clipboard.setData(ClipboardData(text: data.value));
-                  USnackBar.smallSnackBar(title: 'widgets.list.details.Phone number copied'.tr(), width: 180);
+                  USnackBar.smallSnackBar(
+                      title: 'widgets.list.details.Phone number copied'.tr(),
+                      width: 180);
                 }
               },
               child: ElevatedButton(
@@ -229,11 +258,15 @@ class Content extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.phone_outlined, color: Colors.white, size: CFontSize.title3),
+                      const Icon(Icons.phone_outlined,
+                          color: Colors.white, size: CFontSize.title3),
                       const HSpacer(CSpace.small),
                       Text(
                         Convert.phoneNumber(data.value),
-                        style: TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: fontSize),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                            fontSize: fontSize),
                       ),
                     ],
                   )),
@@ -244,8 +277,10 @@ class Content extends StatelessWidget {
     }
     if (data.dataType == DataType.status) {
       return Padding(
-          padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: horizontalPadding),
-          child: status(data.value, height: CHeight.mediumSmall / 2, fontSize: CFontSize.footnote));
+          padding: EdgeInsets.only(
+              top: CSpace.mediumSmall + 1, right: horizontalPadding),
+          child: status(data.value,
+              height: CHeight.mediumSmall / 2, fontSize: CFontSize.footnote));
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,7 +289,9 @@ class Content extends StatelessWidget {
         Flexible(
           child: Padding(
             padding: EdgeInsets.only(
-              right: horizontalPadding,
+              right: data.dataType == DataType.copy
+                  ? CSpace.superSmall / 2
+                  : horizontalPadding,
               top: verticalPadding,
               bottom: verticalPadding,
             ),
@@ -273,12 +310,15 @@ class Content extends StatelessWidget {
           Container(
             height: CFontSize.subhead,
             width: 25,
-            margin: const EdgeInsets.only(left: 3),
+            margin: EdgeInsets.only(
+                right: horizontalPadding * 0.8, top: verticalPadding),
             child: InkWell(
               splashColor: CColor.primary.shade100,
               onTap: () {
                 Clipboard.setData(ClipboardData(text: data.value));
-                USnackBar.smallSnackBar(title: 'widgets.list.details.Successfully copied'.tr(), width: 170);
+                USnackBar.smallSnackBar(
+                    title: 'widgets.list.details.Successfully copied'.tr(),
+                    width: 170);
               },
               child: CIcon.copy,
             ),

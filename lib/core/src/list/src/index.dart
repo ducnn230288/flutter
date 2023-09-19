@@ -78,7 +78,7 @@ class _WListState<T> extends State<WList<T>> {
       blocC.setSize(
         size: size,
         api: widget.api ?? (_, __, ___, ____) {},
-        format: widget.format ?? MAttachment.fromJson,
+        format: widget.format ?? MUpload.fromJson,
       );
     } else {
       List? content = widget.items;
@@ -112,11 +112,11 @@ class _WListState<T> extends State<WList<T>> {
 
   @override
   void didUpdateWidget(covariant WList<T> oldWidget) {
-    setCurrentUrl();
+    refresh();
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<void> setCurrentUrl() async {
+  Future<void> refresh() async {
     String location = GoRouter.of(context).location;
     if (location.contains('?')) {
       location = location.substring(0, location.indexOf('?'));
@@ -142,7 +142,7 @@ class _WListState<T> extends State<WList<T>> {
         !isLoadMore) {
       isLoadMore = true;
       loadMoreController.sink.add(true);
-      await cubit.increasePage(api: widget.api ?? (_, __, ___, ____) {}, format: widget.format ?? MAttachment.fromJson);
+      await cubit.increasePage(api: widget.api ?? (_, __, ___, ____) {}, format: widget.format ?? MUpload.fromJson);
       loadMoreController.sink.add(false);
       isLoadMore = false;
     }
@@ -164,7 +164,7 @@ class _WListState<T> extends State<WList<T>> {
                 await context.read<BlocC<T>>().setPage(
                       page: 1,
                       api: widget.api ?? (_, __, ___, ____) {},
-                      format: widget.format ?? MAttachment.fromJson,
+                      format: widget.format ?? MUpload.fromJson,
                     );
               }
             },

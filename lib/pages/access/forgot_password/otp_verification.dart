@@ -30,7 +30,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           const VSpacer(CSpace.mediumSmall),
           Text.rich(TextSpan(
             children: [
-              const TextSpan(text: 'Để xác nhận số điện thoại là của bạn, nhập mã gồm '),
+              const TextSpan(text: 'Để xác nhận email là của bạn, nhập mã gồm '),
               TextSpan(text: '6', style: TextStyle(color: CColor.primary, fontWeight: FontWeight.bold)),
               const TextSpan(text: ' chữ số vừa được gửi đến địa chỉ email: '),
               TextSpan(text: widget.email, style: TextStyle(color: CColor.primary, fontWeight: FontWeight.bold))

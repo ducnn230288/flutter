@@ -33,6 +33,7 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                     Text('Chọn ngày tham gia', style: CStyle.title),
                     const VSpacer(CSpace.large),
                     WDate(
+                      name: 'dateRange',
                       controller: TextEditingController(),
                       value: (value['dateRange'] ?? ''),
                       space: false,

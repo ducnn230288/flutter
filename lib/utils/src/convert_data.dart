@@ -7,13 +7,13 @@ import 'snack_bar.dart';
 
 class Convert {
   static String dateTime(String dateTime, {String separator = '/', bool returnTime = true}) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     return DateFormat('${returnTime ? 'HH:mm' : ''} dd${separator}MM${separator}yyyy', 'vi')
         .format(DateTime.parse(dateTime));
   }
 
   static String dateTimeAgo(String dateTime, {String separator = '/'}) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     final DateTime now = DateTime.now();
     final int day = now.difference(DateTime.parse(dateTime)).inDays;
     if (day >= 1 && day < 30) {
@@ -34,32 +34,32 @@ class Convert {
   }
 
   static String dateTimeSecond(String dateTime, {String separator = '/'}) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     return DateFormat('HH:mm:ss dd${separator}MM${separator}yyyy', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String dateLocation(String dateTime) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     return DateFormat('dd MMMM, yyyy', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String hours(String dateTime) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     return DateFormat('HH:mm', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String hoursLocation(String dateTime) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     return DateFormat('HH:mm a', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String date(String dateTime, {String separator = '/'}) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     return DateFormat('dd${separator}MM${separator}yyyy', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String dateChart(String dateTime) {
-    if (dateTime == '') return '';
+    if (DateTime.tryParse(dateTime)  == null) return '';
     return DateFormat('dd/MM', 'vi').format(DateTime.parse(dateTime));
   }
 
@@ -101,12 +101,12 @@ class Convert {
       convertPrice /= 1000000000;
       unit = 'tỷ $unit';
     }
-    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', ' ');
+    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
   }
 
   static String price(num price, {String unit = 'đ'}) {
     final double convertPrice = double.parse(price.toStringAsFixed(0));
-    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', ' ');
+    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
   }
 
   static String phoneNumber(String number) {
@@ -157,7 +157,7 @@ class Convert {
       if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
         id = iosInfo.identifierForVendor ?? '';
-        name = iosInfo.name ?? '';
+        name = iosInfo.name;
       } else {
         AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
         id = androidInfo.id;
@@ -174,5 +174,15 @@ class Convert {
       'deviceName': name,
       'deviceType': 'MOBILE',
     };
+  }
+
+  static String gender(String gender) {
+    switch (gender.toLowerCase()) {
+      case 'male':
+        return 'Nam';
+      case 'female':
+        return 'Nữ';
+    }
+    return '';
   }
 }

@@ -22,52 +22,81 @@ class CIcon {
   static final forgotPassword = SvgPicture.asset(
     'assets/svgs/forgot-password.svg',
     semanticsLabel: 'forgot-password',
-    color: CColor.primary,
+    colorFilter: ColorFilter.mode(CColor.primary, BlendMode.srcIn),
   );
   static final otpVerification = SvgPicture.asset(
     'assets/svgs/otp-verification.svg',
     semanticsLabel: 'otp-verification',
-    color: CColor.primary,
+    colorFilter: ColorFilter.mode(CColor.primary, BlendMode.srcIn),
   );
   static final resetPassword = SvgPicture.asset(
     'assets/svgs/reset-password.svg',
     semanticsLabel: 'reset-password',
-    color: CColor.primary,
+    colorFilter: ColorFilter.mode(CColor.primary, BlendMode.srcIn),
   );
   static final arrowDown = SvgPicture.asset(
     'assets/svgs/arrow-down.svg',
     semanticsLabel: 'Arrow down',
-    color: CColor.black.shade200,
+    colorFilter: ColorFilter.mode(CColor.black.shade200, BlendMode.srcIn),
     width: 0,
+  );
+  static final remove = SvgPicture.asset(
+    'assets/svgs/remove.svg',
+    semanticsLabel: 'Remove',
+    colorFilter: ColorFilter.mode(CColor.black.shade500, BlendMode.srcIn),
+    width: CHeight.mediumSmall / 2,
+  );
+  static final removeWhite = SvgPicture.asset(
+    'assets/svgs/remove.svg',
+    semanticsLabel: 'Remove',
+    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+    width: CHeight.mediumSmall / 2,
+  );
+  static final upload = SvgPicture.asset(
+    'assets/svgs/upload.svg',
+    semanticsLabel: 'Upload',
+    colorFilter: ColorFilter.mode(CColor.black.shade500, BlendMode.srcIn),
+    width: CHeight.mediumSmall / 2,
+  );
+  static final add = SvgPicture.asset(
+    'assets/svgs/add.svg',
+    semanticsLabel: 'Add',
+    width: CHeight.mediumSmall / 2,
+    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+  );
+  static final check = SvgPicture.asset(
+    'assets/form/check.svg',
+    semanticsLabel: 'Check',
+    width: CFontSize.paragraph2,
   );
   static final arrowRight = SvgPicture.asset(
     'assets/svgs/arrow-right.svg',
     semanticsLabel: 'arrow left',
     width: CFontSize.headline4,
-    color: CColor.primary,
+    colorFilter: ColorFilter.mode(CColor.primary, BlendMode.srcIn),
   );
   static final close = SvgPicture.asset(
     'assets/svgs/close.svg',
     semanticsLabel: 'Close',
     width: 0,
-    color: CColor.black.shade300,
+    colorFilter: ColorFilter.mode(CColor.black.shade300, BlendMode.srcIn),
   );
   static final closeWhite = SvgPicture.asset(
     'assets/svgs/close.svg',
     semanticsLabel: 'Close',
     width: CFontSize.paragraph2,
-    color: Colors.white,
+    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
   );
   static final copy = SvgPicture.asset(
     'assets/svgs/copy.svg',
     semanticsLabel: 'Copy',
     width: CFontSize.paragraph2,
-    color: CColor.primary,
+    colorFilter: ColorFilter.mode(CColor.primary, BlendMode.srcIn),
   );
   static final search = SvgPicture.asset(
     'assets/svgs/search.svg',
     semanticsLabel: 'Search',
     width: CFontSize.headline4,
-    color: CColor.black.shade400,
+    colorFilter: ColorFilter.mode(CColor.black.shade400, BlendMode.srcIn),
   );
 }

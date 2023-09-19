@@ -1,8 +1,5 @@
-//src
-//project
 export 'project/filter.dart';
 export 'src/api.dart';
-export 'src/attachment.dart';
 export 'src/code_type.dart';
 export 'src/data.dart';
 export 'src/drawer.dart';

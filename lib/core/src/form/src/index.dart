@@ -13,7 +13,7 @@ class WForm<T> extends StatefulWidget {
   final List<MFormItem> list;
   final Widget Function(Map<String, Widget> items)? builder;
   final void Function(Map<String, TextEditingController> listController)? onInit;
-  final void Function(Map<String, TextEditingController> listController)? onChangedController;
+  final void Function(Map<String, TextEditingController> listController, int index)? onChangedController;
 
   const WForm({
     Key? key,
@@ -53,17 +53,10 @@ class _WFormState<T> extends State<WForm> {
         final MFormItem item = state.list[index];
         late Widget child;
         if (item.value != '' && listController[item.name] != null && state.status != AppStatus.success) {
-          if (item.type != EFormItemType.upload) {
-            if (item.type == EFormItemType.selectMultiple) {
-              final List listValue = item.value.split(',');
-              if (listValue.length > 1) {
-                listController[item.name]!.text = 'Đã chọn: ${listValue.length}';
-              } else if (item.value.split(',').length > 0) {
-                listController[item.name]!.text = listValue[0];
-              }
-            } else if (item.type != EFormItemType.date) {
-              listController[item.name]!.text = item.value ?? '';
-            }
+          if (item.type != EFormItemType.upload &&
+              item.type != EFormItemType.selectMultiple &&
+              item.type != EFormItemType.date) {
+            listController[item.name]!.text = item.value ?? '';
           }
           switch (item.type) {
             case EFormItemType.date:
@@ -75,13 +68,23 @@ class _WFormState<T> extends State<WForm> {
               }
               break;
             case EFormItemType.select:
+              state.value[item.name] = item.code != '' ? item.code : item.value;
+              break;
             case EFormItemType.time:
-              state.value[item.name] = item.code;
+              state.value[item.name] = item.value;
+              listController[item.name]!.text = Convert.hours(item.value ?? '');
               break;
             case EFormItemType.upload:
               state.value[item.name] = item.value?.map((v) => v.toJson()).toList() ?? [];
               break;
             case EFormItemType.selectMultiple:
+              final List listValue = item.value.split(',');
+              if (listValue.length > 1) {
+                listController[item.name]!.text = 'Đã chọn: ${listValue.length}';
+              } else if (item.value.split(',').length > 0) {
+                listController[item.name]!.text = listValue[0];
+              }
+
               state.value[item.name] = item.code.split(',');
               break;
             case EFormItemType.checkbox:
@@ -89,8 +92,8 @@ class _WFormState<T> extends State<WForm> {
               break;
             default:
               if (item.number) {
-                if (item.value.toString().contains(' ')) {
-                  state.value[item.name] = item.value.toString().replaceAll(' ', '');
+                if (item.value.toString().contains('.')) {
+                  state.value[item.name] = item.value.toString().replaceAll('.', '');
                 } else if (item.formatNumberType == FormatNumberType.inputFormatters) {
                   state.value[item.name] = item.value;
                   listController[item.name]!.text = Convert.thousands(item.value);
@@ -114,6 +117,7 @@ class _WFormState<T> extends State<WForm> {
             break;
           case EFormItemType.checkbox:
             child = WCheckbox(
+              value: state.value[item.name],
               name: item.name,
               required: item.required,
               onChanged: (value) {
@@ -136,11 +140,11 @@ class _WFormState<T> extends State<WForm> {
             );
             break;
           case EFormItemType.upload:
-            child = FUpload(
+            child = FUpload<T>(
               required: item.required,
               name: item.name,
               uploadType: item.uploadType,
-              list: item.value != null && item.value != '' ? item.value : [],
+              list: state.value[item.name],
               label: item.label,
               space: index != state.list.length - 1,
               maxQuantity: item.maxQuantity,
@@ -149,8 +153,8 @@ class _WFormState<T> extends State<WForm> {
               prefix: item.prefix,
               maxCount: item.maxCountUpload,
               onChanged: (dynamic value) {
-                if (item.onChange != null) item.onChange!(item.uploadType == UploadType.single ? value[0] : value);
-                cubit.saved(value: item.uploadType == UploadType.single ? value[0] : value, name: item.name);
+                if (item.onChange != null) item.onChange!(value);
+                cubit.saved(value: value, name: item.name);
               },
             );
             break;
@@ -170,7 +174,7 @@ class _WFormState<T> extends State<WForm> {
                     stackedLabel: item.stackedLabel,
                     suffix: item.suffix,
                     onChanged: (value) {
-                      widget.onChangedController?.call(listController);
+                      widget.onChangedController?.call(listController, index);
                       if (item.onChange != null) item.onChange!(value);
                       cubit.saved(value: value, name: item.name);
                       item.value = '';
@@ -203,7 +207,7 @@ class _WFormState<T> extends State<WForm> {
                     required: item.required,
                     enabled: item.enabled,
                     onChanged: (value) {
-                      widget.onChangedController?.call(listController);
+                      widget.onChangedController?.call(listController, index);
                       if (item.onChange != null) item.onChange!(value);
                       cubit.saved(value: value.split(','), name: item.name);
                     },
@@ -221,6 +225,7 @@ class _WFormState<T> extends State<WForm> {
           case EFormItemType.date:
             child = item.show
                 ? WDate(
+                    name: item.name,
                     selectDateType: item.selectDateType,
                     controller: listController[item.name] ?? TextEditingController(),
                     label: item.label,

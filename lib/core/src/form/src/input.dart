@@ -136,7 +136,7 @@ class _WInputState<T> extends State<WInput> {
             style: TextStyle(fontSize: CFontSize.body + (height * 3), color: CColor.black.shade700),
             onChanged: (String text) {
               if (inputFormatters) {
-                text = text.replaceAll(' ', '');
+                text = text.replaceAll('.', '');
               }
               if (widget.onChanged != null) {
                 widget.onChanged!(text);
@@ -152,7 +152,7 @@ class _WInputState<T> extends State<WInput> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             obscureText: visible,
             keyboardType: widget.number
-                ? const TextInputType.numberWithOptions(decimal: true, signed: true)
+                ? TextInputType.number
                 : widget.maxLines > 1
                     ? TextInputType.multiline
                     : null,
@@ -172,7 +172,7 @@ class _WInputState<T> extends State<WInput> {
                         widget.icon ?? '',
                         semanticsLabel: widget.hintText ?? widget.label,
                         width: 0,
-                        color: CColor.black.shade400,
+                        theme: SvgTheme(currentColor: CColor.black.shade400),
                       ),
                     )
                   : null,
@@ -250,9 +250,9 @@ class _WInputState<T> extends State<WInput> {
   }
 }
 
+
 class ThousandFormatter extends TextInputFormatter {
-  static const separator = ' ';
-  static const decimalSeparator = '.';
+  static const separator = '.';
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
@@ -260,42 +260,27 @@ class ThousandFormatter extends TextInputFormatter {
       return newValue.copyWith(text: '');
     }
 
-    String oldValueText = oldValue.text.replaceAll(separator, '');
     String newValueText = newValue.text.replaceAll(separator, '');
 
     if (oldValue.text.endsWith(separator) && oldValue.text.length == newValue.text.length + 1) {
       newValueText = newValueText.substring(0, newValueText.length - 1);
     }
 
-    if (oldValueText != newValueText) {
-      int selectionIndex = newValue.text.length - newValue.selection.extentOffset;
-      final chars = newValueText.split('');
-
-      String newString = '';
-      int decimalIndex = chars.indexOf(decimalSeparator);
-      if (decimalIndex == -1) {
-        decimalIndex = chars.length;
+    int selectionIndex = newValue.text.length - newValue.selection.extentOffset;
+    final chars = newValueText.split('');
+    String newString = '';
+    for (int i = chars.length - 1; i >= 0; i--) {
+      if ((chars.length - 1 - i) % 3 == 0 && i != chars.length - 1) {
+        newString = separator + newString;
       }
-
-      for (int i = decimalIndex - 1; i >= 0; i--) {
-        if ((decimalIndex - 1 - i) % 3 == 0 && i != decimalIndex - 1) {
-          newString = separator + newString;
-        }
-        newString = chars[i] + newString;
-      }
-
-      if (decimalIndex != chars.length) {
-        newString += decimalSeparator + chars.sublist(decimalIndex + 1).join();
-      }
-
-      return TextEditingValue(
-        text: newString,
-        selection: TextSelection.collapsed(
-          offset: newString.length - selectionIndex,
-        ),
-      );
+      newString = chars[i] + newString;
     }
 
-    return newValue;
+    return TextEditingValue(
+      text: newString.toString(),
+      selection: TextSelection.collapsed(
+        offset: newString.length - selectionIndex,
+      ),
+    );
   }
 }

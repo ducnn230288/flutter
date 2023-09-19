@@ -13,11 +13,12 @@ part '_dynamic_height_grid_view.dart';
 
 class GridRefresh<T> extends StatefulWidget {
   final Function(Map<String, dynamic>, int, int, Map<String, dynamic>) api;
+  final Function(T item)? apiId;
   final double? height;
   final Function? onLoadMore;
-  final Function format;
-  final Widget Function(dynamic item, int index) item;
-  final Function(dynamic)? onTap;
+  final Function(T) format;
+  final Widget Function(T item, int index) item;
+  final Function(T)? onTap;
   final int crossAxisCount;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
@@ -35,6 +36,7 @@ class GridRefresh<T> extends StatefulWidget {
     required this.api,
     this.padding,
     this.onTap,
+    this.apiId,
   }) : super(key: key);
 
   @override
@@ -81,7 +83,15 @@ class _GridRefreshState<T> extends State<GridRefresh> {
                 if (index < state.data.content.length) {
                   return InkWell(
                     splashColor: CColor.primary.shade100,
-                    onTap: widget.onTap != null ? () => widget.onTap!(state.data.content[index]) : null,
+                    onTap: widget.onTap != null
+                        ? () {
+                            this.index = index;
+                            if (widget.apiId != null) {
+                              this.item = item;
+                            }
+                            widget.onTap!(state.data.content[index]);
+                          }
+                        : null,
                     child: widget.item(state.data.content[index], index),
                   );
                 } else {
@@ -104,6 +114,8 @@ class _GridRefreshState<T> extends State<GridRefresh> {
   late final String currentUrl;
   late final BlocC<T> cubit;
   bool isLoadMore = false;
+  int? index;
+  dynamic item;
 
   @override
   void initState() {
@@ -122,7 +134,9 @@ class _GridRefreshState<T> extends State<GridRefresh> {
   }
 
   void _scrollListener() async {
-    if (_scrollController.position.extentAfter < 50 && cubit.state.data.content.length >= 20 && !isLoadMore) {
+    if (_scrollController.position.extentAfter < 50 &&
+        cubit.state.data.content.length >= cubit.state.size &&
+        !isLoadMore) {
       isLoadMore = true;
       _streamController.add(true);
       await context.read<BlocC<T>>().increasePage(api: widget.api, format: widget.format);
@@ -142,8 +156,10 @@ class _GridRefreshState<T> extends State<GridRefresh> {
     if (location.contains('?')) {
       location = location.substring(0, location.indexOf('?'));
     }
-    if (currentUrl == location) {
-      context.read<BlocC<T>>().setSize(size: 20, api: widget.api, format: widget.format);
+    if (currentUrl == location && item != null && index != null) {
+      await context.read<BlocC<T>>().refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format);
+      index = null;
+      item = null;
     }
   }
 }

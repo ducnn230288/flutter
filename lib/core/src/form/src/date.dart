@@ -2,16 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '/cubit/index.dart';
 import '/constants/index.dart';
 import '/core/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
 
 class WDate extends StatefulWidget {
+  final String name;
   final String label;
   final String value;
   final String? subtitle;
@@ -51,6 +54,7 @@ class WDate extends StatefulWidget {
     this.mode = DateRangePickerSelectionMode.single,
     this.height,
     this.width,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -77,7 +81,31 @@ class _WDateState extends State<WDate> {
       required: widget.required,
       enabled: widget.enabled,
       stackedLabel: widget.stackedLabel,
-      suffix: Icon(Icons.calendar_month_rounded, color: CColor.black.shade300, size: CFontSize.title2),
+      suffix: BlocBuilder<BlocC, BlocS>(
+        buildWhen: (bf, at) =>
+            (bf.value[widget.name] == '' && at.value[widget.name] != '') ||
+            (bf.value[widget.name] != '' && at.value[widget.name] == ''),
+        builder: (context, state) {
+          if (state.value[widget.name] == null || state.value[widget.name] == '') {
+            return Icon(Icons.calendar_month_rounded, color: CColor.black.shade300, size: CFontSize.title2);
+          }
+          return InkWell(
+            splashColor: CColor.primary.shade100,
+            onTap: () {
+              widget.controller.clear();
+              if (widget.onChanged != null) {
+                widget.onChanged!('');
+              }
+            },
+            child: Icon(
+              Icons.cancel,
+              size: CFontSize.title3,
+              color: CColor.black.shade300,
+              semanticLabel: 'Clear',
+            ),
+          );
+        },
+      ),
       focus: true,
       focusNode: focusNode,
       onTap: (text) {
@@ -111,7 +139,10 @@ class _WDateState extends State<WDate> {
                             minDate: widget.selectDateType == SelectDateType.after ? DateTime.now() : null,
                             initialSelectedDate: selectedDateSingle,
                             initialSelectedDates: selectedDateMultiple != null
-                                ? [selectedDateMultiple!.startDate!, selectedDateMultiple!.endDate!]
+                                ? [
+                                    selectedDateMultiple!.startDate!,
+                                    selectedDateMultiple!.endDate ?? selectedDateMultiple!.startDate!
+                                  ]
                                 : null,
                             initialDisplayDate: widget.mode == DateRangePickerSelectionMode.single
                                 ? selectedDateSingle

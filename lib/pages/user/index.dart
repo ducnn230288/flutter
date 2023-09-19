@@ -216,7 +216,7 @@ class _UserState extends State<User> {
                                           children: [
                                             Flexible(
                                               child: Text(
-                                                '$index: ${data.name}  ',
+                                                '${data.name}  ',
                                                 style: const TextStyle(fontWeight: FontWeight.w600),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -289,10 +289,15 @@ class _UserState extends State<User> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: CColor.danger,
-        onPressed: () => context.pushNamed(
-          isInternalUser ? CRoute.createInternalUser : CRoute.createCustomerUser,
-          queryParams: {'formType': FormType.create.name},
-        ),
+        onPressed: () async {
+          var check = await context.pushNamed(
+            isInternalUser ? CRoute.createInternalUser : CRoute.createCustomerUser,
+            queryParams: {'formType': FormType.create.name},
+          );
+          if (check == true) {
+            getData();
+          }
+        },
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
       endDrawer: const _EndDrawer<MUser>(),
@@ -304,10 +309,9 @@ class _UserState extends State<User> {
   final bool isInternalUser =
       GoRouter.of(rootNavigatorKey.currentState!.context).location.contains(CRoute.internalUser);
 
-  void getData() => context.read<BlocC<MUser>>().submit(
-      getData: true,
+  void getData() => context.read<BlocC<MUser>>().setPage(
       api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
-      format: MUser.fromJson);
+      format: MUser.fromJson, page: 1);
 
   Widget active(MUser data) {
     const double size = 17;

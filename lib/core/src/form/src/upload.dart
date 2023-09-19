@@ -21,7 +21,7 @@ class FUpload<T> extends FormField<List> {
     required String name,
     required bool required,
     UploadType uploadType = UploadType.multiple,
-    List? list,
+    required List list,
     String label = '',
     bool space = true,
     int maxQuantity = 1,
@@ -37,7 +37,7 @@ class FUpload<T> extends FormField<List> {
               }
               return null;
             },
-            initialValue: [],
+            initialValue: list,
             builder: (FormFieldState<List> state) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +56,6 @@ class FUpload<T> extends FormField<List> {
                         state.didChange(value);
                         state.validate();
                         onChanged(value);
-                        print(value);
                       }),
                   state.hasError
                       ? Padding(
@@ -395,6 +394,7 @@ class WUploadState extends State<WUpload> {
   }
 
   void _showModal(context) {
+    FocusScope.of(context).unfocus();
     showModalBottomSheet<void>(
       context: context,
       builder: (_) {
