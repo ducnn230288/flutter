@@ -35,7 +35,7 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                     WDate(
                       name: 'dateRange',
                       controller: TextEditingController(),
-                      value: (value['dateRange'] ?? ''),
+                      value: (value['dateRange'] != null ? '${value['dateRange'][0]}|${value['dateRange'][1]}' : ''),
                       space: false,
                       mode: DateRangePickerSelectionMode.range,
                       onChanged: (value) {
@@ -43,9 +43,7 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                         if (value.contains('|')) {
                           val = value.split('|');
                         }
-                        blocC.addValue(value: value, name: 'dateRange');
-                        blocC.addValue(value: val[0], name: 'fromDate');
-                        blocC.addValue(value: val[1], name: 'toDate');
+                        blocC.addValue(value: [val[0], val[1]], name: 'dateRange');
                       },
                     ),
                     status(),
@@ -71,8 +69,6 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                         ),
                         onPressed: () {
                           Map<String, dynamic> newValue = Map.from(context.read<BlocC<T>>().state.value);
-                          newValue.remove('fromDate');
-                          newValue.remove('toDate');
                           newValue.remove('isLockedOut');
                           newValue.remove('dateRange');
                           if (isCustomerAccount) {
@@ -127,8 +123,6 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
         submit: (_) {
           context.pop();
           if (newValue != null) {
-            context.read<BlocC<T>>().removeKey(name: 'fromDate');
-            context.read<BlocC<T>>().removeKey(name: 'toDate');
             context.read<BlocC<T>>().removeKey(name: 'isLockedOut');
             context.read<BlocC<T>>().removeKey(name: 'dateRange');
             if (isCustomerAccount) {
