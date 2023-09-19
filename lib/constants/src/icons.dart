@@ -40,35 +40,6 @@ class CIcon {
     colorFilter: ColorFilter.mode(CColor.black.shade200, BlendMode.srcIn),
     width: 0,
   );
-  static final remove = SvgPicture.asset(
-    'assets/svgs/remove.svg',
-    semanticsLabel: 'Remove',
-    colorFilter: ColorFilter.mode(CColor.black.shade500, BlendMode.srcIn),
-    width: CHeight.mediumSmall / 2,
-  );
-  static final removeWhite = SvgPicture.asset(
-    'assets/svgs/remove.svg',
-    semanticsLabel: 'Remove',
-    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-    width: CHeight.mediumSmall / 2,
-  );
-  static final upload = SvgPicture.asset(
-    'assets/svgs/upload.svg',
-    semanticsLabel: 'Upload',
-    colorFilter: ColorFilter.mode(CColor.black.shade500, BlendMode.srcIn),
-    width: CHeight.mediumSmall / 2,
-  );
-  static final add = SvgPicture.asset(
-    'assets/svgs/add.svg',
-    semanticsLabel: 'Add',
-    width: CHeight.mediumSmall / 2,
-    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-  );
-  static final check = SvgPicture.asset(
-    'assets/form/check.svg',
-    semanticsLabel: 'Check',
-    width: CFontSize.paragraph2,
-  );
   static final arrowRight = SvgPicture.asset(
     'assets/svgs/arrow-right.svg',
     semanticsLabel: 'arrow left',
