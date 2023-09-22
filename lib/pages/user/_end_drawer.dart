@@ -38,6 +38,7 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                       value: (value['dateRange'] != null ? '${value['dateRange'][0]}|${value['dateRange'][1]}' : ''),
                       space: false,
                       mode: DateRangePickerSelectionMode.range,
+                      required: false,
                       onChanged: (value) {
                         dynamic val = value;
                         if (value.contains('|')) {

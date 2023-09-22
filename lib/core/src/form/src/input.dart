@@ -132,7 +132,7 @@ class _WInputState<T> extends State<WInput> {
               }
             },
             readOnly: widget.onTap != null,
-            textInputAction: TextInputAction.next,
+            textInputAction: widget.maxLines > 1 ? TextInputAction.newline : TextInputAction.next,
             style: TextStyle(fontSize: CFontSize.body + (height * 3), color: CColor.black.shade700),
             onChanged: (String text) {
               if (inputFormatters) {

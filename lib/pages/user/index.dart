@@ -96,7 +96,6 @@ class _UserState extends State<User> {
           ),
           Expanded(
             child: WList<MUser>(
-              apiId: (item) => user.details(id: item.id),
               item: (data, int index) {
                 final cubit = context.read<BlocC<MUser>>();
                 final content = cubit.state.data.content.cast<MUser>().toList();
@@ -119,6 +118,13 @@ class _UserState extends State<User> {
                   }
                 }
                 const double widthSpace = 35;
+                void refresh(){
+                  context.read<BlocC<MUser>>().refreshPage(
+                    index: index,
+                    apiId: user.details(id: data.id),
+                    format: MUser.fromJson,
+                  );
+                }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -149,12 +155,13 @@ class _UserState extends State<User> {
                                 widthSpace: widthSpace,
                                 content: button(child: Icon(Icons.edit_square, color: CColor.primary)),
                                 color: Colors.transparent,
-                                onTap: (handler) {
-                                  context.pushNamed(
+                                onTap: (handler) async{
+                                  await context.pushNamed(
                                     CRoute.createCustomerUser,
                                     queryParams: {'formType': FormType.edit.name},
                                     extra: data,
                                   );
+                                  refresh();
                                 },
                               ),
                               SwipeAction(
@@ -170,11 +177,7 @@ class _UserState extends State<User> {
                                             onlyApi: true,
                                             submit: (_) {
                                               context.pop();
-                                              context.read<BlocC<MUser>>().refreshPage(
-                                                    index: index,
-                                                    apiId: user.details(id: data.id),
-                                                    format: MUser.fromJson,
-                                                  );
+                                              refresh();
                                             },
                                             api: (_, __, ___, ____) => user.delete(id: data.id),
                                           );
@@ -283,6 +286,7 @@ class _UserState extends State<User> {
               separator: const VSpacer(CSpace.medium),
               format: MUser.fromJson,
               api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
+              apiId: (item) => user.details(id: item.id),
             ),
           ),
         ],

@@ -60,7 +60,7 @@ class _WFormState<T> extends State<WForm> {
           }
           switch (item.type) {
             case EFormItemType.date:
-              state.value[item.name] = item.value;
+              state.value[item.name] = state.value[item.name] ?? item.value;
               if (item.mode == DateRangePickerSelectionMode.single) {
                 listController[item.name]!.text = Convert.dateLocation(item.value ?? '');
               } else {
@@ -68,14 +68,14 @@ class _WFormState<T> extends State<WForm> {
               }
               break;
             case EFormItemType.select:
-              state.value[item.name] = item.code != '' ? item.code : item.value;
+              state.value[item.name] = state.value[item.name] ?? item.code;
               break;
             case EFormItemType.time:
-              state.value[item.name] = item.value;
+              state.value[item.name] = state.value[item.name] ?? item.value;
               listController[item.name]!.text = Convert.hours(item.value ?? '');
               break;
             case EFormItemType.upload:
-              state.value[item.name] = item.value?.map((v) => v.toJson()).toList() ?? [];
+              state.value[item.name] = state.value[item.name] ?? item.value?.map((v) => v.toJson()).toList() ?? [];
               break;
             case EFormItemType.selectMultiple:
               final List listValue = item.value.split(',');
@@ -84,22 +84,21 @@ class _WFormState<T> extends State<WForm> {
               } else if (item.value.split(',').length > 0) {
                 listController[item.name]!.text = listValue[0];
               }
-
-              state.value[item.name] = item.code.split(',');
+              state.value[item.name] = state.value[item.name] ?? item.code.split(',');
               break;
             case EFormItemType.checkbox:
-              state.value[item.name] = item.value ?? false;
+              state.value[item.name] = state.value[item.name] ?? item.value ?? false;
               break;
             default:
               if (item.number) {
-                if (item.value.toString().contains('.')) {
-                  state.value[item.name] = item.value.toString().replaceAll('.', '');
-                } else if (item.formatNumberType == FormatNumberType.inputFormatters) {
-                  state.value[item.name] = item.value;
-                  listController[item.name]!.text = Convert.thousands(item.value);
-                }
+                state.value[item.name] =
+                    state.value[item.name] ?? (item.value.contains('.') ? item.value.replaceAll('.', '') : item.value);
+                listController[item.name]!.text =
+                    item.formatNumberType == FormatNumberType.inputFormatters && !item.value.contains('.')
+                        ? Convert.thousands(item.value)
+                        : item.value;
               } else {
-                state.value[item.name] = item.value;
+                state.value[item.name] = state.value[item.name] ?? item.value;
               }
           }
         }
@@ -166,7 +165,7 @@ class _WFormState<T> extends State<WForm> {
                     name: item.name,
                     hintText: item.hintText,
                     subtitle: item.subtitle,
-                    value: item.value ?? '',
+                    value: state.value[item.name].toString(),
                     space: index != state.list.length - 1,
                     maxLines: item.maxLines,
                     required: item.required,
@@ -199,8 +198,8 @@ class _WFormState<T> extends State<WForm> {
                     label: item.label,
                     hintText: item.hintText,
                     subtitle: item.subtitle,
-                    value: item.value ?? '',
-                    code: item.code ?? '',
+                    value: item.value.toString(),
+                    code: state.value[item.name] ?? [],
                     space: index != state.list.length - 1,
                     maxLines: item.maxLines,
                     stackedLabel: item.stackedLabel,
@@ -231,8 +230,10 @@ class _WFormState<T> extends State<WForm> {
                     label: item.label,
                     hintText: item.hintText,
                     value: item.mode == DateRangePickerSelectionMode.single
-                        ? (item.value ?? '')
-                        : (item.value != '' ? item.value.join('|') : ''),
+                        ? (state.value[item.name] ?? '')
+                        : (state.value[item.name] != null && state.value[item.name] != ''
+                            ? state.value[item.name].join('|')
+                            : ''),
                     subtitle: item.subtitle,
                     space: index != state.list.length - 1,
                     stackedLabel: item.stackedLabel,
@@ -244,8 +245,8 @@ class _WFormState<T> extends State<WForm> {
                       if (value.contains('|')) {
                         val = value.split('|');
                       }
-                      if (item.onChange != null) item.onChange!(val);
                       cubit.saved(value: val, name: item.name);
+                      if (item.onChange != null) item.onChange!(val);
                       item.value = '';
                     },
                     icon: item.icon,
@@ -260,7 +261,7 @@ class _WFormState<T> extends State<WForm> {
                     controller: listController[item.name] ?? TextEditingController(),
                     label: item.label,
                     hintText: item.hintText,
-                    value: item.code ?? '',
+                    value: state.value[item.name] ?? '',
                     subtitle: item.subtitle,
                     space: index != state.list.length - 1,
                     maxLines: item.maxLines,
@@ -276,14 +277,6 @@ class _WFormState<T> extends State<WForm> {
                 : Container();
             break;
           default:
-            // Fix error parse when value is null
-            if (item.number &&
-                !item.name.toLowerCase().contains('phone') &&
-                item.value != '' &&
-                item.value != null &&
-                item.formatNumberType == FormatNumberType.inputFormatters) {
-              listController[item.name]!.text = Convert.thousands(item.value);
-            }
             if (item.child != null) {
               child = Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +307,7 @@ class _WFormState<T> extends State<WForm> {
                       label: item.label,
                       hintText: item.hintText,
                       name: item.name,
-                      value: item.value ?? '',
+                      value: state.value[item.name]?.toString() ?? '',
                       subtitle: item.subtitle,
                       space: index != state.list.length - 1,
                       formatNumberType: item.formatNumberType,

@@ -108,7 +108,7 @@ class _WSelectState<T> extends State<WSelect> {
                 return SafeArea(
                   child: Column(
                     children: [
-                      if (widget.label != '')
+                      if (widget.label != '' || widget.hintText != null)
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: CSpace.small),
                           child: Text(

@@ -35,6 +35,9 @@ class Api {
       return null;
     }
     MApi response = MApi.fromJson(jsonDecode(result.body));
+    if (result.statusCode == 404) {
+      return MApi(code: 404, message: response.message);
+    }
     if (!response.isSuccess) {
       Timer(const Duration(milliseconds: 50), () {
         UDialog().showError(text: response.message);

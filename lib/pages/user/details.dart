@@ -27,7 +27,7 @@ class _UserDetailsState extends State<UserDetails> {
           if (state.status == AppStatus.success) {
             final MUser data = state.value['account'];
             final bool isFarmer = data.profileType == 'FARMER';
-            final List<MFormItem> formItems = [
+            List<MFormItem> formItems = [
               MFormItem(label: 'Thông tin chung', dataType: DataType.separation),
               MFormItem(label: 'Họ và tên', value: data.name),
               MFormItem(label: 'Email', value: data.userName),
@@ -48,22 +48,26 @@ class _UserDetailsState extends State<UserDetails> {
               // ],
               MFormItem(label: 'Thao tác', dataType: DataType.separation),
               // if (isFarmer)
-              // MFormItem(
-              //   child: button(
-              //     label: 'Hồ sơ Farmer',
-              //     width: 113,
-              //     color: CColor.purple,
-              //     title: 'Xem hồ sơ',
-              //     icon: Icons.badge,
-              //     onPressed: ()=> context.pushNamed(
-              //       CRoute.farmerProfile,
-              //       queryParams: {
-              //         'data': jsonEncode(data.profileFarmer),
-              //         'title': 'Hồ sơ Farmer',
+              //   MFormItem(
+              //     child: button(
+              //       label: 'Hồ sơ Farmer',
+              //       width: 113,
+              //       color: CColor.purple,
+              //       title: 'Xem hồ sơ',
+              //       icon: Icons.badge,
+              //       onPressed: () {
+              //         if (data.profileFarmer.provinceCode != 0) {
+              //           context.pushNamed(
+              //             CRoute.farmerProfile,
+              //             queryParams: {'title': 'Hồ sơ Farmer'},
+              //             extra: data.profileFarmer,
+              //           );
+              //         } else {
+              //           UDialog().showError(text: 'Farmer chưa cập nhật hồ sơ');
+              //         }
               //       },
               //     ),
               //   ),
-              // ),
               // MFormItem(
               //   child: button(
               //     label: 'Ví điện tử',
@@ -99,6 +103,9 @@ class _UserDetailsState extends State<UserDetails> {
                 ),
               ),
             ];
+            if (Role.isFarmer) {
+              formItems = formItems.sublist(0, 4);
+            }
             return ListView(children: [
               for (var i = 0; i < formItems.length; i++) DataDetails(data: formItems[i]),
             ]);

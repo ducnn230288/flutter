@@ -34,6 +34,10 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     emit(state.copyWith(value: {...state.value, ...value}, status: status));
   }
 
+  void resetValue() {
+    emit(state.copyWith(value: {}));
+  }
+
   void addValue({required dynamic value, required String name}) {
     Map<String, dynamic> newValue = {...state.value};
     if (state.value.containsKey(name)) {
@@ -65,8 +69,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     }
   }
 
-  Future<void> refreshPage(
-      {required Future<MApi?> apiId, required int index, required Function(dynamic json) format}) async {
+  Future<void> refreshPage({required Future<MApi?> apiId, required int index, required Function(T json) format}) async {
     inProcess();
     MApi? result = await apiId;
     // //Lấy totalElements mới nhất
@@ -168,42 +171,41 @@ class BlocC<T> extends Cubit<BlocS<T>> {
         emit(state.copyWith(page: 1));
       }
       UDialog dialogs = UDialog();
-      try {
-        if (showDialog) {
-          await dialogs.delay();
-          dialogs.startLoading();
-        }
-        MApi? result = await api(state.value, state.page, state.size, state.sort);
-        if (showDialog) {
-          dialogs.stopLoading();
-        }
-        if (result != null) {
-          if (!getData || onlyApi) {
-            if (notification && result.message != '') {
+      if (showDialog) {
+        await dialogs.delay();
+        dialogs.startLoading();
+      }
+      MApi? result = await api(state.value, state.page, state.size, state.sort);
+      if (showDialog) {
+        dialogs.stopLoading();
+      }
+      if (result != null) {
+        if (!getData || onlyApi) {
+          if (notification && result.message != '') {
+            if (result.code == 404) {
+              dialogs.showError(text: result.message);
+            } else {
               dialogs.showSuccess(
                   text: result.message,
                   onDismiss: (context) {
                     if (submit != null) submit(result.data);
                     emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
                   });
-            } else {
-              if (submit != null) submit(result.data);
-              emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
             }
           } else {
-            if (format != null) {
-              dynamic data = MData<T>.fromJson(result.data, format);
-              if (submit != null) submit(data);
-              emit(state.copyWith(status: AppStatus.success, data: data));
-            } else {
-              if (submit != null) submit(result.data);
-              emit(state.copyWith(status: AppStatus.success, value: {key: result.data}));
-            }
+            if (submit != null) submit(result.data);
+            emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+          }
+        } else {
+          if (format != null) {
+            dynamic data = MData<T>.fromJson(result.data, format);
+            if (submit != null) submit(data);
+            emit(state.copyWith(status: AppStatus.success, data: data));
+          } else {
+            if (submit != null) submit(result.data);
+            emit(state.copyWith(status: AppStatus.success, value: {key: result.data}));
           }
         }
-      } catch (e) {
-        dialogs.stopLoading();
-        dialogs.showError(text: e.toString());
       }
     }
   }

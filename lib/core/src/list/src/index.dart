@@ -58,96 +58,6 @@ class WList<T> extends StatefulWidget {
 }
 
 class _WListState<T> extends State<WList<T>> {
-  final StreamController<bool> loadMoreController = StreamController<bool>.broadcast();
-  bool isLoadMore = false;
-  late ScrollController controller;
-  final int size = 20;
-  Timer t = Timer(const Duration(seconds: 1), () {});
-  late final String currentUrl;
-  int? index;
-  T? item;
-
-  @override
-  void initState() {
-    currentUrl = GoRouter.of(rootNavigatorKey.currentState!.context).location;
-    final BlocC<T> blocC = context.read<BlocC<T>>();
-    if (widget.items == null) {
-      if (widget.init != null) {
-        widget.init!(blocC);
-      }
-      blocC.setSize(
-        size: size,
-        api: widget.api ?? (_, __, ___, ____) {},
-        format: widget.format ?? MUpload.fromJson,
-      );
-    } else {
-      List? content = widget.items;
-      blocC.setData(
-        data: MData.fromJson({
-          'page': 1,
-          'totalPages': content!.length,
-          'size': content.length,
-          'numberOfElements': content.length,
-          'totalElements': content.length,
-          'content': content
-        }, widget.format),
-        status: widget.status,
-      );
-    }
-    if (widget.items == null) {
-      controller = ScrollController()..addListener(scrollListener);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    loadMoreController.close();
-    if (widget.items == null) {
-      controller.removeListener(scrollListener);
-      t.cancel();
-    }
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant WList<T> oldWidget) {
-    refresh();
-    super.didUpdateWidget(oldWidget);
-  }
-
-  Future<void> refresh() async {
-    String location = GoRouter.of(context).location;
-    if (location.contains('?')) {
-      location = location.substring(0, location.indexOf('?'));
-    }
-    if (currentUrl == location && widget.items == null && item != null && index != null && widget.format != null) {
-      await context
-          .read<BlocC<T>>()
-          .refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format!);
-      index = null;
-      item = null;
-    }
-  }
-
-  void scrollListener() async {
-    const int space = 100;
-    if (widget.items != null) return;
-    final BlocC cubit = context.read<BlocC<T>>();
-    final bool increasePage =
-        cubit.state.data.content.length >= size && cubit.state.data.content.length < cubit.state.data.totalElements!;
-    if (controller.position.pixels >= controller.position.maxScrollExtent - space &&
-        context.mounted &&
-        increasePage &&
-        !isLoadMore) {
-      isLoadMore = true;
-      loadMoreController.sink.add(true);
-      await cubit.increasePage(api: widget.api ?? (_, __, ___, ____) {}, format: widget.format ?? MUpload.fromJson);
-      loadMoreController.sink.add(false);
-      isLoadMore = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BlocC<T>, BlocS<T>>(
@@ -205,11 +115,11 @@ class _WListState<T> extends State<WList<T>> {
                                           splashColor: CColor.primary.shade100,
                                           onTap: (widget.onTap != null || widget.onTapMultiple != null)
                                               ? () async {
-                                                  if (widget.onTap != null) {
+                                                  if (widget.apiId != null) {
+                                                    this.item = item;
                                                     this.index = index;
-                                                    if (widget.apiId != null) {
-                                                      this.item = item;
-                                                    }
+                                                  }
+                                                  if (widget.onTap != null) {
                                                     widget.onTap!(item);
                                                   } else if (widget.onTapMultiple != null) {
                                                     widget.onTapMultiple!(item, context);
@@ -261,6 +171,113 @@ class _WListState<T> extends State<WList<T>> {
             ),
           );
         });
+  }
+
+  final StreamController<bool> loadMoreController = StreamController<bool>.broadcast();
+  bool isLoadMore = false;
+  late ScrollController controller;
+  final int size = 20;
+  Timer t = Timer(const Duration(seconds: 1), () {});
+  late final String currentUrl;
+  int? index;
+  T? item;
+
+  @override
+  void initState() {
+    currentUrl = GoRouter.of(rootNavigatorKey.currentState!.context).location;
+    final BlocC<T> blocC = context.read<BlocC<T>>();
+    if (widget.items == null) {
+      if (widget.init != null) widget.init!(blocC);
+      blocC.setSize(
+        size: size,
+        api: widget.api ?? (_, __, ___, ____) {},
+        format: widget.format ?? MUpload.fromJson,
+      );
+    } else {
+      List? content = widget.items;
+      blocC.setData(
+        data: MData.fromJson({
+          'page': 1,
+          'totalPages': content!.length,
+          'size': content.length,
+          'numberOfElements': content.length,
+          'totalElements': content.length,
+          'content': content
+        }, widget.format),
+        status: widget.status,
+      );
+    }
+    if (widget.items == null) {
+      controller = ScrollController()..addListener(scrollListener);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    loadMoreController.close();
+    if (widget.items == null) {
+      controller.removeListener(scrollListener);
+      t.cancel();
+    }
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant WList<T> oldWidget) {
+    refresh();
+    updateItems();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  Future<void> refresh() async {
+    String location = GoRouter.of(context).location;
+    if (location.contains('?')) {
+      location = location.substring(0, location.indexOf('?'));
+    }
+    if (currentUrl == location && widget.items == null && widget.format != null && index != null) {
+      await context
+          .read<BlocC<T>>()
+          .refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format!);
+      index = null;
+      item = null;
+    }
+  }
+
+  void updateItems() {
+    if (widget.items != null) {
+      final BlocC<T> blocC = context.read<BlocC<T>>();
+      List? content = widget.items;
+      blocC.setData(
+        data: MData.fromJson({
+          'page': 1,
+          'totalPages': content!.length,
+          'size': content.length,
+          'numberOfElements': content.length,
+          'totalElements': content.length,
+          'content': content
+        }, widget.format),
+        status: widget.status,
+      );
+    }
+  }
+
+  void scrollListener() async {
+    const int space = 100;
+    if (widget.items != null) return;
+    final BlocC cubit = context.read<BlocC<T>>();
+    final bool increasePage =
+        cubit.state.data.content.length >= size && cubit.state.data.content.length < cubit.state.data.totalElements!;
+    if (controller.position.pixels >= controller.position.maxScrollExtent - space &&
+        context.mounted &&
+        increasePage &&
+        !isLoadMore) {
+      isLoadMore = true;
+      loadMoreController.sink.add(true);
+      await cubit.increasePage(api: widget.api ?? (_, __, ___, ____) {}, format: widget.format ?? MUpload.fromJson);
+      loadMoreController.sink.add(false);
+      isLoadMore = false;
+    }
   }
 }
 

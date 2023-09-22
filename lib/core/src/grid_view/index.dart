@@ -43,7 +43,7 @@ class GridRefresh<T> extends StatefulWidget {
   _GridRefreshState<T> createState() => _GridRefreshState<T>();
 }
 
-class _GridRefreshState<T> extends State<GridRefresh> {
+class _GridRefreshState<T> extends State<GridRefresh<T>> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -85,9 +85,9 @@ class _GridRefreshState<T> extends State<GridRefresh> {
                     splashColor: CColor.primary.shade100,
                     onTap: widget.onTap != null
                         ? () {
-                            this.index = index;
                             if (widget.apiId != null) {
-                              this.item = item;
+                              item = state.data.content[index];
+                              this.index = index;
                             }
                             widget.onTap!(state.data.content[index]);
                           }
@@ -115,7 +115,7 @@ class _GridRefreshState<T> extends State<GridRefresh> {
   late final BlocC<T> cubit;
   bool isLoadMore = false;
   int? index;
-  dynamic item;
+  T? item;
 
   @override
   void initState() {
@@ -146,7 +146,7 @@ class _GridRefreshState<T> extends State<GridRefresh> {
   }
 
   @override
-  void didUpdateWidget(covariant GridRefresh oldWidget) {
+  void didUpdateWidget(covariant GridRefresh<T> oldWidget) {
     refresh();
     super.didUpdateWidget(oldWidget);
   }
@@ -156,8 +156,8 @@ class _GridRefreshState<T> extends State<GridRefresh> {
     if (location.contains('?')) {
       location = location.substring(0, location.indexOf('?'));
     }
-    if (currentUrl == location && item != null && index != null) {
-      await context.read<BlocC<T>>().refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format);
+    if (currentUrl == location && index != null) {
+      await context.read<BlocC<T>>().refreshPage(index: index!, apiId: widget.apiId!(item!), format: widget.format);
       index = null;
       item = null;
     }

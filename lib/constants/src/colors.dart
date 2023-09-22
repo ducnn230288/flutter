@@ -119,9 +119,11 @@ class CColor {
   static Color statusColor(String status) {
     switch (status) {
       case 'DRAFT':
-      case 'CANCELED':
       case 'UN_CONFIRM':
         return black.shade300;
+
+      case 'CANCELED':
+        return black;
 
       case 'ADMIN_REJECTED':
       case 'REJECT':

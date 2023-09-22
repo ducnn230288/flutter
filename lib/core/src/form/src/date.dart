@@ -150,6 +150,7 @@ class _WDateState extends State<WDate> {
                                     ? selectedDateMultiple!.startDate
                                     : null,
                             initialSelectedRange: selectedDateMultiple,
+
                             headerStyle: DateRangePickerHeaderStyle(textStyle: CStyle.title),
                             view: DateRangePickerView.month,
                             selectionMode: widget.mode,

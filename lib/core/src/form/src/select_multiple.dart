@@ -13,7 +13,7 @@ class WSelectMultiple extends StatefulWidget {
   final String? hintText;
   final String? subtitle;
   final String value;
-  final String code;
+  final List<String>? code;
   final bool space;
   final int maxLines;
   final bool required;
@@ -53,7 +53,7 @@ class WSelectMultiple extends StatefulWidget {
     required this.controller,
     this.items,
     this.name = '',
-    this.code = '',
+    this.code,
     this.hintText,
     this.height,
     this.width,
@@ -201,13 +201,14 @@ class _WSelectMultipleState extends State<WSelectMultiple> {
 
   @override
   void initState() {
-    listCode = widget.code != '' ? widget.code.split(',') : [];
+    listCode = widget.code!;
     listValue = widget.value != '' ? widget.value.split(',') : [];
     if (listCode.length > 1) {
       text = 'Đã chọn: ${listCode.length}';
     } else if (listCode.isNotEmpty) {
       text = listValue[0];
     }
+
     super.initState();
   }
 }

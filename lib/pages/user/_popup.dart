@@ -9,12 +9,6 @@ class _PopUpItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getData() => ctx.read<BlocC>().submit(
-        getData: true,
-        api: (filter, page, size, sort) =>
-            RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size),
-        format: MUser.fromJson);
-
     Widget button({required Widget child, required String code}) => GestureDetector(
           onTap: () => context.pop(MCodeType(code: code)),
           child: Container(
@@ -43,7 +37,7 @@ class _PopUpItem extends StatelessWidget {
         ];
 
     return BlocProvider(
-      create: (context) => BlocC(),
+      create: (context) => BlocC<MUser>(),
       child: Builder(builder: (context) {
         return PopupMenuButton<MCodeType>(
             shape: ShapeBorder.lerp(
@@ -51,23 +45,31 @@ class _PopUpItem extends StatelessWidget {
               BeveledRectangleBorder(borderRadius: BorderRadius.circular(CSpace.mediumSmall)),
               0,
             ),
-            onSelected: (MCodeType item) {
+            onSelected: (MCodeType item) async {
               final user = RepositoryProvider.of<Api>(context).user;
               switch (item.code) {
                 case 'EDIT':
-                  context.goNamed(CRoute.createInternalUser,
-                      queryParams: {'formType': FormType.edit.name}, extra: data);
+                  await context.pushNamed(
+                    CRoute.createInternalUser,
+                    queryParams: {'formType': FormType.edit.name},
+                    extra: data,
+                  );
+                  ctx.read<BlocC<MUser>>().refreshPage(
+                        index: index,
+                        apiId: user.details(id: data.id),
+                        format: MUser.fromJson,
+                      );
                   break;
                 case 'DELETE':
                   UDialog().showConfirm(
                     title: 'Xác nhận trước khi xoá',
                     text: 'Thao tác này sẽ làm mất đi dữ liệu của bạn. Bạn có chắc chắn thực hiện?',
                     btnOkOnPress: () async {
-                      ctx.read<BlocC>().submit(
+                      ctx.read<BlocC<MUser>>().submit(
                             onlyApi: true,
                             submit: (_) {
                               ctx.pop();
-                              ctx.read<BlocC>().refreshPage(
+                              ctx.read<BlocC<MUser>>().refreshPage(
                                     index: index,
                                     apiId: user.details(id: data.id),
                                     format: MUser.fromJson,

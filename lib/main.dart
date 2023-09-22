@@ -34,12 +34,15 @@ class MyApp extends StatelessWidget {
           ],
           child: MaterialApp.router(
             title: 'Flutter App',
-            builder: (BuildContext context, Widget? child) => GestureDetector(
-              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-              child: Builder(builder: (context) {
-                CSpace.setScreenSize(context);
-                return child!;
-              }),
+            builder: (BuildContext context, Widget? child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true, textScaleFactor: 1),
+              child: GestureDetector(
+                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                child: Builder(builder: (context) {
+                  CSpace.setScreenSize(context);
+                  return child!;
+                }),
+              ),
             ),
             debugShowCheckedModeBanner: false,
             localizationsDelegates: context.localizationDelegates,
