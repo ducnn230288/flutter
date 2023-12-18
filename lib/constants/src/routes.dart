@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '/core/src/map/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/pages/index.dart';
@@ -23,6 +24,7 @@ class CRoute {
   static const String resetPassword = 'reset-password';
   static const String myAccountInfo = 'my-account-info';
   static const String myAccountPass = 'my-account-password';
+  static const String map = 'map';
 }
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -50,23 +52,24 @@ GoRoute introductionRoute() => GoRoute(
           GoRoute(
               name: CRoute.login,
               path: CRoute.login,
-              builder: (BuildContext context, GoRouterState state) => blocForm(child: const LoginPage()),
+              builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(child: const LoginPage()),
               routes: <RouteBase>[
                 GoRoute(
                     name: CRoute.forgotPassword,
                     path: CRoute.forgotPassword,
-                    builder: (BuildContext context, GoRouterState state) => blocForm(child: const ForgotPassword()),
+                    builder: (BuildContext context, GoRouterState state) =>
+                        blocForm<MUser>(child: const ForgotPassword()),
                     routes: <RouteBase>[
                       GoRoute(
                           name: CRoute.otpVerification,
                           path: CRoute.otpVerification,
                           builder: (BuildContext context, GoRouterState state) =>
-                              blocForm(child: OTPVerificationPage(email: state.queryParams['email']!)),
+                              blocForm<MUser>(child: OTPVerificationPage(email: state.queryParams['email']!)),
                           routes: <RouteBase>[
                             GoRoute(
                               name: CRoute.resetPassword,
                               path: CRoute.resetPassword,
-                              builder: (BuildContext context, GoRouterState state) => blocForm(
+                              builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(
                                   child: ResetPassword(resetPasswordToken: state.queryParams['resetPasswordToken']!)),
                             )
                           ])
@@ -75,7 +78,7 @@ GoRoute introductionRoute() => GoRoute(
           GoRoute(
               name: CRoute.register,
               path: CRoute.register,
-              builder: (BuildContext context, GoRouterState state) => blocForm(
+              builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(
                     child: const RegisterPage(),
                   ))
         ]);
@@ -91,17 +94,28 @@ blocForm<T>({required Widget child}) => BlocListener<AuthC, AuthS>(
 GoRoute homeRoute() => GoRoute(
         name: CRoute.home,
         path: CRoute.home,
-        builder: (BuildContext context, GoRouterState state) => blocForm(child: const HomePage()),
+        builder: (BuildContext context, GoRouterState state) => const HomePage(),
         routes: <RouteBase>[
+          GoRoute(
+              name: CRoute.map,
+              path: CRoute.map,
+              builder: (BuildContext context, GoRouterState state) => blocForm(
+                  child: WMap(
+                    fullScreen: true,
+                    onlyPoint: state.queryParams['onlyPoint'] == 'true',
+                    address: state.extra as List<String>,
+                    name: state.queryParams['name']!,
+                    latLn: state.queryParams['latLn']!.split(',').map((e) => double.parse(e)).toList(),
+                  ))),
           GoRoute(
             name: CRoute.myAccountInfo,
             path: CRoute.myAccountInfo,
-            builder: (BuildContext context, GoRouterState state) => blocForm(child: const MyAccountInfo()),
+            builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(child: const MyAccountInfo()),
           ),
           GoRoute(
               name: CRoute.myAccountPass,
               path: CRoute.myAccountPass,
-              builder: (BuildContext context, GoRouterState state) => blocForm(child: const MyAccountPass())),
+              builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(child: const MyAccountPass())),
           GoRoute(
             name: CRoute.internalUser,
             path: CRoute.internalUser,

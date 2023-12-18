@@ -57,6 +57,12 @@ dependencies:
   syncfusion_flutter_charts: ^22.2.10
   qr_code_scanner: ^1.0.1
   device_info_plus: ^9.0.3
+  intl: ^0.18.1
+  firebase_core: ^2.23.0
+  firebase_messaging: ^14.7.5
+  google_maps_flutter: ^2.4.1
+  geocoding: ^2.1.0
+  geolocator: ^10.0.0
 
 dev_dependencies:
   flutter_test:

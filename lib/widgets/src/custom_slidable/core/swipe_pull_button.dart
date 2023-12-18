@@ -22,12 +22,12 @@ class SwipePullButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SwipePullButtonState createState() {
-    return _SwipePullButtonState();
+  SwipePullButtonState createState() {
+    return SwipePullButtonState();
   }
 }
 
-class _SwipePullButtonState extends State<SwipePullButton> with TickerProviderStateMixin {
+class SwipePullButtonState extends State<SwipePullButton> with TickerProviderStateMixin {
   ///The cell's total offset,not button's
   late double offsetX;
 
@@ -178,7 +178,7 @@ class _SwipePullButtonState extends State<SwipePullButton> with TickerProviderSt
         assert(action.nestedAction!.nestedWidth! >= data.totalActionWidth,
             "Your nested width must be larger than the width of all action button");
       } catch (e) {
-        print(e.toString());
+        // print(e.toString());
       }
     }
 

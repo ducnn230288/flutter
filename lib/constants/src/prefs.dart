@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CPref {
@@ -7,59 +8,30 @@ class CPref {
 
   static String statusTitle(String status) {
     switch (status) {
-      case 'DRAFT':
-        return 'Nháp';
-      case 'PUBLISHED':
-        return 'Đã duyệt';
-      case 'ADMIN_REJECTED':
       case 'REJECTED':
-      case 'ADMIN_REJECT':
-        return 'Từ chối';
-      case 'END':
-        return 'Kết thúc';
-      case 'USED':
-        return 'Đã sử dụng';
-      case 'UN_USED':
-        return 'Chưa sử dụng';
-      case 'WAIT_CONFIRM':
+        return 'CPref.REJECTED'.tr();
       case 'WFA':
-        return 'Chờ duyệt';
+        return 'CPref.WFA'.tr();
       case 'APPROVED':
-        return 'Đã duyệt';
-      case 'CLOSED':
-        return 'Đã đóng';
-      case 'LOCKED':
-        return 'Đã khóa';
-      case 'ACTIVE':
-        return 'Hoạt động';
-      case 'REJECT':
-        return 'Từ chối';
-      case 'ACCEPTED':
-        return 'Đang thực hiện';
-      case 'ASSIGNED':
-        return 'Đã lấy đơn';
+        return 'CPref.APPROVED'.tr();
       case 'COMPLETED':
-        return 'Hoàn thành';
+        return 'CPref.COMPLETED'.tr();
+      case 'WAIT_TRANSFER':
+        return 'CPref.WAIT_TRANSFER'.tr();
+      case 'TRANSFER_CONFIRMED':
+        return 'CPref.TRANSFER_CONFIRMED'.tr();
       case 'UN_CONFIRM':
-        return 'Chưa xác nhận';
-      case 'CONFIRMED':
-        return 'Đã xác nhận';
-      case 'USER_TRANSFER_CONFIRMED':
-        return 'Xác nhận CK';
-      case 'RECEIVED_CONFIRMED':
-        return 'Đã về tài khoản';
+        return 'CPref.UN_CONFIRM'.tr();
       case 'CANCELED':
-        return 'Đã hủy';
-      case 'KT':
-        return 'Kế toán';
-      case 'ORDERER':
-        return 'Order Side';
-      case 'FARMER':
-        return 'Farmer Side';
+        return 'CPref.CANCELED'.tr();
       case 'MALE':
-        return 'Nam';
+        return 'CPref.MALE'.tr();
       case 'FEMALE':
-        return 'Nữ';
+        return 'CPref.FEMALE'.tr();
+      case 'DRAFT':
+        return 'CPref.DRAFT'.tr();
+      case 'WAIT_CONFIRM':
+        return 'CPref.WAIT_CONFIRM'.tr();
     }
     return status;
   }

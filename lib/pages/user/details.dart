@@ -7,6 +7,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
+import '/widgets/index.dart';
 
 class UserDetails extends StatefulWidget {
   final String id;
@@ -26,7 +27,7 @@ class _UserDetailsState extends State<UserDetails> {
         builder: (context, state) {
           if (state.status == AppStatus.success) {
             final MUser data = state.value['account'];
-            final bool isFarmer = data.profileType == 'FARMER';
+            // final bool isFarmer = data.profileType == 'FARMER';
             List<MFormItem> formItems = [
               MFormItem(label: 'Thông tin chung', dataType: DataType.separation),
               MFormItem(label: 'Họ và tên', value: data.name),
@@ -49,7 +50,7 @@ class _UserDetailsState extends State<UserDetails> {
               MFormItem(label: 'Thao tác', dataType: DataType.separation),
               // if (isFarmer)
               //   MFormItem(
-              //     child: button(
+              //     child: buttonRow(
               //       label: 'Hồ sơ Farmer',
               //       width: 113,
               //       color: CColor.purple,
@@ -69,7 +70,7 @@ class _UserDetailsState extends State<UserDetails> {
               //     ),
               //   ),
               // MFormItem(
-              //   child: button(
+              //   child: buttonRow(
               //     label: 'Ví điện tử',
               //     width: 93,
               //     color: CColor.warning.shade600,
@@ -82,7 +83,7 @@ class _UserDetailsState extends State<UserDetails> {
               //   ),
               // ),
               MFormItem(
-                child: button(
+                child: buttonRow(
                   label: 'Kích hoạt',
                   width: data.isLockedOut ? 115 : 85,
                   color: data.isLockedOut ? CColor.green : CColor.danger,
@@ -110,7 +111,7 @@ class _UserDetailsState extends State<UserDetails> {
               for (var i = 0; i < formItems.length; i++) DataDetails(data: formItems[i]),
             ]);
           }
-          return Center(child: WLoading());
+          return const Center(child: WLoading());
         },
       ),
     );
@@ -130,39 +131,5 @@ class _UserDetailsState extends State<UserDetails> {
     if (result != null) {
       context.read<BlocC<MUser>>().setValue(value: {'account': MUser.fromJson(result.data)}, status: AppStatus.success);
     }
-  }
-
-  Widget button({
-    required String label,
-    required String title,
-    required IconData icon,
-    required Function() onPressed,
-    required Color color,
-    required double width,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: CSpace.small),
-      child: Row(
-        children: [
-          Expanded(child: Text(label, style: TextStyle(color: CColor.black.shade300))),
-          SizedBox(
-            width: width,
-            height: CHeight.superSmall,
-            child: ElevatedButton(
-              style: CStyle.buttonFill(backgroundColor: color),
-              onPressed: onPressed,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon, color: Colors.white, size: CFontSize.title3),
-                  const HSpacer(CSpace.small),
-                  Text(title)
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '/constants/index.dart';
-import '/core/index.dart';
 import '/cubit/index.dart';
 import '/utils/index.dart';
 
 class TextSearch<T> extends StatefulWidget {
   final String? hintText;
   final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
-  final Function format;
+  final Function(dynamic) format;
   final EdgeInsets? margin;
 
   const TextSearch({Key? key, required this.api, required this.format, this.hintText, this.margin}) : super(key: key);
@@ -26,7 +25,7 @@ class _TextSearchState<T> extends State<TextSearch> {
       margin: widget.margin ?? EdgeInsets.zero,
       child: TextFormField(
         controller: controller,
-        style: TextStyle(color: CColor.primary),
+        style: TextStyle(color: CColor.primary, fontSize: CFontSize.body),
         onChanged: (text) {
           Delay().run(() {
             api(text);
@@ -39,13 +38,13 @@ class _TextSearchState<T> extends State<TextSearch> {
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
             focusedBorder: borderStyle,
             enabledBorder: borderStyle,
-            fillColor: CColor.black.shade100.withOpacity(0.2),
+            fillColor: Colors.white,
             filled: true,
             contentPadding: EdgeInsets.zero,
             suffixIcon: BlocBuilder<BlocC<T>, BlocS<T>>(
               builder: (context, state) {
                 if (state.value['fullTextSearch'] == null || state.value['fullTextSearch'] == '') {
-                  return const HSpacer(0);
+                  return const SizedBox();
                 } else {
                   return InkWell(
                     splashColor: CColor.primary.shade100,
@@ -66,18 +65,16 @@ class _TextSearchState<T> extends State<TextSearch> {
     );
   }
 
-  final OutlineInputBorder borderStyle = const OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(5)),
-    borderSide: BorderSide(width: 0, style: BorderStyle.none),
+  final OutlineInputBorder borderStyle = OutlineInputBorder(
+    borderRadius: const BorderRadius.all(Radius.circular(CRadius.small)),
+    borderSide: BorderSide(color: CColor.black.shade100, width: 1),
   );
 
   final TextEditingController controller = TextEditingController();
 
   Future<void> api(String text) async {
     final cubit = context.read<BlocC<T>>();
-    Future block = cubit.stream.first;
     cubit.saved(value: text, name: 'fullTextSearch');
-    cubit.setPage(page: 1, api: widget.api, format: widget.format);
-    await block;
+    await cubit.setPage(page: 1, api: widget.api, format: widget.format);
   }
 }

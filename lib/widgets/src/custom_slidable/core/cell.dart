@@ -175,7 +175,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
 
   bool get hasLeadingAction => leadingActionsCount > 0;
 
-  final _CellStateInfo cellStateInfo = _CellStateInfo();
+  final CellStateInfo cellStateInfo = CellStateInfo();
 
   @override
   void initState() {
@@ -291,7 +291,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
       if (event.trailing && !hasTrailingAction || !event.trailing && !hasLeadingAction) {
         return;
       }
-      if (event.index != this.widget.index) {
+      if (event.index != widget.index) {
         return;
       }
 
@@ -301,7 +301,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
     });
 
     ignorePointerSubscription = SwipeActionStore.getInstance().bus.on<IgnorePointerEvent>().listen((event) {
-      this.ignorePointer = event.ignore;
+      ignorePointer = event.ignore;
       if (mounted) setState(() {});
     });
 
@@ -386,7 +386,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
 
   void _addScrollListener() {
     if (widget.closeWhenScrolling) {
-      scrollPosition = Scrollable.of(context)?.position;
+      scrollPosition = Scrollable.of(context).position;
       scrollPosition?.isScrollingNotifier.addListener(_scrollListener);
     }
   }
@@ -515,7 +515,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
         trailingActionsCount > 0 && widget.trailingActions![0].performsFirstActionWithFullSwipe;
 
     if (lastItemOut && canFullSwipe) {
-      CompletionHandler completionHandler = (delete) async {
+      completionHandler(delete) async {
         if (delete) {
           SwipeActionStore.getInstance().bus.fire(const IgnorePointerEvent(ignore: true));
           if (widget.firstActionWillCoverAllSpaceOnDeleting) {
@@ -531,7 +531,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
           ///wait animation to complete
           await closeWithAnim();
         }
-      };
+      }
 
       if (whenTrailingActionShowing && widget.trailingActions != null) {
         await widget.trailingActions?[0].onTap?.call(completionHandler);
@@ -586,7 +586,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
     animation = Tween<double>(begin: currentOffset.dx, end: endOffset).animate(curveAnim)
       ..addListener(() {
         if (lockAnim) return;
-        this.currentOffset = Offset(animation.value, 0);
+        currentOffset = Offset(animation.value, 0);
         setState(() {});
       });
     adjustOffsetAnimController.forward().whenCompleteOrCancel(() {
@@ -601,13 +601,13 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
           .animate(curvedAnim)
         ..addListener(() {
           if (lockAnim) return;
-          this.currentOffset = Offset(animation.value, 0);
+          currentOffset = Offset(animation.value, 0);
           setState(() {});
         });
 
       controller.forward();
     } else {
-      this.currentOffset = Offset(trailing ? -maxTrailingPullWidth : maxLeadingPullWidth, 0);
+      currentOffset = Offset(trailing ? -maxTrailingPullWidth : maxLeadingPullWidth, 0);
       setState(() {});
     }
   }
@@ -621,7 +621,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
       animation = Tween<double>(begin: currentOffset.dx, end: 0.0).animate(curvedAnim)
         ..addListener(() {
           if (lockAnim) return;
-          this.currentOffset = Offset(animation.value, 0);
+          currentOffset = Offset(animation.value, 0);
           setState(() {});
         });
 
@@ -990,7 +990,7 @@ class SwipeNestedAction {
 class _DirectionDependentDragGestureRecognizer extends HorizontalDragGestureRecognizer {
   final bool canDragToLeft;
   final bool canDragToRight;
-  final _CellStateInfo cellStateInfo;
+  final CellStateInfo cellStateInfo;
 
   _DirectionDependentDragGestureRecognizer(
       {required this.cellStateInfo, required this.canDragToLeft, required this.canDragToRight});
@@ -1004,6 +1004,6 @@ class _DirectionDependentDragGestureRecognizer extends HorizontalDragGestureReco
   }
 }
 
-class _CellStateInfo {
+class CellStateInfo {
   bool isActionShowing = false;
 }

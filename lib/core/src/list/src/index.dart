@@ -29,6 +29,7 @@ class WList<T> extends StatefulWidget {
   final EdgeInsets? margin;
   final Color? backgroundColor;
   final Function(dynamic cubit)? init;
+  final Function(ScrollController controller, double number)? onScroll;
 
   const WList({
     super.key,
@@ -51,6 +52,7 @@ class WList<T> extends StatefulWidget {
     this.backgroundColor,
     this.init,
     this.apiId,
+    this.onScroll,
   });
 
   @override
@@ -63,10 +65,12 @@ class _WListState<T> extends State<WList<T>> {
     return BlocBuilder<BlocC<T>, BlocS<T>>(
         buildWhen: (bf, at) => isLoadMore == false,
         builder: (context, state) {
-          final int length =
-              state.data.content.isNotEmpty && state.status != AppStatus.fails ? state.data.content.length : 1;
-          if (state.status == AppStatus.inProcess) return WLoading();
-
+          final int length = widget.items != null
+              ? widget.items!.length
+              : state.data.content.isNotEmpty && state.status != AppStatus.fails
+                  ? state.data.content.length
+                  : 1;
+          if (state.status == AppStatus.inProcess) return const WLoading();
           return RefreshIndicator(
             notificationPredicate: widget.items == null ? (_) => true : (_) => false,
             onRefresh: () async {
@@ -87,7 +91,7 @@ class _WListState<T> extends State<WList<T>> {
                 crossAxisAlignment: widget.crossAxisAlignment,
                 children: [
                   if (widget.inputDisplayType == InputDisplayType.outside) widget.top ?? Container(),
-                  state.data.content.isNotEmpty
+                  state.data.content.isNotEmpty || widget.items != null
                       ? Flexible(
                           flex: widget.flex,
                           child: ListView.separated(
@@ -99,18 +103,20 @@ class _WListState<T> extends State<WList<T>> {
                                 return Container(
                                   height: 150,
                                   alignment: Alignment.center,
-                                  child:
-                                      Text('Oops!, có lỗi xảy ra...', style: TextStyle(color: CColor.black.shade300)),
+                                  child: Text(
+                                    'Oops!, có lỗi xảy ra...',
+                                    style: TextStyle(color: CColor.black.shade300),
+                                  ),
                                 );
                               }
-                              final item = state.data.content[index];
+                              final item = widget.items == null ? state.data.content[index] : widget.items![index];
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: widget.crossAxisAlignment,
                                 children: [
                                   if (index == 0 && widget.inputDisplayType == InputDisplayType.inside)
                                     widget.top ?? Container(),
-                                  state.data.content.isNotEmpty
+                                  state.data.content.isNotEmpty || widget.items != null
                                       ? InkWell(
                                           splashColor: CColor.primary.shade100,
                                           onTap: (widget.onTap != null || widget.onTapMultiple != null)
@@ -137,7 +143,7 @@ class _WListState<T> extends State<WList<T>> {
                                       stream: loadMoreController.stream,
                                       builder: (_, snapshot) {
                                         if (snapshot.hasData && snapshot.data == true) {
-                                          return WLoading();
+                                          return const WLoading();
                                         }
                                         return Container();
                                       },
@@ -193,19 +199,6 @@ class _WListState<T> extends State<WList<T>> {
         api: widget.api ?? (_, __, ___, ____) {},
         format: widget.format ?? MUpload.fromJson,
       );
-    } else {
-      List? content = widget.items;
-      blocC.setData(
-        data: MData.fromJson({
-          'page': 1,
-          'totalPages': content!.length,
-          'size': content.length,
-          'numberOfElements': content.length,
-          'totalElements': content.length,
-          'content': content
-        }, widget.format),
-        status: widget.status,
-      );
     }
     if (widget.items == null) {
       controller = ScrollController()..addListener(scrollListener);
@@ -226,7 +219,6 @@ class _WListState<T> extends State<WList<T>> {
   @override
   void didUpdateWidget(covariant WList<T> oldWidget) {
     refresh();
-    updateItems();
     super.didUpdateWidget(oldWidget);
   }
 
@@ -247,22 +239,30 @@ class _WListState<T> extends State<WList<T>> {
   void updateItems() {
     if (widget.items != null) {
       final BlocC<T> blocC = context.read<BlocC<T>>();
-      List? content = widget.items;
+      final List items = widget.items!;
       blocC.setData(
         data: MData.fromJson({
           'page': 1,
-          'totalPages': content!.length,
-          'size': content.length,
-          'numberOfElements': content.length,
-          'totalElements': content.length,
-          'content': content
+          'totalPages': items.length,
+          'size': items.length,
+          'numberOfElements': items.length,
+          'totalElements': items.length,
+          'content': items
         }, widget.format),
         status: widget.status,
       );
     }
   }
-
+  var timer = Timer(const Duration(hours: 10000), () {});
+  double _scrollCurrent = 0;
   void scrollListener() async {
+    if (widget.onScroll != null && controller.position.pixels >= 0) {
+      timer.cancel();
+      double number = _scrollCurrent - controller.position.pixels;
+      _scrollCurrent = controller.position.pixels;
+      timer = Timer(const Duration(milliseconds: 15), () => widget.onScroll!(controller, number));
+    }
+
     const int space = 100;
     if (widget.items != null) return;
     final BlocC cubit = context.read<BlocC<T>>();

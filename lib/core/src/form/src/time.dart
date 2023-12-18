@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '/core/index.dart';
 import '/utils/index.dart';
 
-class WTime extends StatefulWidget {
+class WTime<T> extends StatefulWidget {
   final String label;
   final String value;
   final String? subtitle;
@@ -37,16 +37,16 @@ class WTime extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<WTime> createState() => _WTimeState();
+  State<WTime> createState() => _WTimeState<T>();
 }
 
-class _WTimeState extends State<WTime> {
+class _WTimeState<T> extends State<WTime> {
   FocusNode focusNode = FocusNode();
   TimeOfDay timeOfDay = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
-    return WInput(
+    return WInput<T>(
       height: widget.height,
       width: widget.width,
       controller: widget.controller,

@@ -34,8 +34,8 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     emit(state.copyWith(value: {...state.value, ...value}, status: status));
   }
 
-  void resetValue() {
-    emit(state.copyWith(value: {}));
+  void resetValue({Map<String, dynamic>? value}) {
+    emit(state.copyWith(value: value ?? {}));
   }
 
   void addValue({required dynamic value, required String name}) {
@@ -69,7 +69,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     }
   }
 
-  Future<void> refreshPage({required Future<MApi?> apiId, required int index, required Function(T json) format}) async {
+  Future<void> refreshPage({required Future<MApi?> apiId, required int index, required Function(dynamic json) format}) async {
     inProcess();
     MApi? result = await apiId;
     // //Lấy totalElements mới nhất
@@ -90,7 +90,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
   Future<void> setPage(
       {required int page,
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
-      Function? format}) async {
+      Function(dynamic)? format}) async {
     try {
       inProcess();
       MApi? result = await api(
@@ -145,6 +145,10 @@ class BlocC<T> extends Cubit<BlocS<T>> {
     }
   }
 
+  void savedStatus({AppStatus status = AppStatus.init}) {
+    state.status = status;
+  }
+
   void removeKey({required String name, bool isEmit = false}) {
     state.value.remove(name);
     if (isEmit) {
@@ -182,28 +186,28 @@ class BlocC<T> extends Cubit<BlocS<T>> {
       if (result != null) {
         if (!getData || onlyApi) {
           if (notification && result.message != '') {
-            if (result.code == 404) {
+            if (result.code == 404 && !result.isSuccess) {
               dialogs.showError(text: result.message);
             } else {
               dialogs.showSuccess(
                   text: result.message,
                   onDismiss: (context) {
-                    if (submit != null) submit(result.data);
                     emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+                    if (submit != null) submit(result.data);
                   });
             }
           } else {
-            if (submit != null) submit(result.data);
             emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+            if (submit != null) submit(result.data);
           }
         } else {
           if (format != null) {
             dynamic data = MData<T>.fromJson(result.data, format);
-            if (submit != null) submit(data);
             emit(state.copyWith(status: AppStatus.success, data: data));
+            if (submit != null) submit(data);
           } else {
-            if (submit != null) submit(result.data);
             emit(state.copyWith(status: AppStatus.success, value: {key: result.data}));
+            if (submit != null) submit(result.data);
           }
         }
       }
@@ -218,7 +222,7 @@ class BlocC<T> extends Cubit<BlocS<T>> {
 }
 
 class BlocS<T> {
-  final AppStatus status;
+  AppStatus status;
   final GlobalKey<FormState> formKey;
   final Map<String, dynamic> value;
   final List<MFormItem> list;

@@ -72,7 +72,7 @@ class _WSelectState<T> extends State<WSelect> {
   @override
   Widget build(BuildContext context) {
     final value = context.read<BlocC<T>>().state.value;
-    return WInput(
+    return WInput<T>(
       height: widget.height,
       width: widget.width,
       controller: widget.controller,
@@ -123,25 +123,21 @@ class _WSelectState<T> extends State<WSelect> {
                       if (widget.items == null && widget.showSearch)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
-                          child: Builder(
-                            builder: (context) {
-                              return WInput(
-                                name: 'fullTextSearch',
-                                hintText: 'widgets.form.select.Search'.tr(),
-                                required: false,
-                                icon: 'assets/svgs/search.svg',
-                                onChanged: (value) {
-                                  context.read<BlocC>().saved(name: 'fullTextSearch', value: value);
-                                  Delay().run(() {
-                                    context.read<BlocC>().submit(
-                                          showDialog: false,
-                                          api: widget.api,
-                                          getData: true,
-                                          format: widget.format,
-                                        );
-                                  });
-                                },
-                              );
+                          child: WInput(
+                            hintText: 'widgets.form.select.Search'.tr(),
+                            required: false,
+                            icon: 'assets/svgs/search.svg',
+                            value: context.read<BlocC>().state.value['fullTextSearch'] ?? '',
+                            onChanged: (value) {
+                              context.read<BlocC>().saved(name: 'fullTextSearch', value: value);
+                              Delay().run(() {
+                                context.read<BlocC>().submit(
+                                  showDialog: false,
+                                  api: widget.api,
+                                  getData: true,
+                                  format: widget.format,
+                                );
+                              });
                             },
                           ),
                         ),

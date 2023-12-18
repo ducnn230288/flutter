@@ -51,7 +51,7 @@ class CreateUser extends StatelessWidget {
       MFormItem(
         name: 'phoneNumber',
         label: 'Số điện thoại',
-        number: true,
+        keyBoard: EFormItemKeyBoard.number,
         formatNumberType: FormatNumberType.normal,
         value: data?.phoneNumber ?? '',
       ),

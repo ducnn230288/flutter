@@ -7,6 +7,7 @@ import 'package:pinput/pinput.dart';
 import '/constants/index.dart';
 import '/core/index.dart';
 import '/cubit/index.dart';
+import '/models/index.dart';
 import '/utils/index.dart';
 
 class OTPVerificationPage extends StatefulWidget {
@@ -61,7 +62,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () => context.read<BlocC>().submit(
+                onPressed: () => context.read<BlocC<MUser>>().submit(
                     onlyApi: true,
                     api: (_, __, ___, ____) =>
                         RepositoryProvider.of<Api>(context).auth.forgotPassword(email: widget.email)),
@@ -95,7 +96,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
 
   void checkToken() async {
     if (_controller.text.length == 6) {
-      context.read<BlocC>().submit(
+      context.read<BlocC<MUser>>().submit(
           onlyApi: true,
           api: (_, __, ___, ____) =>
               RepositoryProvider.of<Api>(context).auth.verifyForgotPassword(resetPasswordToken: _controller.text),

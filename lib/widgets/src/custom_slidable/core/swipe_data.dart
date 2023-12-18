@@ -4,7 +4,6 @@ import 'cell.dart';
 
 class SwipeData extends InheritedWidget {
   final List<SwipeAction> actions;
-  final Widget child;
   final double currentOffset;
   final bool fullDraggable;
   final Key parentKey;
@@ -14,8 +13,8 @@ class SwipeData extends InheritedWidget {
   final bool willPull;
   final SwipeActionCellState parentState;
 
-  SwipeData({
-    required this.child,
+  const SwipeData({super.key,
+    required super.child,
     required this.actions,
     required this.willPull,
     required this.currentOffset,
@@ -25,7 +24,7 @@ class SwipeData extends InheritedWidget {
     required this.contentWidth,
     required this.totalActionWidth,
     required this.parentState,
-  }) : super(child: child);
+  });
 
   static SwipeData of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType(aspect: SwipeData)!;

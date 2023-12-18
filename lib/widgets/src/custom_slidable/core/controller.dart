@@ -19,7 +19,7 @@ typedef SelectedIndexPathsChangeCallback = Function(
 class SwipeActionController {
   SwipeActionController({this.selectedIndexPathsChangeCallback});
 
-  Set<int> selectedSet = Set<int>();
+  Set<int> selectedSet = <int>{};
 
   SelectedIndexPathsChangeCallback? selectedIndexPathsChangeCallback;
 
@@ -74,9 +74,9 @@ class SwipeActionController {
   ///这个方法只是为了更新内部数据源，你仍然需要在调用这个方法之后
   ///去调用 [setState] 来更新你自己的数据源
   void deleteCellAt({required List<int> indexPaths}) {
-    indexPaths.forEach((element) {
+    for (var element in indexPaths) {
       selectedSet.remove(element);
-    });
+    }
   }
 
   ///Open a cell programmatically
@@ -116,9 +116,9 @@ class SwipeActionController {
         isEditing.value,
         "Please call method :selectCellAt(index)  when you are in edit mode\n"
         "请在编辑模式打开的情况下调用 selectCellAt(index)");
-    indexPaths.forEach((element) {
+    for (var element in indexPaths) {
       selectedSet.add(element);
-    });
+    }
     selectedIndexPathsChangeCallback?.call(indexPaths, true, selectedSet.length);
     SwipeActionStore.getInstance().bus.fire(CellSelectedEvent(selected: true));
   }
@@ -131,9 +131,9 @@ class SwipeActionController {
         "Please call method :selectCellAt(index)  when you are in edit mode\n"
         "请在编辑模式打开的情况下调用 selectCellAt(index)");
 
-    indexPaths.forEach((element) {
+    for (var element in indexPaths) {
       selectedSet.remove(element);
-    });
+    }
     selectedIndexPathsChangeCallback?.call(indexPaths, false, selectedSet.length);
     SwipeActionStore.getInstance().bus.fire(CellSelectedEvent(selected: false));
   }

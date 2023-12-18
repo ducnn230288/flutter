@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pinput/pinput.dart';
 
 import '/constants/index.dart';
-import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 
@@ -17,14 +17,16 @@ class WInput<T> extends StatefulWidget {
   final String? subtitle;
   final bool space;
   final int maxLines;
+  final int? maxLength;
+  final int? minLength;
   final bool required;
   final bool enabled;
   final bool password;
-  final bool number;
   final bool stackedLabel;
   final bool focus;
   final ValueChanged<String>? onChanged;
   final Function(dynamic)? onTap;
+  final dynamic onValidated;
   final String? icon;
   final Widget? suffix;
   final TextEditingController? controller;
@@ -33,6 +35,7 @@ class WInput<T> extends StatefulWidget {
   final String? rulesRequired;
   final double? height;
   final double? width;
+  final EFormItemKeyBoard? keyBoard;
 
   const WInput({
     Key? key,
@@ -40,13 +43,15 @@ class WInput<T> extends StatefulWidget {
     this.value = '',
     this.subtitle,
     this.maxLines = 1,
+    this.maxLength,
+    this.minLength,
     this.required = true,
     this.enabled = true,
     this.password = false,
-    this.number = false,
     this.stackedLabel = true,
     this.focus = false,
     this.onChanged,
+    this.onValidated,
     this.onTap,
     this.icon,
     this.suffix,
@@ -59,6 +64,7 @@ class WInput<T> extends StatefulWidget {
     this.rulesRequired,
     this.height,
     this.width,
+    this.keyBoard,
   }) : super(key: key);
 
   @override
@@ -89,12 +95,13 @@ class _WInputState<T> extends State<WInput> {
         widget.onTap!(controller.text);
       }
     });
+    if (widget.value != 'null') controller.setText(widget.value);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool inputFormatters = widget.number && widget.formatNumberType == FormatNumberType.inputFormatters;
+    final bool inputFormatters = widget.keyBoard == EFormItemKeyBoard.number && widget.formatNumberType == FormatNumberType.inputFormatters;
     final height = widget.height != null ? ((widget.height! / CHeight.large) - 1) : 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,31 +138,45 @@ class _WInputState<T> extends State<WInput> {
                 widget.onTap!(controller.text);
               }
             },
+            maxLength: widget.maxLength,
             readOnly: widget.onTap != null,
             textInputAction: widget.maxLines > 1 ? TextInputAction.newline : TextInputAction.next,
             style: TextStyle(fontSize: CFontSize.body + (height * 3), color: CColor.black.shade700),
             onChanged: (String text) {
-              if (inputFormatters) {
-                text = text.replaceAll('.', '');
-              }
-              if (widget.onChanged != null) {
-                widget.onChanged!(text);
-              }
+              if (inputFormatters) text = text.replaceAll('.', '');
+              if (widget.onChanged != null) widget.onChanged!(text);
             },
             validator: (value) {
-              if (widget.required && value == '') {
+              BlocC cubit = context.read<BlocC<T>>();
+              if (cubit.state.status != AppStatus.success && widget.required && value == '') {
                 return (widget.rulesRequired ?? 'widgets.form.input.rulesRequired')
                     .tr(args: [('${widget.label != '' ? widget.label : widget.hintText}').toLowerCase()]);
               }
+              if (value != '') {
+                switch (widget.keyBoard) {
+                  case EFormItemKeyBoard.email:
+                    if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)) return 'Không đúng định dạng email';
+                    return null;
+                  case EFormItemKeyBoard.phone:
+                    if (!RegExp(r'^(?:[+0][1-9])?[0-9]{10,12}$').hasMatch(value!) || value.length > 11) return 'Nhập sai định dạng số điện thoại';
+                    return null;
+                  case EFormItemKeyBoard.number:
+                    if (value!.contains('-')) return 'Không được có dấu trừ';
+                    if (double.tryParse(value.replaceAll('.', '')) == null || value.endsWith('.')) return 'Vui lòng nhập đúng định dạng số';
+                    if (value[0] == '0') return 'Nhập sai định dạng số';
+                    return null;
+                  default:
+                    break;
+                }
+                if (widget.minLength != null && value!.length < widget.minLength!) return 'Không được nhập dưới ${widget.minLength.toString()} ký tự';
+                if (widget.onValidated != null && value != null) return widget.onValidated!(value);
+              }
+
               return null;
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
             obscureText: visible,
-            keyboardType: widget.number
-                ? TextInputType.number
-                : widget.maxLines > 1
-                    ? TextInputType.multiline
-                    : null,
+            keyboardType: textInputType(),
             decoration: InputDecoration(
               counterText: widget.label != '' ? widget.label : widget.hintText,
               counterStyle: const TextStyle(fontSize: 0.5, color: Colors.transparent),
@@ -204,7 +225,7 @@ class _WInputState<T> extends State<WInput> {
                                 (state.value['fullTextSearch'].runtimeType != String &&
                                     state.value['fullTextSearch']?['value'] == '') ||
                                 controller.text == '') {
-                              return const HSpacer(0);
+                              return Container();
                             }
                             return InkWell(
                               splashColor: CColor.primary.shade100,
@@ -230,9 +251,9 @@ class _WInputState<T> extends State<WInput> {
               enabledBorder: borderStyle,
               errorBorder: errorBorderStyle,
               focusedErrorBorder: errorBorderStyle,
-              fillColor: Colors.transparent,
+              fillColor: Colors.white,
               contentPadding: EdgeInsets.symmetric(
-                vertical: widget.maxLines > 1 ? CSpace.medium : 0,
+                vertical: widget.maxLines > 1 ? CSpace.medium : -3,
                 horizontal: CSpace.medium + (height * 10),
               ),
               filled: true,
@@ -248,8 +269,22 @@ class _WInputState<T> extends State<WInput> {
       ],
     );
   }
+  TextInputType? textInputType() {
+    switch (widget.keyBoard) {
+      case EFormItemKeyBoard.email:
+        return TextInputType.emailAddress;
+      case EFormItemKeyBoard.phone:
+        return TextInputType.phone;
+      case EFormItemKeyBoard.number:
+        return const TextInputType.numberWithOptions(
+          decimal: true,
+          signed: true,
+        );
+      default:
+        return null;
+    }
+  }
 }
-
 
 class ThousandFormatter extends TextInputFormatter {
   static const separator = '.';

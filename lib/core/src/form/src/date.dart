@@ -13,7 +13,7 @@ import '/core/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
 
-class WDate extends StatefulWidget {
+class WDate<T> extends StatefulWidget {
   final String name;
   final String label;
   final String value;
@@ -58,15 +58,14 @@ class WDate extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<WDate> createState() => _WDateState();
+  State<WDate> createState() => _WDateState<T>();
 }
 
-class _WDateState extends State<WDate> {
+class _WDateState<T> extends State<WDate> {
   @override
   Widget build(BuildContext context) {
     final double width =
         (CSpace.width / (widget.mode == DateRangePickerSelectionMode.single ? 1.15 : 2)) - (2 * CSpace.superLarge);
-
     return WInput(
       height: widget.height,
       width: widget.width,
@@ -74,14 +73,18 @@ class _WDateState extends State<WDate> {
       hintText: widget.hintText ?? 'widgets.form.input.Choose'.tr(args: [widget.label.toLowerCase()]),
       rulesRequired: 'widgets.form.date.rulesRequired'.tr(),
       label: widget.label,
-      value: widget.value,
+      value: widget.value != '' ?
+        widget.mode == DateRangePickerSelectionMode.single
+          ? Convert.dateLocation(selectedDateSingle!.toIso8601String())
+          : Convert.dateTimeMultiple([selectedDateMultiple!.startDate!.toIso8601String(), selectedDateMultiple!.endDate!.toIso8601String()])
+        : '',
       subtitle: widget.subtitle,
       space: widget.space,
       maxLines: widget.maxLines,
       required: widget.required,
       enabled: widget.enabled,
       stackedLabel: widget.stackedLabel,
-      suffix: BlocBuilder<BlocC, BlocS>(
+      suffix: BlocBuilder<BlocC<T>, BlocS<T>>(
         buildWhen: (bf, at) =>
             (bf.value[widget.name] == '' && at.value[widget.name] != '') ||
             (bf.value[widget.name] != '' && at.value[widget.name] == ''),
@@ -146,9 +149,7 @@ class _WDateState extends State<WDate> {
                                 : null,
                             initialDisplayDate: widget.mode == DateRangePickerSelectionMode.single
                                 ? selectedDateSingle
-                                : selectedDateMultiple != null
-                                    ? selectedDateMultiple!.startDate
-                                    : null,
+                                : selectedDateMultiple?.startDate,
                             initialSelectedRange: selectedDateMultiple,
 
                             headerStyle: DateRangePickerHeaderStyle(textStyle: CStyle.title),
@@ -185,7 +186,7 @@ class _WDateState extends State<WDate> {
                                       ),
                                     ],
                                   ),
-                                  const VSpacer(10),
+                                  const VSpacer(CSpace.mediumSmall),
                                   Row(
                                     children: [
                                       Container(

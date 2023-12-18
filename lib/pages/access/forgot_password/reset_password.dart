@@ -41,16 +41,16 @@ class ResetPassword extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const VSpacer(CSpace.superLarge),
-          WForm(list: listFormItem),
+          WForm<MUser>(list: listFormItem),
           const VSpacer(CSpace.superLarge),
           ElevatedButton(
               onPressed: () {
-                final value = context.read<BlocC>().state.value;
+                final value = context.read<BlocC<MUser>>().state.value;
                 if (value['newPassword'] != value['password']) {
                   UDialog().showError(text: 'Xác nhận mật khẩu sai');
                   return;
                 }
-                context.read<BlocC>().submit(
+                context.read<BlocC<MUser>>().submit(
                     api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context)
                         .auth
                         .resetPassword(resetPasswordToken: resetPasswordToken, password: value['password']),

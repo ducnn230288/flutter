@@ -45,8 +45,9 @@ class BaseHttp {
     required String url,
     required body,
     required Map<String, String> headers,
+    Map<String, dynamic>? queryParameters,
   }) async {
-    final apiUri = Uri.parse(url);
+    final apiUri = Uri.parse(url).replace(queryParameters: queryParameters);
 
     return await _common(
       url: url,

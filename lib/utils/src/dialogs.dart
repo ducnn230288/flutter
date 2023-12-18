@@ -11,7 +11,6 @@ import '/models/index.dart';
 
 class UDialog {
   static bool _isDialog = false;
-  final Duration _timeOut = const Duration(seconds: 30);
 
   Future<void> startLoading() async {
     _isDialog = true;
@@ -20,8 +19,8 @@ class UDialog {
       barrierDismissible: false,
       barrierColor: CColor.black.withOpacity(0.2),
       builder: (_) {
-        return WillPopScope(
-          onWillPop: () async => false,
+        return const PopScope(
+          canPop: true,
           child: SimpleDialog(
             elevation: 0.0,
             backgroundColor: Colors.transparent,
@@ -232,9 +231,7 @@ class UDialog {
                           },
                           child: ElevatedButton(
                               onPressed: () {
-                                if (onSubmit != null) {
-                                  onSubmit(context.read<BlocC>().state.value);
-                                }
+                                if (onSubmit != null) onSubmit(context.read<BlocC>().state.value);
                                 context.read<BlocC>().submit(api: api);
                               },
                               child: Text(textButton)),

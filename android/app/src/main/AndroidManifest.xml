@@ -1,8 +1,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application
+  <uses-permission android:name="android.permission.INTERNET" /> <!-- Cấp quyền call API -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Cấp quyền ví trí hiện tại -->
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- Cấp quyền cập nhật vị trí ở khi ở trạng thái nền -->
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"/><!-- Cấp quyền truy cập url cho Android > 11. -->
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/><!-- Cấp quyền thông báo cho android >= 13-->
+
+  <application
         android:label="Flutter App"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
+    <meta-data
+      android:name="com.google.android.gms.version"
+      android:value="@integer/google_play_services_version" />
+    <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyAO_SXaEFQ4QHOtFjk_zCQvy-Xa02SegyE" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

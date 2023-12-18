@@ -34,7 +34,7 @@ class ForgotPassword extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const VSpacer(CSpace.superLarge),
-            WForm(
+            WForm<MUser>(
               list: [
                 MFormItem(
                   name: 'email',
@@ -45,12 +45,12 @@ class ForgotPassword extends StatelessWidget {
             ),
             const VSpacer(CSpace.large),
             ElevatedButton(
-                onPressed: () => context.read<BlocC>().submit(
+                onPressed: () => context.read<BlocC<MUser>>().submit(
                     api: (value, _, __, ___) =>
                         RepositoryProvider.of<Api>(context).auth.forgotPassword(email: value['email']),
                     submit: (data) => context.goNamed(
                           CRoute.otpVerification,
-                          queryParams: {'email': context.read<BlocC>().state.value['email']},
+                          queryParams: {'email': context.read<BlocC<MUser>>().state.value['email']},
                         )),
                 child: const Text('Gửi'))
           ],

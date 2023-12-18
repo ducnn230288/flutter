@@ -1,19 +1,21 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 
 import 'snack_bar.dart';
 
 class Convert {
   static String dateTime(String dateTime, {String separator = '/', bool returnTime = true}) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('${returnTime ? 'HH:mm' : ''} dd${separator}MM${separator}yyyy', 'vi')
         .format(DateTime.parse(dateTime));
   }
 
   static String dateTimeAgo(String dateTime, {String separator = '/'}) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     final DateTime now = DateTime.now();
     final int day = now.difference(DateTime.parse(dateTime)).inDays;
     if (day >= 1 && day < 30) {
@@ -34,32 +36,32 @@ class Convert {
   }
 
   static String dateTimeSecond(String dateTime, {String separator = '/'}) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('HH:mm:ss dd${separator}MM${separator}yyyy', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String dateLocation(String dateTime) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('dd MMMM, yyyy', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String hours(String dateTime) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('HH:mm', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String hoursLocation(String dateTime) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('HH:mm a', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String date(String dateTime, {String separator = '/'}) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('dd${separator}MM${separator}yyyy', 'vi').format(DateTime.parse(dateTime));
   }
 
   static String dateChart(String dateTime) {
-    if (DateTime.tryParse(dateTime)  == null) return '';
+    if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('dd/MM', 'vi').format(DateTime.parse(dateTime));
   }
 
@@ -184,5 +186,20 @@ class Convert {
         return 'Nữ';
     }
     return '';
+  }
+
+  static List<Shadow> outlinedText({double strokeWidth = 1, Color strokeColor = Colors.black, int precision = 5}) {
+    Set<Shadow> result = HashSet();
+    for (int x = 1; x < strokeWidth + precision; x++) {
+      for (int y = 1; y < strokeWidth + precision; y++) {
+        double offsetX = x.toDouble();
+        double offsetY = y.toDouble();
+        result.add(Shadow(offset: Offset(-strokeWidth / offsetX, -strokeWidth / offsetY), color: strokeColor));
+        result.add(Shadow(offset: Offset(-strokeWidth / offsetX, strokeWidth / offsetY), color: strokeColor));
+        result.add(Shadow(offset: Offset(strokeWidth / offsetX, -strokeWidth / offsetY), color: strokeColor));
+        result.add(Shadow(offset: Offset(strokeWidth / offsetX, strokeWidth / offsetY), color: strokeColor));
+      }
+    }
+    return result.toList();
   }
 }

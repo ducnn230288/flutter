@@ -66,7 +66,7 @@ class _AccountInfoState extends State<_AccountInfo> {
       ),
     ];
 
-    return WForm(
+    return WForm<MUser>(
       list: listFormItem,
       builder: (items) {
         return CustomScrollView(
@@ -105,15 +105,42 @@ class _AccountInfoState extends State<_AccountInfo> {
                 ),
               ),
             ),
-            // SliverToBoxAdapter(
-            //   child: _buildCommonInfo(),
-            // ),
+
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if (!Role.isAdmin)
+                      Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: CSpace.large),
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton(
+                          style: CStyle.buttonDanger,
+                          onPressed: () {
+                            UDialog().showConfirm(
+                                title: 'Xóa tài khoản',
+                                text: 'Bạn có muốn xoá tài khoản này không?',
+                                btnOkOnPress: () {
+                                  context.read<BlocC>().submit(
+                                      onlyApi: true,
+                                      notification: false,
+                                      api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context)
+                                          .auth
+                                          .delete(),
+                                      submit: (_) async {
+                                        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                        sharedPreferences.clear();
+                                        await UDialog().delay();
+                                        context.goNamed(CRoute.login);
+                                      });
+                                });
+                          },
+                          child: const Text('Xoá tài khoản'),
+                        ),
+                      ),
                     const VSpacer(CSpace.large),
                     items['name'] ?? const SizedBox.shrink(),
                     items['gender'] ?? const SizedBox.shrink(),

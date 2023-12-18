@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-enum EFormItemType { select, date, time, upload, selectMultiple, title, separation, input, checkbox }
+enum EFormItemType { select, date, time, upload, selectMultiple, title, separation, input, checkbox, map }
+enum EFormItemKeyBoard { number, phone, email }
 
 class MFormItem {
   MFormItem({
@@ -13,15 +14,19 @@ class MFormItem {
     this.value = '',
     this.code = '',
     this.maxLines = 1,
+    this.maxLength,
+    this.minLength,
     this.required = true,
     this.show = true,
     this.enabled = true,
     this.password = false,
     this.showClose = false,
-    this.number = false,
+    this.keyBoard,
     this.onTap,
+    this.onCondition,
     this.onFind,
     this.onChange,
+    this.onValidator,
     this.icon,
     this.suffix,
     this.items,
@@ -56,15 +61,19 @@ class MFormItem {
   dynamic value;
   dynamic code;
   int maxLines;
+  int? maxLength;
+  int? minLength;
   bool required;
   bool show;
   bool showClose;
   bool enabled;
   bool password;
-  bool number;
+  EFormItemKeyBoard? keyBoard;
   Function(dynamic value)? onTap;
+  Function(dynamic value)? onCondition;
   Function? onFind;
-  Function(dynamic)? onChange;
+  Function(dynamic value, Map<String, TextEditingController> listController)? onChange;
+  Function(dynamic value, Map<String, TextEditingController> listController)? onValidator;
   String? icon;
   Widget? suffix;
   List<MOption>? items;
@@ -99,16 +108,20 @@ class MFormItem {
         value: json["value"] ?? '',
         code: json["code"] ?? '',
         maxLines: json["maxLines"] ?? 1,
+        maxLength: json["maxLength"],
+        minLength: json["minLength"],
         required: json["required"] ?? true,
         show: json["show"] ?? true,
         enabled: json["enabled"] ?? true,
         password: json["password"] ?? false,
         showClose: json["showClose"] ?? false,
-        number: json["number"] ?? false,
+        keyBoard: json["keyBoard"],
         bold: json["bold"] ?? false,
         onTap: json["onTap"],
+        onCondition: json["onCondition"],
         onFind: json["onFind"],
         onChange: json["onChange"],
+        onValidator: json["onValidator"],
         icon: json["icon"],
         suffix: json["suffix"],
         items: json["items"],
@@ -143,16 +156,20 @@ class MFormItem {
         "value": value,
         "code": code,
         "maxLines": maxLines,
+        "maxLength": maxLength,
+        "minLength": minLength,
         "required": required,
         "show": show,
         "enabled": enabled,
         "bold": bold,
         "password": password,
         "showClose": showClose,
-        "number": number,
+        "keyBoard": keyBoard,
         "onTap": onTap,
+        "onCondition": onCondition,
         "onFind": onFind,
         "onChange": onChange,
+        "onValidator": onValidator,
         "icon": icon,
         "suffix": suffix,
         "items": items != null ? List<MOption>.from(items!.map((x) => x.toJson())) : null,

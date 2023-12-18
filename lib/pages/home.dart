@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       endDrawerEnableOpenDragGesture: false,
       appBar: appBar(title: 'Home'),
-      drawer: drawer(),
+      drawer: const CDrawer(),
       body: BlocBuilder<AuthC, AuthS>(
         builder: (context, state) {
           return Container(

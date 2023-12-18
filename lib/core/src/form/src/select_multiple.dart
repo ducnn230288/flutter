@@ -7,7 +7,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/utils/index.dart';
 
-class WSelectMultiple extends StatefulWidget {
+class WSelectMultiple<T> extends StatefulWidget {
   final String name;
   final String label;
   final String? hintText;
@@ -60,13 +60,13 @@ class WSelectMultiple extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<WSelectMultiple> createState() => _WSelectMultipleState();
+  State<WSelectMultiple> createState() => _WSelectMultipleState<T>();
 }
 
-class _WSelectMultipleState extends State<WSelectMultiple> {
+class _WSelectMultipleState<T> extends State<WSelectMultiple> {
   @override
   Widget build(BuildContext context) {
-    return WInput(
+    return WInput<T>(
       height: widget.height,
       width: widget.width,
       controller: widget.controller,

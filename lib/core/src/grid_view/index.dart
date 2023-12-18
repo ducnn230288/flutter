@@ -16,7 +16,7 @@ class GridRefresh<T> extends StatefulWidget {
   final Function(T item)? apiId;
   final double? height;
   final Function? onLoadMore;
-  final Function(T) format;
+  final Function(dynamic) format;
   final Widget Function(T item, int index) item;
   final Function(T)? onTap;
   final int crossAxisCount;
@@ -40,10 +40,10 @@ class GridRefresh<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _GridRefreshState<T> createState() => _GridRefreshState<T>();
+  GridRefreshState<T> createState() => GridRefreshState<T>();
 }
 
-class _GridRefreshState<T> extends State<GridRefresh<T>> {
+class GridRefreshState<T> extends State<GridRefresh<T>> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -59,7 +59,7 @@ class _GridRefreshState<T> extends State<GridRefresh<T>> {
           builder: (context, state) {
             if (state.data.content.isEmpty) {
               if (state.status == AppStatus.inProcess) {
-                return WLoading();
+                return const WLoading();
               }
               return ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -97,7 +97,7 @@ class _GridRefreshState<T> extends State<GridRefresh<T>> {
                 } else {
                   return StreamBuilder<bool>(
                     stream: _streamController.stream,
-                    builder: (_, snapshot) => (snapshot.data ?? false) ? WLoading() : Container(),
+                    builder: (_, snapshot) => (snapshot.data ?? false) ? const WLoading() : Container(),
                   );
                 }
               },
@@ -157,7 +157,7 @@ class _GridRefreshState<T> extends State<GridRefresh<T>> {
       location = location.substring(0, location.indexOf('?'));
     }
     if (currentUrl == location && index != null) {
-      await context.read<BlocC<T>>().refreshPage(index: index!, apiId: widget.apiId!(item!), format: widget.format);
+      await context.read<BlocC<T>>().refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format);
       index = null;
       item = null;
     }

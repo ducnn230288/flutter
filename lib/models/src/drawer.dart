@@ -14,6 +14,7 @@ class DrawerData {
   int? level;
   int? order;
   bool? status;
+  bool? isExpansion;
 
   DrawerData(
       {this.parentId,
@@ -30,7 +31,8 @@ class DrawerData {
       this.path,
       this.level,
       this.order,
-      this.status});
+      this.status,
+      this.isExpansion});
 
   DrawerData.fromJson(dynamic json) {
     parentId = json['parentId'] ?? '';
@@ -55,6 +57,7 @@ class DrawerData {
     level = json['level'];
     order = json['order'];
     status = json['status'] ?? false;
+    isExpansion = json['isExpansion'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +81,7 @@ class DrawerData {
     data['level'] = level;
     data['order'] = order;
     data['status'] = status;
+    data['isExpansion'] = isExpansion;
     return data;
   }
 }

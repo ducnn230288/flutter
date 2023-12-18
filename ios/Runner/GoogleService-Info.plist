@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>8641793380-kmlp35rebg8r1rntkgpb253imtrv1tva.apps.googleusercontent.com</string>
+	<string>708916792764-rd05vv4r739bn0ippuha7p2nahir48cu.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.8641793380-kmlp35rebg8r1rntkgpb253imtrv1tva</string>
+	<string>com.googleusercontent.apps.708916792764-rd05vv4r739bn0ippuha7p2nahir48cu</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAOiby2e718oFrVmaZL66qOXYHGKDKaA6o</string>
+	<string>AIzaSyBMLvTlmlYnoVJcrpkDUZ8a-_pO75_lxho</string>
 	<key>GCM_SENDER_ID</key>
-	<string>8641793380</string>
+	<string>708916792764</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.uberental.main</string>
+	<string>com.geneat.nmd.group</string>
 	<key>PROJECT_ID</key>
-	<string>test-circleci-aa125</string>
+	<string>test-fcm-882b1</string>
 	<key>STORAGE_BUCKET</key>
-	<string>test-circleci-aa125.appspot.com</string>
+	<string>test-fcm-882b1.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:8641793380:ios:73c0b6b64c790ec984be71</string>
+	<string>1:708916792764:ios:6d0f30123326f574b7afb9</string>
 </dict>
 </plist>

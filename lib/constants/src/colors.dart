@@ -99,72 +99,52 @@ class CColor {
       950: Color(0xFF172554),
     },
   );
-  static MaterialColor purple = const MaterialColor(
-    0xFFa855f7,
+  static MaterialColor violet = const MaterialColor(
+    0xFF8b5cf6,
     <int, Color>{
-      50: Color(0xFFfaf5ff),
-      100: Color(0xFFf3e8ff),
-      200: Color(0xFFe9d5ff),
-      300: Color(0xFFd8b4fe),
-      400: Color(0xFFc084fc),
-      500: Color(0xFFa855f7),
-      600: Color(0xFF9333ea),
-      700: Color(0xFF7e22ce),
-      800: Color(0xFF6b21a8),
-      900: Color(0xFF581c87),
-      950: Color(0xFF3b0764),
+      50: Color(0xFFf5f3ff),
+      100: Color(0xFFede9fe),
+      200: Color(0xFFddd6fe),
+      300: Color(0xFFc4b5fd),
+      400: Color(0xFFa78bfa),
+      500: Color(0xFF8b5cf6),
+      600: Color(0xFF7c3aed),
+      700: Color(0xFF6d28d9),
+      800: Color(0xFF5b21b6),
+      900: Color(0xFF4c1d95),
+      950: Color(0xFF2e1065),
     },
   );
 
   static Color statusColor(String status) {
     switch (status) {
-      case 'DRAFT':
-      case 'UN_CONFIRM':
-        return black.shade300;
-
-      case 'CANCELED':
-        return black;
-
-      case 'ADMIN_REJECTED':
-      case 'REJECT':
-      case 'ADMIN_REJECT':
+      case 'LOCKED':
       case 'REJECTED':
-      case 'USED':
-      case 'CLOSED':
-      case 'SOLD':
-      case 'END':
-      case 'CLOSE_PROPOSAL':
-      case 'NO_KYC_VERIFY':
-      case 'EXPIRED':
+      case 'CANCELED':
         return danger;
 
-      case 'PUBLISHED':
-      case 'ACTIVE':
-      case 'RECEIVE':
-      case 'RECEIVED':
-      case 'POST':
-      case 'APPROVE':
-      case 'APPROVED':
-      case 'CONFIRMED':
-      case 'VERIFIED':
-      case 'COMPLETED':
-      case 'USER_TRANSFER_CONFIRMED':
-        return blue;
-
-      case 'UN_USED':
-      case 'WAIT_CONFIRM':
       case 'WFA':
       case 'WAIT_TRANSFER':
-      case 'CUSTOMER':
-      case 'WAIT_FOR_APPROVAL':
+      case 'WAIT_CONFIRM':
         return warning;
 
-      case 'ASSIGNED':
-        return purple;
+      case 'ACTIVE':
+      case 'APPROVED':
+      case 'COMPLETED':
+        return green;
 
-      case 'LOCKED':
-      case 'LOCK_PROPOSAL':
-        return green.shade700;
+      case 'TRANSFER_CONFIRMED':
+        return blue;
+
+      case 'CLOSED':
+      case 'UN_CONFIRM':
+        return black;
+
+      case 'DRAFT':
+        return black.shade500;
+
+      case 'VERIFIED':
+        return violet;
     }
     return primary;
   }

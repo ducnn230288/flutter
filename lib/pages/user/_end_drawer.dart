@@ -1,7 +1,8 @@
 part of 'index.dart';
 
 class _EndDrawer<T> extends StatefulWidget {
-  const _EndDrawer({Key? key}) : super(key: key);
+  final Function format;
+  const _EndDrawer({Key? key, required this.format}) : super(key: key);
 
   @override
   State<_EndDrawer> createState() => _EndDrawerState<T>();
@@ -43,8 +44,13 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                         dynamic val = value;
                         if (value.contains('|')) {
                           val = value.split('|');
+                          blocC.addValue(value: [val[0], val[1]], name: 'dateRange');
+                          blocC.addValue(value: val[0], name: 'fromDate');
+                          blocC.addValue(value: val[1], name: 'toDate');
+                        } else {
+                          blocC.state.value
+                              .removeWhere((key, value) => ['dateRange', 'fromDate', 'toDate'].contains(key));
                         }
-                        blocC.addValue(value: [val[0], val[1]], name: 'dateRange');
                       },
                     ),
                     status(),
@@ -72,6 +78,8 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                           Map<String, dynamic> newValue = Map.from(context.read<BlocC<T>>().state.value);
                           newValue.remove('isLockedOut');
                           newValue.remove('dateRange');
+                          newValue.remove('fromDate');
+                          newValue.remove('toDate');
                           if (isCustomerAccount) {
                             newValue.remove('isEmailVerified');
                           }
@@ -89,9 +97,12 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                           )),
                         ),
                         onPressed: () {
-                          context
-                              .read<BlocC<T>>()
-                              .setValue(value: {...context.read<BlocC<T>>().state.value, ...blocC.state.value});
+                          Map<String, dynamic> currentValue = {
+                            ...context.read<BlocC<T>>().state.value,
+                            ...blocC.state.value
+                          };
+                          currentValue.removeWhere((key, value) => !blocC.state.value.containsKey(key));
+                          context.read<BlocC<T>>().resetValue(value: currentValue);
                           getData(null);
                         },
                         child: const Text('Áp dụng'),
@@ -120,12 +131,14 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
               page: page,
               size: size,
             ),
-        format: MUser.fromJson,
+        format: widget.format,
         submit: (_) {
           context.pop();
           if (newValue != null) {
             context.read<BlocC<T>>().removeKey(name: 'isLockedOut');
             context.read<BlocC<T>>().removeKey(name: 'dateRange');
+            context.read<BlocC<T>>().removeKey(name: 'fromDate');
+            context.read<BlocC<T>>().removeKey(name: 'toDate');
             if (isCustomerAccount) {
               context.read<BlocC<T>>().removeKey(name: 'isEmailVerified');
             }
@@ -145,8 +158,8 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
           spacing: CSpace.medium,
           runSpacing: CSpace.medium,
           children: [
-            button(title: 'Đã xác thực', key: 'isEmailVerified', value: true, width: 120),
-            button(title: 'Chưa xác thực', key: 'isEmailVerified', value: false, width: 130),
+            buttonSelect(title: 'Đã xác thực', key: 'isEmailVerified', value: true, width: 120),
+            buttonSelect(title: 'Chưa xác thực', key: 'isEmailVerified', value: false, width: 130),
           ],
         )
       ],
@@ -163,53 +176,11 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
           spacing: CSpace.medium,
           runSpacing: CSpace.medium,
           children: [
-            button(title: 'Khóa', key: 'isLockedOut', value: true, width: 70),
-            button(title: 'Mở khóa', key: 'isLockedOut', value: false, width: 90),
+            buttonSelect(title: 'Khóa', key: 'isLockedOut', value: true, width: 70),
+            buttonSelect(title: 'Mở khóa', key: 'isLockedOut', value: false, width: 90),
           ],
         )
       ],
-    );
-  }
-
-  Widget button({
-    required String title,
-    required String key,
-    required dynamic value,
-    required double width,
-  }) {
-    return BlocBuilder<BlocC, BlocS>(
-      builder: (context, state) {
-        final bool selected = state.value[key] == value;
-        return SizedBox(
-          height: 32,
-          width: width,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
-              shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  side: BorderSide(width: selected ? 1 : 0.00001, color: CColor.primary))),
-            ),
-            onPressed: () {
-              final cubit = context.read<BlocC>();
-              if (selected) {
-                cubit.removeKey(name: key, isEmit: true);
-              } else {
-                cubit.addValue(value: value, name: key);
-              }
-            },
-            child: FittedBox(
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: selected ? CColor.primary : CColor.black,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                ),
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }

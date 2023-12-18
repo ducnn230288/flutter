@@ -64,25 +64,26 @@ class LoginPage extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title1),
                     ),
                   ),
-                  WForm(list: listFormItem),
+                  WForm<MUser>(list: listFormItem),
                   const SizedBox(height: CSpace.small),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                          onPressed: () => context.read<BlocC>().savedBool(name: 'rememberMe'),
+                          onPressed: () => context.read<BlocC<MUser>>().savedBool(name: 'rememberMe'),
                           child: Row(
                             children: [
                               SizedBox(
                                 width: 20,
                                 height: 20,
-                                child: BlocBuilder<BlocC, BlocS>(
+                                child: BlocBuilder<BlocC<MUser>, BlocS<MUser>>(
                                   builder: (context, state) {
                                     return Checkbox(
                                       side: BorderSide(width: 1, color: CColor.primary),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                                       value: state.value['rememberMe'] != null && state.value['rememberMe'],
-                                      onChanged: (bool? value) => context.read<BlocC>().savedBool(name: 'rememberMe'),
+                                      onChanged: (bool? value) =>
+                                          context.read<BlocC<MUser>>().savedBool(name: 'rememberMe'),
                                     );
                                   },
                                 ),
@@ -124,11 +125,11 @@ class LoginPage extends StatelessWidget {
                           style: const TextStyle(fontSize: CFontSize.footnote),
                         ),
                         const SizedBox(height: CSpace.large * 2),
-                        BlocConsumer<BlocC, BlocS>(
+                        BlocConsumer<BlocC<MUser>, BlocS<MUser>>(
                             listenWhen: (context, state) => state.status == AppStatus.success,
                             listener: (context, state) => GoRouter.of(context).go(CRoute.home),
                             builder: (context, state) => ElevatedButton(
-                                onPressed: () => context.read<BlocC>().submit(
+                                onPressed: () => context.read<BlocC<MUser>>().submit(
                                     notification: false,
                                     api: (value, page, size, sort) =>
                                         RepositoryProvider.of<Api>(context).auth.login(body: value),

@@ -50,7 +50,7 @@ class _MyAccountPassState extends State<MyAccountPass> {
               child: Column(
                 children: [
                   SizedBox(height: 160, child: CIcon.resetPassword),
-                  WForm(
+                  WForm<MUser>(
                     list: listFormItem,
                     onInit: (items) {
                       lstControllers.addAll(items);
@@ -58,19 +58,26 @@ class _MyAccountPassState extends State<MyAccountPass> {
                   ),
                   const VSpacer(CSpace.large * 2),
                   ElevatedButton(
-                    onPressed: () => context.read<BlocC>().submit(
-                          api: (value, _, __, ___) {
-                            if (value['password'] != value['confirmPassword']) {
-                              UDialog().stopLoading();
-                              UDialog().showError(text: 'Nhập lại mật khẩu sai');
-                              return null;
-                            }
-                            return RepositoryProvider.of<Api>(context).auth.updatePassword(body: value);
-                          },
-                          submit: (_) => lstControllers.forEach((key, value) {
-                            value.value = const TextEditingValue(text: '');
-                          }),
-                        ),
+                    onPressed: () {
+                      context.read<BlocC<MUser>>().submit(
+                        api: (value, _, __, ___) {
+                          if (value['password'] != value['confirmPassword']) {
+                            UDialog().stopLoading();
+                            UDialog().showError(text: 'Nhập lại mật khẩu sai');
+                            return null;
+                          }
+                          return RepositoryProvider.of<Api>(context).auth.updatePassword(body: value);
+                        },
+                        submit: (_) {
+                          lstControllers.forEach((key, value) {
+                            value.clear();
+                          });
+                          Future.delayed(const Duration(milliseconds: 30), () {
+                            context.read<BlocC<MUser>>().savedStatus(status: AppStatus.init);
+                          });
+                        },
+                      );
+                    },
                     child: const Text('Cập nhật'),
                   ),
                 ],

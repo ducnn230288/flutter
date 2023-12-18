@@ -16,7 +16,7 @@ class WSeparation extends StatelessWidget {
       child: Row(
         children: [
           Text(title, style: TextStyle(fontWeight: FontWeight.w400, color: CColor.black.shade300)),
-          const HSpacer(10),
+          const HSpacer(CSpace.mediumSmall),
           Expanded(child: line())
         ],
       ),

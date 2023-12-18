@@ -35,13 +35,10 @@ class MyApp extends StatelessWidget {
           child: MaterialApp.router(
             title: 'Flutter App',
             builder: (BuildContext context, Widget? child) => MediaQuery(
-              data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true, textScaleFactor: 1),
+              data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
               child: GestureDetector(
                 onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-                child: Builder(builder: (context) {
-                  CSpace.setScreenSize(context);
-                  return child!;
-                }),
+                child: child,
               ),
             ),
             debugShowCheckedModeBanner: false,
@@ -49,6 +46,7 @@ class MyApp extends StatelessWidget {
             supportedLocales: context.supportedLocales,
             locale: context.locale,
             theme: ThemeData(
+              useMaterial3: false,
               fontFamily: 'SFProDisplay',
               textTheme: TextTheme(
                 bodyMedium: CStyle.caption(
@@ -57,6 +55,7 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     textBaseline: TextBaseline.alphabetic,
                     fontFamily: 'SFProDisplay',
+                    height: 1.1,
                   ),
                 ),
                 labelLarge: CStyle.caption(
@@ -66,6 +65,7 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: CColor.black.shade50,
               primarySwatch: CColor.primary,
               unselectedWidgetColor: CColor.primary,
+              floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: CColor.primary, foregroundColor: Colors.white),
               elevatedButtonTheme: ElevatedButtonThemeData(style: CStyle.button),
             ),
             routeInformationProvider: routes.routeInformationProvider,

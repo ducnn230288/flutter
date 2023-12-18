@@ -35,7 +35,7 @@ class MUpload {
     _maxQuantity = json?['maxQuantity'] ?? 0;
     _minQuantity = json?['minQuantity'] ?? 0;
     _file = json?['fileUrl'] ?? json?['file'] ?? json['physicalPath'] ?? '';
-    _fileUrl = ((_file as String).indexOf('http') < 0 ? Environment.fileUrl : '') + _file!;
+    _fileUrl = (!(_file as String).contains('http') ? Environment.fileUrl : '') + _file!;
   }
 
   String? _id;

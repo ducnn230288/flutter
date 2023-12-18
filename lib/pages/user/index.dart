@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,7 +21,9 @@ class User extends StatefulWidget {
   State<User> createState() => _UserState();
 }
 
-class _UserState extends State<User> {
+class _UserState extends State<User> with TickerProviderStateMixin {
+  double _height = 123.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +55,9 @@ class _UserState extends State<User> {
       ),
       body: Column(
         children: [
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            height: _height,
             color: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
             child: Column(
@@ -78,24 +80,27 @@ class _UserState extends State<User> {
                           ? MFilter(label: 'Kế toán', value: 'KT')
                           : MFilter(label: 'Farmer Side', value: 'FARMER'),
                     ],
-                    submit: () => context.read<BlocC<MUser>>().submit(
-                        getData: true,
-                        notification: false,
-                        api: (filter, page, size, sort) =>
-                            RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size),
-                        format: MUser.fromJson),
+                    api: (filter, page, size, sort) =>
+                        RepositoryProvider.of<Api>(context).user.get(filter: filter, page: page, size: size),
                     keyValue: 'roleCode',
+                    format: MUser.fromJson,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: CSpace.large),
                   child: totalElementTitle<MUser>(suffix: 'tài khoản'),
-                )
+                ),
               ],
             ),
           ),
           Expanded(
             child: WList<MUser>(
+              onScroll: (controller, number) {
+                double height = controller.position.pixels < 150 || number >= 0 ? 123 : 0;
+                if (height != _height && controller.position.pixels < controller.position.maxScrollExtent) {
+                  setState(() => _height = height);
+                }
+              },
               item: (data, int index) {
                 final cubit = context.read<BlocC<MUser>>();
                 final content = cubit.state.data.content.cast<MUser>().toList();
@@ -118,13 +123,14 @@ class _UserState extends State<User> {
                   }
                 }
                 const double widthSpace = 35;
-                void refresh(){
+                void refresh() {
                   context.read<BlocC<MUser>>().refreshPage(
-                    index: index,
-                    apiId: user.details(id: data.id),
-                    format: MUser.fromJson,
-                  );
+                        index: index,
+                        apiId: user.details(id: data.id),
+                        format: MUser.fromJson,
+                      );
                 }
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -155,7 +161,7 @@ class _UserState extends State<User> {
                                 widthSpace: widthSpace,
                                 content: button(child: Icon(Icons.edit_square, color: CColor.primary)),
                                 color: Colors.transparent,
-                                onTap: (handler) async{
+                                onTap: (handler) async {
                                   await context.pushNamed(
                                     CRoute.createCustomerUser,
                                     queryParams: {'formType': FormType.edit.name},
@@ -304,7 +310,9 @@ class _UserState extends State<User> {
         },
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
-      endDrawer: const _EndDrawer<MUser>(),
+      endDrawer: const _EndDrawer<MUser>(
+        format: MUser.fromJson,
+      ),
     );
   }
 
@@ -315,7 +323,8 @@ class _UserState extends State<User> {
 
   void getData() => context.read<BlocC<MUser>>().setPage(
       api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
-      format: MUser.fromJson, page: 1);
+      format: MUser.fromJson,
+      page: 1);
 
   Widget active(MUser data) {
     const double size = 17;

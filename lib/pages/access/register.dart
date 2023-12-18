@@ -15,23 +15,36 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocC cubit = context.read<BlocC>();
+    BlocC cubit = context.read<BlocC<MUser>>();
 
     final List<MFormItem> listFormItem = [
       MFormItem(label: 'Thông tin đăng ký', type: EFormItemType.title),
       MFormItem(
         name: 'email',
         label: 'pages.login.login.Email address'.tr(),
+        keyBoard: EFormItemKeyBoard.email,
       ),
       MFormItem(
         name: 'password',
         label: 'pages.login.login.Password'.tr(),
         password: true,
+        onValidator: (value, listController) {
+          if (value != null && listController['confirmPassword']!.text != '' && value != listController['confirmPassword']!.text) {
+            return 'Mật khẩu không khớp';
+          }
+          return null;
+        }
       ),
       MFormItem(
         name: 'confirmPassword',
         label: 'pages.login.register.Re-enter password'.tr(),
         password: true,
+        onValidator: (value, listController) {
+          if (value != null && listController['password']!.text != '' && value != listController['password']!.text) {
+            return 'Mật khẩu không khớp';
+          }
+          return null;
+        }
       ),
       MFormItem(
         type: EFormItemType.select,
@@ -53,12 +66,12 @@ class RegisterPage extends StatelessWidget {
       MFormItem(
         name: 'phoneNumber',
         label: 'pages.login.register.Phone number'.tr(),
-        number: true,
+        keyBoard: EFormItemKeyBoard.number,
         formatNumberType: FormatNumberType.normal,
       ),
     ];
 
-    listFormItem[4].onChange = (text) async {
+    listFormItem[4].onChange = (text, _) async {
       if (text == 'FARMER' && !listFormItem[5].show) {
         listFormItem[5].show = true;
         cubit.setList(list: listFormItem);
@@ -77,7 +90,7 @@ class RegisterPage extends StatelessWidget {
           const SizedBox(height: CSpace.large),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
-            child: WForm(list: listFormItem),
+            child: WForm<MUser>(list: listFormItem),
           ),
           const SizedBox(height: CSpace.large * 2),
           Container(
@@ -99,7 +112,7 @@ class RegisterPage extends StatelessWidget {
                         TextSpan(
                             text: 'pages.login.login.Log in'.tr(),
                             style: TextStyle(color: CColor.primary),
-                            recognizer: TapGestureRecognizer()..onTap = () => {Navigator.pop(context)})
+                            recognizer: TapGestureRecognizer()..onTap = () => Navigator.pop(context))
                       ],
                       style: TextStyle(color: CColor.black.shade300)),
                 ),

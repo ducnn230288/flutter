@@ -69,4 +69,6 @@ class SAuth {
         body: body,
         headers: headers,
       ));
+
+  Future<MApi?> delete() async => checkAuth(result: await BaseHttp.delete(url: '$endpoint/me', headers: headers,));
 }

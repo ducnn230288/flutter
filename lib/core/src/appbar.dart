@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '/constants/index.dart';
-import '/core/index.dart';
 
 appBar({
   required String title,
@@ -44,20 +43,10 @@ appBar({
           leading = InkWell(
             splashColor: CColor.primary.shade100,
             child: Container(
-              width: 105,
+              width: 40,
               height: 40,
               color: Colors.transparent,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const HSpacer(CSpace.medium),
-                  Icon(Icons.arrow_back_ios_rounded, color: backColor ?? Colors.white),
-                  Text(
-                    backTitle ?? 'Quay lại',
-                    style: TextStyle(fontSize: CFontSize.body, color: backColor ?? Colors.white),
-                  ),
-                ],
-              ),
+              child: Icon(Icons.arrow_back_ios_rounded, color: backColor ?? Colors.white),
             ),
             onTap: () {
               if (pop != null) {
@@ -76,7 +65,7 @@ appBar({
             style: const TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w600, color: Colors.white)
                 .merge(titleStyle)),
         centerTitle: true,
-        leadingWidth: leadingWidth ?? (hasDrawer ? 50 : 105),
+        leadingWidth: leadingWidth ?? (50),
         backgroundColor: backgroundColor ?? CColor.primary,
         shadowColor: Colors.transparent,
         leading: leading ?? Container(),

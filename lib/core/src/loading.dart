@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+class WLoading extends StatelessWidget {
+  const WLoading({ super.key });
 
-WLoading() => Center(
+  @override
+  Widget build(BuildContext context) {
+    return Center(
       child: Lottie.asset(
         'assets/json/trail_loading.json',
         height: 150,
@@ -9,3 +13,5 @@ WLoading() => Center(
         fit: BoxFit.scaleDown,
       ),
     );
+  }
+}

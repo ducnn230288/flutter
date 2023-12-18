@@ -12,7 +12,7 @@ import '/constants/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/service/index.dart';
-import '../index.dart';
+import '/utils/index.dart';
 
 class Api {
   SAuth get auth => SAuth(endpoint, headers, checkAuth);
@@ -26,25 +26,27 @@ class Api {
   final String endpoint = Environment.apiUrl;
   final Map<String, String> headers = {'Content-Type': 'application/json'};
 
-  Future<MApi?> checkAuth({required http.Response result}) async {
+  Future<MApi?> checkAuth({required http.Response result, int? returnWithStatusCode}) async {
     if (result.body.isEmpty) {
       return null;
     }
     if (result.statusCode == 401) {
-      rootNavigatorKey.currentState!.context.read<AuthC>().logout();
+      rootNavigatorKey.currentState!.context.read<AuthC>().error();
       return null;
     }
     MApi response = MApi.fromJson(jsonDecode(result.body));
+    if (returnWithStatusCode != null && response.code == returnWithStatusCode) {
+      return response;
+    }
     if (result.statusCode == 404) {
       return MApi(code: 404, message: response.message);
     }
-    if (!response.isSuccess) {
+    if (response.isSuccess == false && response.message != null) {
       Timer(const Duration(milliseconds: 50), () {
         UDialog().showError(text: response.message);
       });
       return null;
     }
-
     if (response.data is List) {
       return response.copyWith(data: {
         'page': 1,
@@ -83,6 +85,7 @@ class Api {
     final res = await http.Response.fromStream(response).timeout(const Duration(seconds: 20), onTimeout: () {
       return http.Response('Error', 408);
     });
+    if (res.statusCode == 413) UDialog().showError(text: 'Dung lượng tệp được tải lên quá lớn');
     if (res.statusCode > 300) return null;
     dynamic data = {...jsonDecode(res.body)['data'], ...obj};
     return MUpload.fromJson(data);

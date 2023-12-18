@@ -18,16 +18,16 @@ class MApi {
   MApi.fromJson(dynamic json) {
     if (json is List) {
       _code = 0;
-      _message = '';
+      _message;
       _totalTime = 0;
-      _isSuccess = true;
+      _isSuccess;
       _data = json;
       _errorDetail = '';
     } else {
       _code = json['code'] ?? 0;
       _message = json['message'] ?? '';
       _totalTime = json['totalTime'] ?? 0;
-      _isSuccess = json['isSuccess'] ?? true;
+      _isSuccess = json['isSuccess'] ?? false;
       _data = json['data'] ?? json;
       _errorDetail = json['errorDetail'] ?? '';
     }

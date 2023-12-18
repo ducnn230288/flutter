@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 
 import '/constants/index.dart';
 import '/core/index.dart';
@@ -34,7 +36,7 @@ class _MyAccountInfoState extends State<MyAccountInfo> {
             return _AccountInfo(user: state.user!);
           }
           if (state.status == AppStatus.inProcess) {
-            return Center(
+            return const Center(
               child: WLoading(),
             );
           }
@@ -46,7 +48,7 @@ class _MyAccountInfoState extends State<MyAccountInfo> {
         child: Padding(
           padding: const EdgeInsets.all(CSpace.medium),
           child: ElevatedButton(
-            onPressed: () => context.read<BlocC>().submit(
+            onPressed: () => context.read<BlocC<MUser>>().submit(
                   api: (value, _, __, ___) => RepositoryProvider.of<Api>(context).auth.updateProfile(body: value),
                 ),
             child: const Text('Cập nhật'),

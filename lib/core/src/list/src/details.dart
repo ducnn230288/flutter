@@ -236,7 +236,7 @@ class Content extends StatelessWidget {
         children: [
           SizedBox(height: verticalPadding / 2),
           Container(
-            width: 170,
+            width: 200,
             height: CHeight.superSmall,
             padding: EdgeInsets.only(right: horizontalPadding),
             child: InkWell(

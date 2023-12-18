@@ -5,19 +5,22 @@ import '/constants/index.dart';
 import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
+import '/utils/index.dart';
 
 class WidgetFilter<T> extends StatefulWidget {
   final List<MFilter> filter;
   final String keyValue;
-  final Function() submit;
+  final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
+  final Function(dynamic) format;
   final List<String>? keyForReset;
 
   const WidgetFilter({
     Key? key,
     required this.filter,
     this.keyValue = '',
-    required this.submit,
+    required this.api,
     this.keyForReset,
+    required this.format,
   }) : super(key: key);
 
   @override
@@ -72,14 +75,16 @@ class _WidgetFilterState<T> extends State<WidgetFilter> {
 
               return InkWell(
                 splashColor: CColor.primary.shade100,
-                onTap: () {
+                onTap: () async {
                   _first = index == 0;
                   if (filter.onTap != null) {
                     filter.onTap!();
                   } else {
+                    UDialog().startLoading();
                     final cubit = context.read<BlocC<T>>();
-                    cubit.resetPage(page: 1, name: keyValue, value: filter.value);
-                    widget.submit();
+                    cubit.saved(name: keyValue, value: filter.value);
+                    await cubit.setPage(page: 1, api: widget.api, format: widget.format);
+                    UDialog().stopLoading();
                   }
                 },
                 child: Container(

@@ -1,8 +1,20 @@
 {
-  "text": {
-    "clinic": "Phòng khám",
-    "detail": "Chi tiết",
-    "clinic_detail": "@:text.detail @.lower:text.clinic"
+  "CPref": {
+    "REJECTED": "Rejected",
+    "WFA": "Wait Confirm",
+    "WAIT_CONFIRM": "Wait Confirm",
+    "APPROVED": "Approved",
+    "COMPLETED": "Completed",
+    "WAIT_TRANSFER": "Wait Transfer",
+    "TRANSFER_CONFIRMED": "Transfer Confirmed",
+    "UN_CONFIRM": "Un Confirm",
+    "CANCELED": "Canceled",
+    "DRAFT": "Draft",
+    "MALE": "Male",
+    "FEMALE": "Famale",
+    "KT": "Accountant",
+    "ORDERER": "Order Side",
+    "FARMER": "Farmer Side"
   },
   "pages": {
     "login": {
@@ -96,70 +108,6 @@
     "description_text_widget": {
       "See more": "Xem thêm"
     }
-  },
-  "example": {
-    "hello": "Chào"
-  },
-  "order": {
-    "form": {
-      "createdOnDate": "Ngày tạo đơn",
-      "implementationDate": "Ngày thực hiện",
-      "treatmentDate": "Thời gian thực hiện",
-      "medicalProcedureGroupCode": "Nhóm thủ thuật",
-      "medicalProcedureCode": "Loại thủ thuật",
-      "clinicId": "Phòng khám",
-      "commissionAmount": "Đề xuất hoa hồng",
-      "totalCommissionAmount": "Hoa hồng",
-      "customerName": "Tên khách hàng",
-      "isChildrenCustomer":{
-        "Title": "Độ tuổi",
-        "Adult": "Người lớn (trên 16 tuổi)",
-        "Child": "Trẻ em (từ 12 ~ 16 tuổi)"
-      },
-      "birthday": "Ngày sinh",
-      "gender":  "Giới tính",
-      "difficultyCode": "Phân loại độ khó",
-      "numbersOfTeeth": "Số răng",
-      "positionOfTeeth": "Vị trí cung răng",
-      "description": "Nội dung chi tiết",
-      "patientCondition": "Tình trạng bệnh lý",
-      "medicalHistory": "Tiền sử bệnh lý khác",
-      "status": "Trạng thái đơn",
-      "orderNo": "Mã Order",
-      "address": "Địa chỉ phòng khám"
-    },
-    "create": {
-      "Title1": "Tạo Order",
-      "Title2": "Chỉnh sửa Order",
-      "Save draft": "Lưu nháp",
-      "Create order": "Gửi Order",
-      "Edit order": "Lưu Order",
-      "Total payment": "Tổng tiền thanh toán",
-      "term": {
-        "Title": "Trách nghiệm của Order Side",
-        "content": {
-          "0": "• Đảm bảo cơ sở vật chất để Farmer Side thực hiện thủ thuật 1 cách an toàn, sạch sẽ.",
-          "1": "• Có giấy phép kinh doanh hành nghề.",
-          "2": "• Đã tư vấn tất cả các vấn đề liên quan đến bệnh lý, rủi ro cho khách hàng trước khi Farmer tiến hành thực hiện.",
-          "3": "• Tuân thủ tất cả các quy định do nền tảng đưa ra.",
-          "4": "• Order Side hiểu rõ, ý thức rõ về các quy định do Bộ Y Tế ban hành trong làm việc, khám chữa bệnh chuyên ngành Nha Khoa.",
-          "5": "• Order Side hoàn toàn chủ động, tự nguyện trong việc kết nối, giao dịch công việc với Farmer Side. Order Side và Farmer Side hoàn toàn tự chịu trách nhiệm về các vi phạm của mình theo quy định hành nghề Nha Khoa do bộ Y Tế quy định.",
-          "6": "• Nền tảng không thay mặt Order Side, Farmer Side thỏa thuận giao dịch hay có các hành động không tuân thủ theo quy định của Bộ Y Tế."
-        }
-      }
-    }
-  },
-  "actions": {
-    "Title": "Thao tác",
-    "EDIT": "Chỉnh sửa",
-    "DELETE": "Xóa",
-    "CANCEL": "Hủy",
-    "REJECT": "Từ chối",
-    "APPROVE": "Duyệt",
-    "UN_PICK": "Hủy nhận Order",
-    "PICK": "Nhận Order",
-    "DISTRIBUTE": "Phân phối",
-    "PROPOSAL": "Gửi đề xuất"
   },
   "introduction": {
     "Title": {

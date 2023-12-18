@@ -44,11 +44,18 @@ class AuthC extends Cubit<AuthS> {
     }
   }
 
-  void logout() async {
+  void error() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(CPref.token);
     prefs.remove(CPref.user);
     emit(state.copyWith(status: AppStatus.fails));
+  }
+
+  Future<void> logout() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.clear();
+    await UDialog().delay();
+    emit(state.copyWith(status: AppStatus.init, user: null, zalo: null));
   }
 
   Future<void> save({required data}) async {

@@ -1,3 +1,4 @@
+export 'src/map/index.dart';
 export 'src/appbar.dart';
 export 'src/description_text_widget.dart';
 export 'src/drawer/expansion_tile_card.dart';
