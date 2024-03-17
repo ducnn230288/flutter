@@ -15,10 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: futureware-tech/simulator-action@v3
-        with:
-          model: 'iPhone 15'
-      - run: flutter drive
+      - name: Launch iOS Simulator
+        uses: futureware-tech/simulator-action@v3
 
       - uses: subosito/flutter-action@v2
         with:
