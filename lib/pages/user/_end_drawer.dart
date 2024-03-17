@@ -2,13 +2,16 @@ part of 'index.dart';
 
 class _EndDrawer<T> extends StatefulWidget {
   final Function format;
-  const _EndDrawer({Key? key, required this.format}) : super(key: key);
+  final bool isCustomer;
+  const _EndDrawer({super.key, required this.format, this.isCustomer = false});
 
   @override
   State<_EndDrawer> createState() => _EndDrawerState<T>();
 }
 
 class _EndDrawerState<T> extends State<_EndDrawer> {
+
+  int _count = 0;
   @override
   Widget build(BuildContext context) {
     final value = context.read<BlocC<T>>().state.value;
@@ -23,16 +26,17 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
             body: Builder(
               builder: (context) {
                 final blocC = context.read<BlocC>();
-                while (count < 1) {
+                while (_count < 1) {
+                  blocC.saved(name: 'dateRange', value: value['dateRange']);
                   blocC.saved(name: 'isLockedOut', value: value['isLockedOut']);
                   blocC.saved(name: 'isEmailVerified', value: value['isEmailVerified']);
-                  count++;
+                  _count++;
                 }
                 return ListView(
-                  padding: const EdgeInsets.all(CSpace.large),
+                  padding: const EdgeInsets.all(CSpace.xl3),
                   children: [
                     Text('Chọn ngày tham gia', style: CStyle.title),
-                    const VSpacer(CSpace.large),
+                    const VSpacer(CSpace.xl3),
                     WDate(
                       name: 'dateRange',
                       controller: TextEditingController(),
@@ -53,9 +57,9 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                         }
                       },
                     ),
-                    status(),
-                    const VSpacer(CSpace.superLarge),
-                    active(),
+                    _status(),
+                    const VSpacer(CSpace.xl5),
+                    _active(),
                   ],
                 );
               },
@@ -63,7 +67,7 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
             bottomNavigationBar: Builder(builder: (context) {
               final blocC = context.read<BlocC>();
               return Padding(
-                padding: const EdgeInsets.all(CSpace.mediumSmall),
+                padding: const EdgeInsets.all(CSpace.base),
                 child: Row(
                   children: [
                     Expanded(
@@ -80,15 +84,15 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                           newValue.remove('dateRange');
                           newValue.remove('fromDate');
                           newValue.remove('toDate');
-                          if (isCustomerAccount) {
+                          if (widget.isCustomer) {
                             newValue.remove('isEmailVerified');
                           }
-                          getData(newValue);
+                          _getData(newValue);
                         },
                         child: Text('Thiết lập lại', style: TextStyle(color: CColor.primary)),
                       ),
                     ),
-                    const HSpacer(CSpace.mediumSmall),
+                    const HSpacer(CSpace.base),
                     Expanded(
                       child: ElevatedButton(
                         style: const ButtonStyle(
@@ -103,7 +107,7 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                           };
                           currentValue.removeWhere((key, value) => !blocC.state.value.containsKey(key));
                           context.read<BlocC<T>>().resetValue(value: currentValue);
-                          getData(null);
+                          _getData(null);
                         },
                         child: const Text('Áp dụng'),
                       ),
@@ -117,46 +121,40 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
       ),
     );
   }
-
-  final bool isCustomerAccount =
-      GoRouter.of(rootNavigatorKey.currentState!.context).location.contains(CRoute.customerUser);
-
-  int count = 0;
-
-  void getData(Map<String, dynamic>? newValue) {
+  void _getData(Map<String, dynamic>? newValue) {
     context.read<BlocC<T>>().submit(
-        getData: true,
-        api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).user.get(
-              filter: newValue ?? filter,
-              page: page,
-              size: size,
-            ),
-        format: widget.format,
-        submit: (_) {
-          context.pop();
-          if (newValue != null) {
-            context.read<BlocC<T>>().removeKey(name: 'isLockedOut');
-            context.read<BlocC<T>>().removeKey(name: 'dateRange');
-            context.read<BlocC<T>>().removeKey(name: 'fromDate');
-            context.read<BlocC<T>>().removeKey(name: 'toDate');
-            if (isCustomerAccount) {
-              context.read<BlocC<T>>().removeKey(name: 'isEmailVerified');
-            }
+      getData: true,
+      api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).user.get(
+            filter: newValue ?? filter,
+            page: page,
+            size: size,
+          ),
+      format: widget.format,
+      submit: (_) {
+        context.pop();
+        if (newValue != null) {
+          context.read<BlocC<T>>().removeKey(name: 'isLockedOut');
+          context.read<BlocC<T>>().removeKey(name: 'dateRange');
+          context.read<BlocC<T>>().removeKey(name: 'fromDate');
+          context.read<BlocC<T>>().removeKey(name: 'toDate');
+          if (widget.isCustomer) {
+            context.read<BlocC<T>>().removeKey(name: 'isEmailVerified');
           }
-        });
+        }
+      });
   }
 
-  Widget status() {
-    if (!isCustomerAccount) return Container();
+  Widget _status() {
+    if (!widget.isCustomer) return Container();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const VSpacer(CSpace.superLarge),
+        const VSpacer(CSpace.xl5),
         Text('Trạng thái', style: CStyle.title),
-        const VSpacer(CSpace.large),
+        const VSpacer(CSpace.xl3),
         Wrap(
-          spacing: CSpace.medium,
-          runSpacing: CSpace.medium,
+          spacing: CSpace.xl,
+          runSpacing: CSpace.xl,
           children: [
             buttonSelect(title: 'Đã xác thực', key: 'isEmailVerified', value: true, width: 120),
             buttonSelect(title: 'Chưa xác thực', key: 'isEmailVerified', value: false, width: 130),
@@ -166,15 +164,15 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
     );
   }
 
-  Widget active() {
+  Widget _active() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Kích hoạt', style: CStyle.title),
-        const VSpacer(CSpace.large),
+        const VSpacer(CSpace.xl3),
         Wrap(
-          spacing: CSpace.medium,
-          runSpacing: CSpace.medium,
+          spacing: CSpace.xl,
+          runSpacing: CSpace.xl,
           children: [
             buttonSelect(title: 'Khóa', key: 'isLockedOut', value: true, width: 70),
             buttonSelect(title: 'Mở khóa', key: 'isLockedOut', value: false, width: 90),

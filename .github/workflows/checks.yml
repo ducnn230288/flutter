@@ -1,0 +1,25 @@
+---
+name: Checks
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  test-lint:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run actions/checkout@v3
+        uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Get dependencies
+        run: flutter pub get
+      - name: Run test
+        run: flutter test

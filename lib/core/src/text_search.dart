@@ -8,10 +8,10 @@ import '/utils/index.dart';
 class TextSearch<T> extends StatefulWidget {
   final String? hintText;
   final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
-  final Function(dynamic) format;
+  final Function(Map<String, dynamic> json) format;
   final EdgeInsets? margin;
 
-  const TextSearch({Key? key, required this.api, required this.format, this.hintText, this.margin}) : super(key: key);
+  const TextSearch({super.key, required this.api, required this.format, this.hintText, this.margin});
 
   @override
   State<TextSearch> createState() => _TextSearchState<T>();
@@ -25,7 +25,7 @@ class _TextSearchState<T> extends State<TextSearch> {
       margin: widget.margin ?? EdgeInsets.zero,
       child: TextFormField(
         controller: controller,
-        style: TextStyle(color: CColor.primary, fontSize: CFontSize.body),
+        style: TextStyle(color: CColor.primary, fontSize: CFontSize.base),
         onChanged: (text) {
           Delay().run(() {
             api(text);
@@ -33,7 +33,7 @@ class _TextSearchState<T> extends State<TextSearch> {
         },
         decoration: InputDecoration(
             hintText: widget.hintText ?? 'Tìm kiếm',
-            hintStyle: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.body),
+            hintStyle: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.base),
             prefixIcon: CIcon.search,
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
             focusedBorder: borderStyle,
@@ -53,7 +53,7 @@ class _TextSearchState<T> extends State<TextSearch> {
                       controller.clear();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+                      padding: const EdgeInsets.symmetric(vertical: CSpace.xl),
                       child: CIcon.close,
                     ),
                   );
@@ -66,7 +66,7 @@ class _TextSearchState<T> extends State<TextSearch> {
   }
 
   final OutlineInputBorder borderStyle = OutlineInputBorder(
-    borderRadius: const BorderRadius.all(Radius.circular(CRadius.small)),
+    borderRadius: const BorderRadius.all(Radius.circular(CSpace.sm)),
     borderSide: BorderSide(color: CColor.black.shade100, width: 1),
   );
 

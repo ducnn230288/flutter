@@ -9,7 +9,7 @@ import '/cubit/index.dart';
 import '/firebase_options.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  const SplashPage({super.key});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    initFirebase();
+    _initFirebase();
     context.read<AuthC>().check(context: context);
   }
 
@@ -28,20 +28,20 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocConsumer<AuthC, AuthS>(
-          listenWhen: (oldState, newState) => newState.status != AppStatus.init,
-          listener: (context, state) {
-            Future.delayed(const Duration(milliseconds: 30), () {
-              CSpace.setScreenSize(context);
-              GoRouter.of(context).goNamed(state.status == AppStatus.fails ? CRoute.introduction : CRoute.home);
-            });
-          },
-          builder: (context, state) => Center(
-                child: CIcon.logo,
-              )),
+        listenWhen: (oldState, newState) => newState.status != AppStatus.init,
+        listener: (context, state) {
+          Future.delayed(const Duration(milliseconds: 30), () {
+            CSpace.setScreenSize(context);
+            GoRouter.of(context).goNamed(state.status == AppStatus.fails ? CRoute.introduction : CRoute.home);
+          });
+        },
+        builder: (context, state) => Center(
+          child: CIcon.logo,
+        )),
     );
   }
 
-  Future<RemoteMessage?> initFirebase() async {
+  Future<RemoteMessage?> _initFirebase() async {
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -56,7 +56,7 @@ class _SplashPageState extends State<SplashPage> {
           debugPrint('Message notification: ${message.notification}');
         }
       });
-      FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+      FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
@@ -75,7 +75,7 @@ class _SplashPageState extends State<SplashPage> {
     return null;
   }
 
-  void handleMessage(RemoteMessage message) {
+  void _handleMessage(RemoteMessage message) {
     if (message.data['id'] != null && message.data['id'] != '') {
       // Navigator.pushNamedAndRemoveUntil(
       //   Utils.navigatorKey.currentState!.context,

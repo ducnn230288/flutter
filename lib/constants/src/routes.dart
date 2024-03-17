@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_contacts/contact.dart';
 import 'package:go_router/go_router.dart';
 
-import '/core/src/map/index.dart';
+import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/pages/index.dart';
@@ -25,6 +26,7 @@ class CRoute {
   static const String myAccountInfo = 'my-account-info';
   static const String myAccountPass = 'my-account-password';
   static const String map = 'map';
+  static const String contacts = 'contacts';
 }
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -64,13 +66,13 @@ GoRoute introductionRoute() => GoRoute(
                           name: CRoute.otpVerification,
                           path: CRoute.otpVerification,
                           builder: (BuildContext context, GoRouterState state) =>
-                              blocForm<MUser>(child: OTPVerificationPage(email: state.queryParams['email']!)),
+                              blocForm<MUser>(child: OTPVerificationPage(email: state.uri.queryParameters['email']!)),
                           routes: <RouteBase>[
                             GoRoute(
                               name: CRoute.resetPassword,
                               path: CRoute.resetPassword,
                               builder: (BuildContext context, GoRouterState state) => blocForm<MUser>(
-                                  child: ResetPassword(resetPasswordToken: state.queryParams['resetPasswordToken']!)),
+                                  child: ResetPassword(resetPasswordToken: state.uri.queryParameters['resetPasswordToken']!)),
                             )
                           ])
                     ])
@@ -97,16 +99,22 @@ GoRoute homeRoute() => GoRoute(
         builder: (BuildContext context, GoRouterState state) => const HomePage(),
         routes: <RouteBase>[
           GoRoute(
-              name: CRoute.map,
-              path: CRoute.map,
-              builder: (BuildContext context, GoRouterState state) => blocForm(
-                  child: WMap(
-                    fullScreen: true,
-                    onlyPoint: state.queryParams['onlyPoint'] == 'true',
-                    address: state.extra as List<String>,
-                    name: state.queryParams['name']!,
-                    latLn: state.queryParams['latLn']!.split(',').map((e) => double.parse(e)).toList(),
-                  ))),
+            name: CRoute.map,
+            path: CRoute.map,
+            builder: (BuildContext context, GoRouterState state) => blocForm(
+              child: WMap(
+                fullScreen: true,
+                onlyPoint: state.uri.queryParameters['onlyPoint'] == 'true',
+                address: state.extra as List<String>,
+                name: state.uri.queryParameters['name']!,
+                latLn: state.uri.queryParameters['latLn']!.split(',').map((e) => double.parse(e)).toList(),
+              ))
+          ),
+          GoRoute(
+            name: CRoute.contacts,
+            path: CRoute.contacts,
+            builder: (BuildContext context, GoRouterState state) => blocForm<Contact>(child: const Contracts())
+          ),
           GoRoute(
             name: CRoute.myAccountInfo,
             path: CRoute.myAccountInfo,
@@ -128,7 +136,7 @@ GoRoute homeRoute() => GoRoute(
                   child: CreateUser(
                     data: state.extra as MUser?,
                     formType: FormType.values.firstWhere(
-                      (element) => element.name == state.queryParams['formType']!,
+                      (element) => element.name == state.uri.queryParameters['formType']!,
                     ),
                   ),
                 ),
@@ -137,7 +145,7 @@ GoRoute homeRoute() => GoRoute(
                 name: CRoute.internalUserDetails,
                 path: CRoute.internalUserDetails,
                 builder: (BuildContext context, GoRouterState state) =>
-                    blocForm<MUser>(child: UserDetails(id: state.queryParams['id']!)),
+                    blocForm<MUser>(child: UserDetails(id: state.uri.queryParameters['id']!)),
               ),
             ],
           ),
@@ -153,7 +161,7 @@ GoRoute homeRoute() => GoRoute(
                     child: CreateUser(
                       data: state.extra as MUser?,
                       formType: FormType.values.firstWhere(
-                        (element) => element.name == state.queryParams['formType']!,
+                        (element) => element.name == state.uri.queryParameters['formType']!,
                       ),
                     ),
                   ),
@@ -162,7 +170,7 @@ GoRoute homeRoute() => GoRoute(
                   name: CRoute.customerUserDetails,
                   path: CRoute.customerUserDetails,
                   builder: (BuildContext context, GoRouterState state) =>
-                      blocForm<MUser>(child: UserDetails(id: state.queryParams['id']!)),
+                      blocForm<MUser>(child: UserDetails(id: state.uri.queryParameters['id']!)),
                 ),
               ]),
         ]);

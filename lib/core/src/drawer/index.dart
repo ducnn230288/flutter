@@ -8,11 +8,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '/constants/index.dart';
 import '/core/index.dart';
 import '/cubit/index.dart';
-import '/models/index.dart';
 import '/utils/index.dart';
 
 class CDrawer extends StatefulWidget {
-  const CDrawer({Key? key}) : super(key: key);
+  const CDrawer({super.key});
 
   @override
   DrawerState createState() => DrawerState();
@@ -39,7 +38,7 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final double widthDrawer = CSpace.width * 0.8;
     double widthImage = CSpace.width * 0.25;
-    final double widthInfo = widthDrawer - widthImage - 2 * CSpace.mediumSmall;
+    final double widthInfo = widthDrawer - widthImage - 2 * CSpace.xs;
     return Drawer(
       elevation: 20,
       width: widthDrawer,
@@ -77,19 +76,19 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  height: CFontSize.title3,
+                                                  height: CFontSize.xl,
                                                   width: widthInfo,
                                                   alignment: Alignment.centerLeft,
                                                   child: FittedBox(
                                                     child: Text(
                                                       state.user!.name,
                                                       style: const TextStyle(
-                                                          fontSize: CFontSize.title3, fontWeight: FontWeight.w600),
+                                                          fontSize: CFontSize.xl, fontWeight: FontWeight.w600),
                                                     ),
                                                   ),
                                                 ),
                                                 Container(
-                                                  height: CFontSize.subhead,
+                                                  height: CFontSize.sm,
                                                   width: widthInfo,
                                                   alignment: Alignment.centerLeft,
                                                   child: state.user?.userName != ''
@@ -118,10 +117,10 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                                           Container(
                                               width: widthDrawer,
                                               padding: const EdgeInsets.fromLTRB(
-                                                CSpace.mediumSmall,
-                                                CSpace.medium,
-                                                CSpace.medium,
-                                                CSpace.medium,
+                                                CSpace.base,
+                                                CSpace.xl,
+                                                CSpace.xl,
+                                                CSpace.xl,
                                               ),
                                               child: Row(
                                                 children: [
@@ -155,29 +154,34 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                 builder: (context, state) {
                   return state.status == AppStatus.success
                       ? Expanded(
-                          child: BlocProvider(
-                            create: (context) => BlocC<DrawerData>(),
-                            child: WList<DrawerData>(
-                              item: (drawer, index) {
-                                if (drawer.subChild!.isNotEmpty) {
+                          child: ListView.separated(
+                              padding: const EdgeInsets.all(8),
+                              itemCount: state.listNavigation!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final navigation = state.listNavigation![index];
+                                _listController[navigation.id!] =
+                                    AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+                                _listAnimation[navigation.id!] = Tween(begin: 0.0, end: 0.25).animate(
+                                    CurvedAnimation(parent: _listController[navigation.id]!, curve: Curves.easeOut));
+                                if (navigation.subChild!.isNotEmpty) {
                                   return ExpansionTileCard(
                                     onExpansionChanged: (status) {
                                       if (status) {
-                                        _listController[drawer.id!]!.forward();
+                                        _listController[navigation.id!]!.forward();
                                       } else {
-                                        _listController[drawer.id!]!.reverse();
+                                        _listController[navigation.id!]!.reverse();
                                       }
                                     },
                                     scrollSettings: () async {},
                                     title: Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: CSpace.mediumSmall),
+                                        padding: const EdgeInsets.only(left: CSpace.base),
                                         child: Text(
-                                          drawer.name!,
+                                          navigation.name!,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             color: Colors.black,
-                                            fontSize: CFontSize.callOut,
+                                            fontSize: CFontSize.base,
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
@@ -185,9 +189,9 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     titlePadding:
-                                        const EdgeInsets.fromLTRB(0, CSpace.medium, CSpace.medium, CSpace.medium),
+                                    const EdgeInsets.fromLTRB(0, CSpace.xl, CSpace.xl, CSpace.xl),
                                     trailing:
-                                        RotationTransition(turns: _listAnimation[drawer.id!]!, child: CIcon.arrowRight),
+                                    RotationTransition(turns: _listAnimation[navigation.id!]!, child: CIcon.arrowRight),
                                     children: [
                                       line(color: CColor.black.shade100),
                                       ListView.separated(
@@ -196,23 +200,23 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                                           separatorBuilder: (_, index) {
                                             return line(color: CColor.black.shade100);
                                           },
-                                          itemCount: drawer.subChild?.length ?? 0,
+                                          itemCount: navigation.subChild?.length ?? 0,
                                           itemBuilder: (_, index) {
                                             return InkWell(
                                               onTap: () {
-                                                context.goNamed(drawer.subChild![index].urlRewrite!);
+                                                context.goNamed(navigation.subChild![index].urlRewrite!);
                                               },
                                               child: Container(
                                                   padding: const EdgeInsets.fromLTRB(
-                                                    CSpace.large,
-                                                    CSpace.medium,
-                                                    CSpace.medium,
-                                                    CSpace.medium,
+                                                    CSpace.xl3,
+                                                    CSpace.xl,
+                                                    CSpace.xl,
+                                                    CSpace.xl,
                                                   ),
                                                   child: Text(
-                                                    drawer.subChild![index].name!,
+                                                    navigation.subChild![index].name!,
                                                     style: const TextStyle(
-                                                      fontSize: CFontSize.callOut,
+                                                      fontSize: CFontSize.base,
                                                     ),
                                                   )),
                                             );
@@ -221,24 +225,24 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                                   );
                                 }
                                 return InkWell(
-                                  onTap: () => context.goNamed(drawer.urlRewrite!),
+                                  onTap: () => context.goNamed(navigation.urlRewrite!),
                                   child: Container(
                                       alignment: Alignment.centerLeft,
                                       padding: const EdgeInsets.fromLTRB(
-                                        CSpace.mediumSmall,
-                                        CSpace.medium,
-                                        CSpace.medium,
-                                        CSpace.medium,
+                                        CSpace.base,
+                                        CSpace.xl,
+                                        CSpace.xl,
+                                        CSpace.xl,
                                       ),
                                       child: Row(
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              drawer.name!,
+                                              navigation.name!,
                                               style: TextStyle(
                                                 fontWeight:
-                                                    drawer.subChild!.isNotEmpty ? FontWeight.w600 : FontWeight.w400,
-                                                fontSize: CFontSize.callOut,
+                                                navigation.subChild!.isNotEmpty ? FontWeight.w600 : FontWeight.w400,
+                                                fontSize: CFontSize.base,
                                               ),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
@@ -248,20 +252,8 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                                       )),
                                 );
                               },
-                              format: DrawerData.fromJson,
-                              separator: line(color: CColor.black.shade100),
-                              api: (filter, page, size, sort) async {
-                                final data = await RepositoryProvider.of<Api>(context).drawer.get();
-                                for (var v in data!.data['content']) {
-                                  _listController[v['id']] =
-                                      AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
-                                  _listAnimation[v['id']] = Tween(begin: 0.0, end: 0.25).animate(
-                                      CurvedAnimation(parent: _listController[v['id']]!, curve: Curves.easeOut));
-                                }
-                                return data;
-                              },
-                            ),
-                          ),
+                              separatorBuilder: (_, int index) => line(color: CColor.black.shade100),
+                          )
                         )
                       : const SizedBox();
                 },
@@ -271,7 +263,7 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
           bottomNavigationBar: BlocBuilder<AuthC, AuthS>(
             builder: (context, state) {
               return Container(
-                padding: const EdgeInsets.all(CSpace.mediumSmall),
+                padding: const EdgeInsets.all(CSpace.base),
                 child: ElevatedButton(
                   onPressed: () => state.status == AppStatus.success
                       ? UDialog().showConfirm(

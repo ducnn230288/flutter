@@ -1,4 +1,4 @@
-class DrawerData {
+class MNavigation {
   String? parentId;
   String? urlRewrite;
   String? iconClass;
@@ -16,7 +16,7 @@ class DrawerData {
   bool? status;
   bool? isExpansion;
 
-  DrawerData(
+  MNavigation(
       {this.parentId,
       this.urlRewrite,
       this.iconClass,
@@ -34,7 +34,7 @@ class DrawerData {
       this.status,
       this.isExpansion});
 
-  DrawerData.fromJson(dynamic json) {
+  MNavigation.fromJson(dynamic json) {
     parentId = json['parentId'] ?? '';
     urlRewrite = json['urlRewrite'] ?? '';
     iconClass = json['iconClass'] ?? '';

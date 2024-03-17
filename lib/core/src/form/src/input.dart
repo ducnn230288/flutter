@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:pinput/pinput.dart';
 
 import '/constants/index.dart';
@@ -19,6 +20,7 @@ class WInput<T> extends StatefulWidget {
   final int maxLines;
   final int? maxLength;
   final int? minLength;
+  final int? maxQuantity;
   final bool required;
   final bool enabled;
   final bool password;
@@ -36,15 +38,17 @@ class WInput<T> extends StatefulWidget {
   final double? height;
   final double? width;
   final EFormItemKeyBoard? keyBoard;
+  final List<TextInputFormatter>? inputFormatters;
 
   const WInput({
-    Key? key,
+    super.key,
     this.label = '',
     this.value = '',
     this.subtitle,
     this.maxLines = 1,
     this.maxLength,
     this.minLength,
+    this.maxQuantity,
     this.required = true,
     this.enabled = true,
     this.password = false,
@@ -65,7 +69,8 @@ class WInput<T> extends StatefulWidget {
     this.height,
     this.width,
     this.keyBoard,
-  }) : super(key: key);
+    this.inputFormatters,
+  });
 
   @override
   State<WInput> createState() => _WInputState<T>();
@@ -74,11 +79,11 @@ class WInput<T> extends StatefulWidget {
 class _WInputState<T> extends State<WInput> {
   late final TextEditingController controller;
   late final OutlineInputBorder borderStyle = OutlineInputBorder(
-    borderRadius: const BorderRadius.all(Radius.circular(CRadius.small)),
+    borderRadius: const BorderRadius.all(Radius.circular(CSpace.sm)),
     borderSide: BorderSide(color: CColor.black.shade100, width: 1),
   );
   final OutlineInputBorder errorBorderStyle = OutlineInputBorder(
-    borderRadius: const BorderRadius.all(Radius.circular(CRadius.small)),
+    borderRadius: const BorderRadius.all(Radius.circular(CSpace.sm)),
     borderSide: BorderSide(color: CColor.danger, width: 1),
   );
 
@@ -101,14 +106,27 @@ class _WInputState<T> extends State<WInput> {
 
   @override
   Widget build(BuildContext context) {
-    final bool inputFormatters = widget.keyBoard == EFormItemKeyBoard.number && widget.formatNumberType == FormatNumberType.inputFormatters;
-    final height = widget.height != null ? ((widget.height! / CHeight.large) - 1) : 0;
+    List<TextInputFormatter>? inputFormatters;
+    switch(widget.keyBoard) {
+      case EFormItemKeyBoard.number:
+        if (widget.formatNumberType == FormatNumberType.inputFormatters) inputFormatters = [ThousandFormatter()];
+        break;
+      case EFormItemKeyBoard.phone:
+        inputFormatters = [MaskTextInputFormatter(
+            mask: '#### ### ###',
+            filter: { "#": RegExp(r'[0-9]') },
+            type: MaskAutoCompletionType.lazy
+        )];
+        break;
+      default:
+    }
+    final height = widget.height != null ? ((widget.height! / CHeight.xl4) - 1) : 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.label != '' && widget.stackedLabel)
           Container(
-            margin: const EdgeInsets.only(bottom: CSpace.mediumSmall),
+            margin: const EdgeInsets.only(bottom: CSpace.base),
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -121,9 +139,9 @@ class _WInputState<T> extends State<WInput> {
                   ],
                   style: TextStyle(
                     color: CColor.black,
-                    fontSize: CFontSize.headline,
+                    fontSize: CFontSize.lg,
                     fontWeight: FontWeight.w600,
-                    height: 22 / CFontSize.body,
+                    height: 22 / CFontSize.base,
                   )),
             ),
           ),
@@ -131,6 +149,8 @@ class _WInputState<T> extends State<WInput> {
           height: widget.height,
           width: widget.width,
           child: TextFormField(
+            key: ValueKey(widget.label != '' ? widget.label : (widget.hintText ?? widget.name)),
+            enabled: widget.enabled,
             focusNode: focusNode,
             controller: controller,
             onTap: () {
@@ -141,9 +161,10 @@ class _WInputState<T> extends State<WInput> {
             maxLength: widget.maxLength,
             readOnly: widget.onTap != null,
             textInputAction: widget.maxLines > 1 ? TextInputAction.newline : TextInputAction.next,
-            style: TextStyle(fontSize: CFontSize.body + (height * 3), color: CColor.black.shade700),
+            style: TextStyle(fontSize: CFontSize.base + (height * 3), color: CColor.black.shade700),
             onChanged: (String text) {
-              if (inputFormatters) text = text.replaceAll('.', '');
+              if (widget.keyBoard == EFormItemKeyBoard.number) text = text.replaceAll('.', '');
+              if (widget.keyBoard == EFormItemKeyBoard.phone) text = text.replaceAll(' ', '');
               if (widget.onChanged != null) widget.onChanged!(text);
             },
             validator: (value) {
@@ -157,13 +178,11 @@ class _WInputState<T> extends State<WInput> {
                   case EFormItemKeyBoard.email:
                     if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)) return 'Không đúng định dạng email';
                     return null;
-                  case EFormItemKeyBoard.phone:
-                    if (!RegExp(r'^(?:[+0][1-9])?[0-9]{10,12}$').hasMatch(value!) || value.length > 11) return 'Nhập sai định dạng số điện thoại';
-                    return null;
                   case EFormItemKeyBoard.number:
                     if (value!.contains('-')) return 'Không được có dấu trừ';
                     if (double.tryParse(value.replaceAll('.', '')) == null || value.endsWith('.')) return 'Vui lòng nhập đúng định dạng số';
                     if (value[0] == '0') return 'Nhập sai định dạng số';
+                    if (widget.maxQuantity != null && num.parse(value) > widget.maxQuantity!) return 'Không được nhập quá ${widget.maxQuantity.toString()}';
                     return null;
                   default:
                     break;
@@ -182,13 +201,13 @@ class _WInputState<T> extends State<WInput> {
               counterStyle: const TextStyle(fontSize: 0.5, color: Colors.transparent),
               hintText: widget.hintText ?? 'widgets.form.input.Enter'.tr(args: [widget.label.toLowerCase()]),
               hintStyle: TextStyle(
-                fontSize: CFontSize.body + (height * 3),
+                fontSize: CFontSize.base + (height * 3),
                 color: CColor.black.shade200,
                 height: widget.height != null ? 1.9 : null,
               ),
               prefixIcon: widget.icon != null
                   ? Container(
-                      padding: EdgeInsets.all(CSpace.medium + (height * 10)),
+                      padding: EdgeInsets.all(CSpace.xl + (height * 10)),
                       child: SvgPicture.asset(
                         widget.icon ?? '',
                         semanticsLabel: widget.hintText ?? widget.label,
@@ -198,10 +217,10 @@ class _WInputState<T> extends State<WInput> {
                     )
                   : null,
               suffixIconConstraints: BoxConstraints(
-                minWidth: widget.height != null ? widget.height! - CSpace.medium - (height * 10) : CHeight.medium,
-                minHeight: widget.height != null ? widget.height! - CSpace.medium - (height * 10) : CHeight.medium,
+                minWidth: widget.height != null ? widget.height! - CSpace.xl - (height * 10) : CHeight.xl2,
+                minHeight: widget.height != null ? widget.height! - CSpace.xl - (height * 10) : CHeight.xl2,
               ),
-              suffixIcon: widget.password
+              suffixIcon: widget.password && widget.enabled
                   ? InkWell(
                       canRequestFocus: false,
                       splashColor: CColor.primary.shade100,
@@ -214,7 +233,7 @@ class _WInputState<T> extends State<WInput> {
                         semanticLabel: 'View',
                       ),
                     )
-                  : widget.name == 'fullTextSearch'
+                  : widget.name == 'fullTextSearch' && widget.enabled
                       ? BlocBuilder<BlocC<T>, BlocS<T>>(
                           buildWhen: (bf, at) =>
                               (bf.value['fullTextSearch'] == '' && at.value['fullTextSearch'] != '') ||
@@ -237,7 +256,7 @@ class _WInputState<T> extends State<WInput> {
                               },
                               child: Icon(
                                 Icons.cancel,
-                                size: CFontSize.title3,
+                                size: CFontSize.xl,
                                 color: CColor.black.shade300,
                                 semanticLabel: 'Clear',
                               ),
@@ -251,21 +270,21 @@ class _WInputState<T> extends State<WInput> {
               enabledBorder: borderStyle,
               errorBorder: errorBorderStyle,
               focusedErrorBorder: errorBorderStyle,
-              fillColor: Colors.white,
+              fillColor: widget.enabled ? Colors.white : CColor.black.shade100,
               contentPadding: EdgeInsets.symmetric(
-                vertical: widget.maxLines > 1 ? CSpace.medium : -3,
-                horizontal: CSpace.medium + (height * 10),
+                vertical: widget.maxLines > 1 ? CSpace.xl : -3,
+                horizontal: CSpace.xl + (height * 10),
               ),
               filled: true,
             ),
             minLines: widget.maxLines,
             maxLines: widget.maxLines,
-            inputFormatters: inputFormatters ? [ThousandFormatter()] : null,
+            inputFormatters: inputFormatters ?? widget.inputFormatters,
           ),
         ),
         if (widget.subtitle != null)
-          Text(widget.subtitle!, style: TextStyle(fontSize: CFontSize.footnote, color: CColor.black.shade400)),
-        SizedBox(height: widget.space ? CSpace.small : 0),
+          Text(widget.subtitle!, style: TextStyle(fontSize: CFontSize.xs, color: CColor.black.shade400)),
+        SizedBox(height: widget.space ? CSpace.xl : 0),
       ],
     );
   }

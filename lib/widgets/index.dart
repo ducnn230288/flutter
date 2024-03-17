@@ -4,7 +4,7 @@ export 'src/custom_slidable/core/cell.dart';
 export 'src/custom_tab_bar.dart';
 export 'src/filter/index.dart';
 export 'src/filter/on_tap.dart';
-export 'src/progress_indicator.dart';
 export 'src/select_date/index.dart';
 export 'src/separation.dart';
 export 'src/status.dart';
+export 'src/list_image.dart';

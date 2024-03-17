@@ -12,16 +12,13 @@ import '/utils/index.dart';
 part '_account_info.dart';
 
 class MyAccountInfo extends StatefulWidget {
-  const MyAccountInfo({Key? key}) : super(key: key);
+  const MyAccountInfo({super.key});
 
   @override
   State<MyAccountInfo> createState() => _MyAccountInfoState();
 }
 
 class _MyAccountInfoState extends State<MyAccountInfo> {
-  String? currentUrl;
-  late MUser? data;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,28 +26,18 @@ class _MyAccountInfoState extends State<MyAccountInfo> {
       backgroundColor: Colors.white,
       body: BlocBuilder<AuthC, AuthS>(
         builder: (context, state) {
-          if (state.status == AppStatus.success) {
-            if (state.user == null) {
-              return Container();
-            }
-            return _AccountInfo(user: state.user!);
-          }
-          if (state.status == AppStatus.inProcess) {
-            return const Center(
-              child: WLoading(),
-            );
-          }
-
-          return Container();
+          return state.user != null && state.status == AppStatus.success
+              ? _AccountInfo(user: state.user!)
+              : const Center(child: WLoading());
         },
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(CSpace.medium),
+          padding: const EdgeInsets.all(CSpace.xl),
           child: ElevatedButton(
             onPressed: () => context.read<BlocC<MUser>>().submit(
-                  api: (value, _, __, ___) => RepositoryProvider.of<Api>(context).auth.updateProfile(body: value),
-                ),
+              api: (value, _, __, ___) => RepositoryProvider.of<Api>(context).auth.updateProfile(body: value),
+            ),
             child: const Text('Cập nhật'),
           ),
         ),

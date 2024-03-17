@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/foundation.dart';
 
 class AppConsole {
@@ -6,32 +7,32 @@ class AppConsole {
       if (object is List) {
         for (var element in object) {
           if (line) {
-            log("<--------------------|");
+            printLog("<--------------------|");
           }
 
           if (name != "") {
-            log("$name: $element");
+            printLog("$name: $element");
           } else {
-            log(element);
+            printLog(element);
           }
 
           if (line) {
-            log("|-------------------->");
+            printLog("|-------------------->");
           }
         }
       } else {
         if (line) {
-          log("<--------------------|");
+          printLog("<--------------------|");
         }
 
         if (name != "") {
-          log("$name: $object");
+          printLog("$name: $object");
         } else {
-          log(object);
+          printLog(object);
         }
 
         if (line) {
-          log("|-------------------->");
+          printLog("|-------------------->");
         }
       }
     }
@@ -45,9 +46,9 @@ class AppConsole {
     AppConsole.dump("--------- dispose:$runtimeType ---------");
   }
 
-  static void log(Object? object) {
+  static void printLog(Object? object) {
     if (kDebugMode) {
-      print(object);
+      log(object.toString());
     }
   }
 }

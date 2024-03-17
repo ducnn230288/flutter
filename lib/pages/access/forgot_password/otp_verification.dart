@@ -13,7 +13,7 @@ import '/utils/index.dart';
 class OTPVerificationPage extends StatefulWidget {
   final String email;
 
-  const OTPVerificationPage({Key? key, required this.email}) : super(key: key);
+  const OTPVerificationPage({super.key, required this.email});
 
   @override
   State<OTPVerificationPage> createState() => _OTPVerificationPageState();
@@ -25,10 +25,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     return Scaffold(
       appBar: appBar(title: 'pages.login.otp_verification.Confirm OTP'.tr()),
       body: ListView(
-        padding: const EdgeInsets.all(CSpace.superLarge),
+        padding: const EdgeInsets.all(CSpace.xl5),
         children: [
           SizedBox(height: 170, child: CIcon.otpVerification),
-          const VSpacer(CSpace.mediumSmall),
+          const VSpacer(CSpace.base),
           Text.rich(TextSpan(
             children: [
               const TextSpan(text: 'Để xác nhận email là của bạn, nhập mã gồm '),
@@ -39,7 +39,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           )),
           const VSpacer(40),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+            padding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
             child: Pinput(
               length: 6,
               pinAnimationType: PinAnimationType.slide,
@@ -53,7 +53,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           const VSpacer(40),
           Text(
             'Bạn có thể cần phải chờ tối đa 1 phút để nhận được mã',
-            style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.footnote),
+            style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm),
             textAlign: TextAlign.center,
           ),
           const VSpacer(40),
@@ -63,10 +63,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             children: [
               TextButton(
                 onPressed: () => context.read<BlocC<MUser>>().submit(
-                    onlyApi: true,
-                    api: (_, __, ___, ____) =>
-                        RepositoryProvider.of<Api>(context).auth.forgotPassword(email: widget.email)),
-                child: const Text('Gửi lại mã xác nhận', style: TextStyle(fontSize: CFontSize.body)),
+                  onlyApi: true,
+                  api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context).auth.forgotPassword(email: widget.email)
+                ),
+                child: const Text('Gửi lại mã xác nhận', style: TextStyle(fontSize: CFontSize.base)),
               ),
             ],
           ),
@@ -75,16 +75,14 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     );
   }
 
-  final TextEditingController _controller = TextEditingController();
-  final double _size = (CSpace.width - 4 * CSpace.large - 5 * CSpace.medium) / 6;
   late final PinTheme _defaultPinTheme;
-
+  final double _size = (CSpace.width - 4 * CSpace.xl3 - 5 * CSpace.xl) / 6;
   @override
   void initState() {
     _defaultPinTheme = PinTheme(
       height: _size,
       width: _size,
-      textStyle: TextStyle(color: CColor.primary, fontSize: CFontSize.title2, fontWeight: FontWeight.w600),
+      textStyle: TextStyle(color: CColor.primary, fontSize: CFontSize.xl2, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -94,14 +92,14 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     super.initState();
   }
 
+  final TextEditingController _controller = TextEditingController();
   void checkToken() async {
     if (_controller.text.length == 6) {
       context.read<BlocC<MUser>>().submit(
-          onlyApi: true,
-          api: (_, __, ___, ____) =>
-              RepositoryProvider.of<Api>(context).auth.verifyForgotPassword(resetPasswordToken: _controller.text),
-          submit: (data) =>
-              context.pushNamed(CRoute.resetPassword, queryParams: {'resetPasswordToken': _controller.text}));
+        onlyApi: true,
+        api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context).auth.verifyForgotPassword(resetPasswordToken: _controller.text),
+        submit: (data) => context.pushNamed(CRoute.resetPassword, queryParameters: {'resetPasswordToken': _controller.text})
+      );
     }
   }
 }

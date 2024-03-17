@@ -9,7 +9,6 @@ import '/utils/index.dart';
 
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
-  WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   runApp(EasyLocalization(supportedLocales: const [
     // Locale('en'),
@@ -48,19 +47,15 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: false,
               fontFamily: 'SFProDisplay',
-              textTheme: TextTheme(
-                bodyMedium: CStyle.caption(
-                  style: const TextStyle(
-                    fontSize: CFontSize.subhead,
-                    fontWeight: FontWeight.w400,
-                    textBaseline: TextBaseline.alphabetic,
-                    fontFamily: 'SFProDisplay',
-                    height: 1.1,
-                  ),
+              textTheme: const TextTheme(
+                bodyMedium: TextStyle(
+                  fontSize: CFontSize.base,
+                  fontWeight: FontWeight.w400,
+                  textBaseline: TextBaseline.alphabetic,
+                  fontFamily: 'SFProDisplay',
+                  height: 1.1,
                 ),
-                labelLarge: CStyle.caption(
-                  style: const TextStyle(fontSize: CFontSize.subhead, fontWeight: FontWeight.w400),
-                ),
+                labelLarge: TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400),
               ),
               scaffoldBackgroundColor: CColor.black.shade50,
               primarySwatch: CColor.primary,

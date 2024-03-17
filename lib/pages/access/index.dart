@@ -7,7 +7,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import '/constants/index.dart';
 
 class IntroductionPage extends StatelessWidget {
-  const IntroductionPage({Key? key}) : super(key: key);
+  const IntroductionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class IntroductionPage extends StatelessWidget {
               child: Text(
                 "introduction.Title.$index".tr(),
                 textAlign: TextAlign.start,
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: CFontSize.headline1, color: CColor.black),
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: CFontSize.xl3, color: CColor.black),
               ),
             ),
             bodyWidget: Text(
@@ -29,17 +29,17 @@ class IntroductionPage extends StatelessWidget {
               style: TextStyle(color: CColor.black.shade500),
             ),
             image: SvgPicture.asset('assets/svgs/splash/$index.svg'),
-            decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: CSpace.superLarge)),
+            decoration: const PageDecoration(imagePadding: EdgeInsets.only(top: CSpace.xl5)),
           );
         }),
       ],
       dotsDecorator: DotsDecorator(
-        size: const Size.square(CSpace.mediumSmall),
-        activeSize: const Size(CSpace.large, CSpace.mediumSmall),
+        size: const Size.square(CSpace.base),
+        activeSize: const Size(CSpace.xl3, CSpace.base),
         activeColor: Theme.of(context).colorScheme.secondary,
         color: CColor.black.shade100,
-        spacing: const EdgeInsets.symmetric(horizontal: CSpace.superSmall),
-        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.large)),
+        spacing: const EdgeInsets.symmetric(horizontal: CSpace.xs),
+        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.xl3)),
       ),
       showSkipButton: true,
       skip: Text("pages.login.introduction.Skip".tr()),
@@ -48,9 +48,7 @@ class IntroductionPage extends StatelessWidget {
       nextStyle: CStyle.button,
       doneStyle: CStyle.button,
       done: Text("pages.login.introduction.Get started".tr()),
-      onDone: () {
-        context.goNamed(CRoute.login);
-      },
+      onDone: () => context.goNamed(CRoute.login),
     );
   }
 }

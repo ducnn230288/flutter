@@ -26,13 +26,13 @@ class MapPicker extends StatefulWidget {
   final MapPickerController mapPickerController;
 
   const MapPicker({
-    Key? key,
+    super.key,
     required this.child,
     required this.mapPickerController,
     this.iconWidget,
     this.showDot = true,
     this.showIcon = false,
-  }) : super(key: key);
+  });
 
   @override
   MapPickerState createState() => MapPickerState();

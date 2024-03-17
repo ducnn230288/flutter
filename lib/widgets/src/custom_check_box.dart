@@ -22,7 +22,7 @@ class CustomCheckbox extends StatefulWidget {
   final bool disable;
 
   const CustomCheckbox({
-    Key? key,
+    super.key,
     this.size = 25,
     this.strokeRadius = 0,
     this.iconSize,
@@ -40,7 +40,7 @@ class CustomCheckbox extends StatefulWidget {
     this.rightMargin = 0,
     this.name,
     this.disable = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomCheckbox> createState() => CustomCheckboxState();

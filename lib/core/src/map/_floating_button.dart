@@ -5,7 +5,7 @@ class _FloatingButton extends StatelessWidget {
   final Function() zoomIn;
   final Function() zoomOut;
 
-  const _FloatingButton({Key? key, required this.location, required this.zoomIn, required this.zoomOut}) : super(key: key);
+  const _FloatingButton({required this.location, required this.zoomIn, required this.zoomOut});
 
   @override
   Widget build(BuildContext context) {

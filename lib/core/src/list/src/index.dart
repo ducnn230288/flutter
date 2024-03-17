@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '/constants/index.dart';
 import '/core/index.dart';
@@ -16,7 +15,7 @@ class WList<T> extends StatefulWidget {
   final Widget? bottom;
   final ScrollPhysics? physics;
   final Function(T content, int index) item;
-  final Function(dynamic json)? format;
+  final Function(Map<String, dynamic> json)? format;
   final Function(T content)? onTap;
   final Function(T content, BuildContext context)? onTapMultiple;
   final CrossAxisAlignment crossAxisAlignment;
@@ -121,21 +120,23 @@ class _WListState<T> extends State<WList<T>> {
                                           splashColor: CColor.primary.shade100,
                                           onTap: (widget.onTap != null || widget.onTapMultiple != null)
                                               ? () async {
-                                                  if (widget.apiId != null) {
-                                                    this.item = item;
-                                                    this.index = index;
-                                                  }
                                                   if (widget.onTap != null) {
                                                     widget.onTap!(item);
                                                   } else if (widget.onTapMultiple != null) {
                                                     widget.onTapMultiple!(item, context);
+                                                  }
+                                                  if (widget.apiId != null) {
+                                                    Timer(const Duration(milliseconds: 100), () {
+                                                      this.item = item;
+                                                      this.index = index;
+                                                    });
                                                   }
                                                 }
                                               : null,
                                           child: widget.item(item, index),
                                         )
                                       : const Padding(
-                                          padding: EdgeInsets.only(top: CSpace.large),
+                                          padding: EdgeInsets.only(top: CSpace.xl3),
                                           child: Text('Danh sách trống'),
                                         ),
                                   if (widget.items == null && index == length - 1)
@@ -164,7 +165,7 @@ class _WListState<T> extends State<WList<T>> {
                           ),
                         )
                       : Padding(
-                          padding: const EdgeInsets.only(top: CSpace.large),
+                          padding: const EdgeInsets.only(top: CSpace.xl3),
                           child: BlocSelector<BlocC<T>, BlocS<T>, int>(
                             selector: (state) => state.data.content.length,
                             builder: (context, state) {
@@ -184,13 +185,12 @@ class _WListState<T> extends State<WList<T>> {
   late ScrollController controller;
   final int size = 20;
   Timer t = Timer(const Duration(seconds: 1), () {});
-  late final String currentUrl;
+  String currentUrl = '';
   int? index;
   T? item;
 
   @override
   void initState() {
-    currentUrl = GoRouter.of(rootNavigatorKey.currentState!.context).location;
     final BlocC<T> blocC = context.read<BlocC<T>>();
     if (widget.items == null) {
       if (widget.init != null) widget.init!(blocC);
@@ -200,10 +200,16 @@ class _WListState<T> extends State<WList<T>> {
         format: widget.format ?? MUpload.fromJson,
       );
     }
-    if (widget.items == null) {
-      controller = ScrollController()..addListener(scrollListener);
-    }
+    if (widget.items == null) controller = ScrollController()..addListener(scrollListener);
     super.initState();
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    if (currentUrl == '') currentUrl = T == dynamic ? '' : ModalRoute.of(context)!.settings.name!;
+    if (T != dynamic) refresh();
+    super.didChangeDependencies();
   }
 
   @override
@@ -216,14 +222,8 @@ class _WListState<T> extends State<WList<T>> {
     super.dispose();
   }
 
-  @override
-  void didUpdateWidget(covariant WList<T> oldWidget) {
-    refresh();
-    super.didUpdateWidget(oldWidget);
-  }
-
   Future<void> refresh() async {
-    String location = GoRouter.of(context).location;
+    String location = ModalRoute.of(context)!.settings.name!;
     if (location.contains('?')) {
       location = location.substring(0, location.indexOf('?'));
     }

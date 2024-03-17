@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/core/src/form/src/map.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -12,15 +13,17 @@ import '/utils/index.dart';
 
 class WForm<T> extends StatefulWidget {
   final List<MFormItem> list;
+  final List<String> listKeyChanged;
   final Widget Function(Map<String, Widget> items)? builder;
   final void Function(Map<String, TextEditingController> listController)? onInit;
 
   const WForm({
-    Key? key,
+    super.key,
     required this.list,
+    this.listKeyChanged = const [],
     this.builder,
     this.onInit,
-  }) : super(key: key);
+  });
 
   @override
   State<WForm> createState() => _WFormState<T>();
@@ -31,7 +34,8 @@ class _WFormState<T> extends State<WForm> {
   final Map<String, GlobalKey> listKey = {};
   final List<String> listTrickMap = [];
   late final cubit = context.read<BlocC<T>>();
-
+  late Timer _t;
+  late Timer _tChange;
   @override
   void initState() {
     super.initState();
@@ -46,7 +50,8 @@ class _WFormState<T> extends State<WForm> {
     }
     widget.onInit?.call(listController);
     cubit.setList(list: widget.list);
-    Delay(milliseconds: 500).run(() { onChangedController(); });
+    _tChange = Timer(const Duration(milliseconds: 1), () {});
+    _t = Timer(const Duration(milliseconds: 500), () {});
   }
 
   void onChangedController() {
@@ -62,40 +67,29 @@ class _WFormState<T> extends State<WForm> {
       for (int index = 0; index < widget.list.length; index++) {
         final MFormItem item = state.list[index];
         late Widget child;
-        if (item.value != '' && listController[item.name] != null && state.status != AppStatus.success) {
-          if (item.type != EFormItemType.map &&
-              item.type != EFormItemType.upload &&
-              item.type != EFormItemType.selectMultiple &&
-              item.type != EFormItemType.date) {
-            listController[item.name]!.text = item.value ?? '';
-          }
+        if (((state.value[item.name] != null && state.value[item.name] != '') || (item.value != null && item.value != '')) && listController[item.name] != null && state.status != AppStatus.success) {
           switch (item.type) {
             case EFormItemType.date:
               state.value[item.name] = state.value[item.name] ?? item.value;
-              if (item.mode == DateRangePickerSelectionMode.single) {
-                listController[item.name]!.text = Convert.dateLocation(item.value ?? '');
-              } else {
-                listController[item.name]!.text = Convert.dateTimeMultiple(item.value ?? '');
-              }
+              Timer(const Duration(microseconds: 1), () => listController[item.name]!.text =
+              item.mode == DateRangePickerSelectionMode.single
+                  ? Convert.dateLocation(state.value[item.name] ?? '')
+                  : Convert.dateTimeMultiple(state.value[item.name] ?? ''));
               break;
             case EFormItemType.select:
               state.value[item.name] = state.value[item.name] ?? item.code;
+              Timer(const Duration(microseconds: 1), () => listController[item.name]!.text = item.value);
               break;
             case EFormItemType.time:
               state.value[item.name] = state.value[item.name] ?? item.value;
-              listController[item.name]!.text = Convert.hours(item.value ?? '');
+              Timer(const Duration(microseconds: 1), () => listController[item.name]!.text = Convert.hours(state.value[item.name] ?? ''));
               break;
             case EFormItemType.upload:
-              state.value[item.name] = state.value[item.name] ?? item.value?.map((v) => v.toJson()).toList() ?? [];
+              state.value[item.name] = state.value[item.name] ?? (item.value?.map((v) => item.value is List<String> ? {'fileUrl': v, 'docType': ''} : v.toJson()).toList()) ?? [];
               break;
             case EFormItemType.selectMultiple:
-              final List listValue = item.value.split(',');
-              if (listValue.length > 1) {
-                listController[item.name]!.text = 'Đã chọn: ${listValue.length}';
-              } else if (item.value.split(',').length > 0) {
-                listController[item.name]!.text = listValue[0];
-              }
-              state.value[item.name] = state.value[item.name] ?? item.code.split(',');
+              state.value[item.name] = state.value[item.name] ?? item.code;
+              if (item.value.length == 0) Timer(const Duration(microseconds: 1), () => listController[item.name]!.text = item.value.length > 1 ? 'Đã chọn: ${item.value.length}' : item.value[0]);
               break;
             case EFormItemType.checkbox:
               state.value[item.name] = state.value[item.name] ?? item.value ?? false;
@@ -103,36 +97,37 @@ class _WFormState<T> extends State<WForm> {
             default:
               if (item.keyBoard == EFormItemKeyBoard.number) {
                 state.value[item.name] =
-                    state.value[item.name] ?? (item.value.contains('.') ? item.value.replaceAll('.', '') : item.value);
-                listController[item.name]!.text =
-                    item.formatNumberType == FormatNumberType.inputFormatters && !item.value.contains('.')
-                        ? Convert.thousands(item.value)
-                        : item.value;
+                    state.value[item.name] ?? (item.value.toString().contains('.') ? item.value.toString().replaceAll('.', '') : item.value);
+                Timer(const Duration(microseconds: 1), () => listController[item.name]!.text =
+                item.formatNumberType == FormatNumberType.inputFormatters && !state.value[item.name].toString().contains('.')
+                    ? Convert.thousands(state.value[item.name].toString())
+                    : state.value[item.name]);
               } else {
                 state.value[item.name] = state.value[item.name] ?? item.value;
+                if (item.type != EFormItemType.map) Timer(const Duration(microseconds: 1), () => listController[item.name]!.text = state.value[item.name]);
               }
           }
         }
-        listController[item.name]?.selection = TextSelection.fromPosition(
+        Timer(const Duration(microseconds: 1), () => listController[item.name]?.selection = TextSelection.fromPosition(
           TextPosition(offset: listController[item.name]?.text.length ?? 0),
-        );
+        ));
 
         switch (item.type) {
           case EFormItemType.map:
-            child = WInputMap<T>(
+            child = item.show ? WInputMap<T>(
               key: listKey[item.name],
               value: state.value[item.name],
               name: item.name,
               label: item.label,
               onCondition: item.onCondition,
-            );
+            ) : Container();
             break;
           case EFormItemType.title:
-            child = Container(
-              margin: const EdgeInsets.only(bottom: CSpace.small),
+            child = item.show ? Container(
+              margin: const EdgeInsets.only(bottom: CSpace.sm),
               alignment: Alignment.topLeft,
-              child: Text(item.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title2)),
-            );
+              child: Text(item.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.xl2)),
+            ) : Container();
             break;
           case EFormItemType.checkbox:
             child = WCheckbox<T>(
@@ -141,7 +136,8 @@ class _WFormState<T> extends State<WForm> {
               name: item.name,
               required: item.required,
               onChanged: (value) {
-                if (item.onChange != null) item.onChange!(value, listController);
+                _tChange.cancel();
+                if (item.onChange != null) _tChange = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { item.onChange!(value, listController); });
                 cubit.saved(value: value, name: item.name);
               },
               child: item.child!,
@@ -149,7 +145,7 @@ class _WFormState<T> extends State<WForm> {
             break;
           case EFormItemType.separation:
             child = Container(
-              margin: const EdgeInsets.only(bottom: CSpace.small, top: CSpace.small / 2),
+              margin: const EdgeInsets.only(bottom: CSpace.sm, top: CSpace.sm / 2),
               child: Row(
                 children: [
                   Text(item.label, style: TextStyle(fontWeight: FontWeight.w400, color: CColor.black.shade300)),
@@ -168,13 +164,15 @@ class _WFormState<T> extends State<WForm> {
               list: state.value[item.name] ?? [],
               label: item.label,
               space: index != state.list.length - 1,
-              maxQuantity: item.maxQuantity,
-              minQuantity: item.minQuantity,
+              maxQuantity: item.maxQuantity ?? 1,
+              minQuantity: item.minQuantity ?? 1,
               docType: item.name,
               prefix: item.prefix,
               maxCount: item.maxCountUpload,
+              onDelete: item.onDelete,
               onChanged: (dynamic value) {
-                if (item.onChange != null) item.onChange!(value, listController);
+                _tChange.cancel();
+                if (item.onChange != null) _tChange = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { item.onChange!(value, listController); });
                 cubit.saved(value: value, name: item.name);
               },
             );
@@ -196,16 +194,19 @@ class _WFormState<T> extends State<WForm> {
                     stackedLabel: item.stackedLabel,
                     suffix: item.suffix,
                     onChanged: (value) {
-                      if (item.onChange != null) item.onChange!(value, listController);
+                      item.value = listController[item.name]!.text;
+                      item.code = value;
+                      _tChange.cancel();
+                      if (item.onChange != null) _tChange = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { item.onChange!(value, listController); });
                       cubit.saved(value: value, name: item.name);
-                      item.value = '';
-                      onChangedController();
+                      _t.cancel();
+                      if (widget.listKeyChanged.contains(item.name)) _t = Timer(const Duration(milliseconds: 1), () { onChangedController(); });
                     },
                     onTap: item.onTap,
                     icon: item.icon,
                     format: item.format,
                     api: item.api ?? (_, __, ___, ____) {},
-                    itemSelect: item.itemSelect ?? (dynamic content, int index) {},
+                    itemSelect: item.itemSelect ?? (dynamic content, int index, bool selected) {},
                     showSearch: item.showSearch ?? true,
                     selectLabel: item.selectLabel ?? () {},
                     selectValue: item.selectValue ?? () {},
@@ -222,22 +223,24 @@ class _WFormState<T> extends State<WForm> {
                     label: item.label,
                     hintText: item.hintText,
                     subtitle: item.subtitle,
-                    value: item.value.toString(),
-                    code: state.value[item.name] ?? [],
+                    value: item.value,
+                    code: state.value[item.name].length > 0 ? state.value[item.name] : [],
                     space: index != state.list.length - 1,
                     maxLines: item.maxLines,
                     stackedLabel: item.stackedLabel,
                     required: item.required,
                     enabled: item.enabled,
                     onChanged: (value) {
-                      if (item.onChange != null) item.onChange!(value, listController);
-                      cubit.saved(value: value.split(','), name: item.name);
-                      onChangedController();
+                      _tChange.cancel();
+                      if (item.onChange != null) _tChange = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { item.onChange!(value, listController); });
+                      cubit.saved(value: value, name: item.name);
+                      _t.cancel();
+                      if (widget.listKeyChanged.contains(item.name)) _t = Timer(const Duration(milliseconds: 1), () { onChangedController(); });
                     },
                     icon: item.icon,
                     format: item.format,
                     api: item.api ?? (_, __, ___, ____) {},
-                    itemSelect: item.itemSelect ?? (dynamic content, int index) {},
+                    itemSelect: item.itemSelect ?? (dynamic content, int index, bool selected) {},
                     showSearch: item.showSearch ?? true,
                     selectLabel: item.selectLabel ?? () {},
                     selectValue: item.selectValue ?? () {},
@@ -267,16 +270,16 @@ class _WFormState<T> extends State<WForm> {
                     enabled: item.enabled,
                     onChanged: (value) {
                       dynamic val = value;
-                      if (value.contains('|')) {
-                        val = value.split('|');
-                      }
+                      if (value.contains('|')) val = value.split('|');
                       cubit.saved(value: val, name: item.name);
-                      if (item.onChange != null) item.onChange!(val, listController);
-                      item.value = '';
+                      _tChange.cancel();
+                      if (item.onChange != null) _tChange = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { item.onChange!(val, listController); });
                     },
                     icon: item.icon,
                     mode: item.mode,
                     showTime: item.showTime,
+                    view: item.view,
+                    readOnly: item.readOnly,
                   )
                 : Container();
             break;
@@ -294,9 +297,9 @@ class _WFormState<T> extends State<WForm> {
                     required: item.required,
                     enabled: item.enabled,
                     onChanged: (value) {
-                      if (item.onChange != null) item.onChange!(value, listController);
+                      _tChange.cancel();
+                      if (item.onChange != null) _tChange = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { item.onChange!(value, listController); });
                       cubit.saved(value: value, name: item.name);
-                      item.value = '';
                     },
                     icon: item.icon,
                   )
@@ -304,28 +307,29 @@ class _WFormState<T> extends State<WForm> {
             break;
           default:
             if (item.child != null) {
-              child = Column(
+              child = item.show
+                  ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (item.label != '')
                     Container(
-                      margin: const EdgeInsets.only(bottom: CSpace.mediumSmall),
+                      margin: const EdgeInsets.only(bottom: CSpace.base),
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
                             text: item.label,
                             style: TextStyle(
                               color: CColor.black,
-                              fontSize: CFontSize.headline,
+                              fontSize: CFontSize.lg,
                               fontWeight: FontWeight.w600,
-                              height: 22 / CFontSize.body,
+                              height: 22 / CFontSize.base,
                             )),
                       ),
                     ),
                   item.child!,
-                  SizedBox(height: index != state.list.length - 1 ? CSpace.medium : 0),
+                  SizedBox(height: index != state.list.length - 1 ? CSpace.xl : 0),
                 ],
-              );
+              ): Container();
             } else {
               child = item.show
                   ? WInput<T>(
@@ -341,15 +345,17 @@ class _WFormState<T> extends State<WForm> {
                       maxLines: item.maxLines,
                       maxLength: item.maxLength,
                       minLength: item.minLength,
+                      maxQuantity: item.maxQuantity,
                       required: item.required,
                       enabled: item.enabled,
                       password: item.password,
                       keyBoard: item.keyBoard,
                       onChanged: (value) {
-                        if (item.onChange != null) item.onChange!(value, listController);
+                        _tChange.cancel();
+                        if (item.onChange != null) _tChange = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { item.onChange!(value, listController); });
                         cubit.saved(value: value, name: item.name);
-                        item.value = '';
-                        Delay(milliseconds: 500).run(() { onChangedController(); });
+                        _t.cancel();
+                        if (widget.listKeyChanged.contains(item.name)) _t = Timer(Duration(milliseconds: listTrickMap.isNotEmpty ? 1200 : 0), () { onChangedController(); });
                       },
                       onTap: item.onTap,
                       onValidated: (String value) {
@@ -373,7 +379,7 @@ class _WFormState<T> extends State<WForm> {
           child: widget.builder?.call(items) ??
               Column(
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[...items.entries.map((e) => e.value).toList()],
+                children: <Widget>[...items.entries.map((e) => e.value)],
               ));
     });
   }

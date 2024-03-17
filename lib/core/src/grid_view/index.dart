@@ -25,7 +25,7 @@ class GridRefresh<T> extends StatefulWidget {
   final EdgeInsets? padding;
 
   const GridRefresh({
-    Key? key,
+    super.key,
     this.height,
     this.onLoadMore,
     required this.item,
@@ -37,7 +37,7 @@ class GridRefresh<T> extends StatefulWidget {
     this.padding,
     this.onTap,
     this.apiId,
-  }) : super(key: key);
+  });
 
   @override
   GridRefreshState<T> createState() => GridRefreshState<T>();
@@ -46,6 +46,7 @@ class GridRefresh<T> extends StatefulWidget {
 class GridRefreshState<T> extends State<GridRefresh<T>> {
   @override
   Widget build(BuildContext context) {
+    currentUrl = GoRouterState.of(context).uri.toString();
     return Padding(
       padding: widget.padding ?? EdgeInsets.zero,
       child: RefreshIndicator(
@@ -86,8 +87,10 @@ class GridRefreshState<T> extends State<GridRefresh<T>> {
                     onTap: widget.onTap != null
                         ? () {
                             if (widget.apiId != null) {
-                              item = state.data.content[index];
-                              this.index = index;
+                              Timer(const Duration(milliseconds: 100), () {
+                                item = state.data.content[index];
+                                this.index = index;
+                              });
                             }
                             widget.onTap!(state.data.content[index]);
                           }
@@ -111,7 +114,7 @@ class GridRefreshState<T> extends State<GridRefresh<T>> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
   final StreamController<bool> _streamController = StreamController<bool>.broadcast();
-  late final String currentUrl;
+  String currentUrl = '';
   late final BlocC<T> cubit;
   bool isLoadMore = false;
   int? index;
@@ -121,9 +124,15 @@ class GridRefreshState<T> extends State<GridRefresh<T>> {
   void initState() {
     cubit = context.read<BlocC<T>>();
     cubit.setSize(size: 20, api: widget.api, format: widget.format);
-    currentUrl = GoRouter.of(rootNavigatorKey.currentState!.context).location;
     _scrollController.addListener(_scrollListener);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (currentUrl == '') currentUrl = T == dynamic ? '' : GoRouterState.of(context).uri.toString();
+    refresh();
+    super.didChangeDependencies();
   }
 
   @override
@@ -145,17 +154,9 @@ class GridRefreshState<T> extends State<GridRefresh<T>> {
     }
   }
 
-  @override
-  void didUpdateWidget(covariant GridRefresh<T> oldWidget) {
-    refresh();
-    super.didUpdateWidget(oldWidget);
-  }
-
   Future<void> refresh() async {
-    String location = GoRouter.of(context).location;
-    if (location.contains('?')) {
-      location = location.substring(0, location.indexOf('?'));
-    }
+    String location = GoRouterState.of(context).uri.toString();
+
     if (currentUrl == location && index != null) {
       await context.read<BlocC<T>>().refreshPage(index: index!, apiId: widget.apiId!(item as T), format: widget.format);
       index = null;

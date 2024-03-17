@@ -40,9 +40,9 @@ class Convert {
     return DateFormat('HH:mm:ss dd${separator}MM${separator}yyyy', 'vi').format(DateTime.parse(dateTime));
   }
 
-  static String dateLocation(String dateTime) {
+  static String dateLocation(String dateTime, {String format = 'dd/MM/yyyy'}) {
     if (DateTime.tryParse(dateTime) == null) return '';
-    return DateFormat('dd MMMM, yyyy', 'vi').format(DateTime.parse(dateTime));
+    return DateFormat(format, 'vi').format(DateTime.parse(dateTime));
   }
 
   static String hours(String dateTime) {
@@ -65,12 +65,12 @@ class Convert {
     return DateFormat('dd/MM', 'vi').format(DateTime.parse(dateTime));
   }
 
-  static String dateTimeMultiple(List<String> dateTimeInput) {
+  static String dateTimeMultiple(List<String> dateTimeInput, {String format = 'dd/MM/yyyy'}) {
     if (dateTimeInput.isEmpty) return '';
     final String hoursFrom = hours(dateTimeInput[0]) != '00:00' ? '${hours(dateTimeInput[0])} ' : '';
     final String hoursTo = hours(dateTimeInput[1]) != '00:00' ? '${hours(dateTimeInput[1])} ' : '';
-    final String dateFrom = date(dateTimeInput[0]);
-    final String dateTo = date(dateTimeInput[1]);
+    final String dateFrom = dateLocation(dateTimeInput[0], format: format);
+    final String dateTo = dateLocation(dateTimeInput[1], format: format);
     return '$hoursFrom$dateFrom - $hoursTo$dateTo';
   }
 
@@ -91,24 +91,24 @@ class Convert {
         unit = 'VND';
     }
     double convertPrice = double.parse(price.toStringAsFixed(0));
-    if (convertPrice >= 1000000 && price < 1000000000) {
-      convertPrice /= 1000000;
-      unit = '${'utils.app_console.million'.tr()} $unit';
-      if (double.parse(convertPrice.toStringAsFixed(2)) == 1000) {
-        convertPrice = 1;
-        unit = '${'utils.app_console.billion'.tr()} $unit';
-      }
-    }
-    if (price >= 1000000000) {
-      convertPrice /= 1000000000;
-      unit = 'tỷ $unit';
-    }
-    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
+    // if (convertPrice >= 1000000 && price < 1000000000) {
+    //   convertPrice /= 1000000;
+    //   unit = '${'utils.app_console.million'.tr()} $unit';
+    //   if (double.parse(convertPrice.toStringAsFixed(2)) == 1000) {
+    //     convertPrice = 1;
+    //     unit = '${'utils.app_console.billion'.tr()} $unit';
+    //   }
+    // }
+    // if (price >= 1000000000) {
+    //   convertPrice /= 1000000000;
+    //   unit = 'tỷ $unit';
+    // }
+    return '${NumberFormat.decimalPatternDigits(locale: 'vi_vn').format(double.parse(convertPrice.toStringAsFixed(2)))} $unit';
   }
 
   static String price(num price, {String unit = 'đ'}) {
     final double convertPrice = double.parse(price.toStringAsFixed(0));
-    return '${NumberFormat().format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
+    return '${NumberFormat.decimalPatternDigits(locale: 'vi_vn').format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
   }
 
   static String phoneNumber(String number) {
@@ -140,15 +140,6 @@ class Convert {
       }
     }
     return priceInText.trim();
-  }
-
-  static String roleName(role) {
-    switch (role) {
-      case 'ADMIN':
-      case 10:
-        return 'utils.app_console.System management'.tr();
-    }
-    return 'utils.app_console.Undefined'.tr();
   }
 
   static Future<Map<String, dynamic>> checkDevice() async {
@@ -201,5 +192,23 @@ class Convert {
       }
     }
     return result.toList();
+  }
+
+  static String? getGroupDate(cubit, num index, String name) {
+    final content = cubit.state.data.content;
+    final item = content[index].toJson();
+    if (index > 0) {
+      final old = content[index - 1].toJson();
+      if (DateTime.tryParse(item[name]) != null && DateTime.tryParse(old[name]) != null) {
+        final DateTime current = DateTime.parse(item[name]);
+        final DateTime before = DateTime.parse(old[name]);
+        Duration timeDifference = before.difference(current);
+        if (timeDifference.isNegative) timeDifference = timeDifference.abs();
+        return timeDifference.inDays > 0 || (timeDifference.inHours < 24 && current.day < before.day)
+            ? Convert.date(current.toIso8601String())
+            : null;
+      }
+    }
+    return DateTime.tryParse(item[name]) != null ? Convert.date(item[name]) : null;
   }
 }

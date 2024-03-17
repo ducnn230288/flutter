@@ -8,6 +8,10 @@ class CPref {
 
   static String statusTitle(String status) {
     switch (status) {
+      case 'ALL':
+        return 'CPref.ALL'.tr();
+      case 'ADMIN':
+        return 'CPref.ADMIN'.tr();
       case 'REJECTED':
         return 'CPref.REJECTED'.tr();
       case 'WFA':

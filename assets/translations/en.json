@@ -1,5 +1,7 @@
 {
   "CPref": {
+    "ALL": "All",
+    "ADMIN": "Administrator",
     "REJECTED": "Rejected",
     "WFA": "Wait Confirm",
     "WAIT_CONFIRM": "Wait Confirm",

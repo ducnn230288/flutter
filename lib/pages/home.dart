@@ -6,7 +6,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,16 +16,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       endDrawerEnableOpenDragGesture: false,
       appBar: appBar(title: 'Home'),
       drawer: const CDrawer(),
       body: BlocBuilder<AuthC, AuthS>(
         builder: (context, state) {
           return Container(
-              padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
-              child: Column(
-                children: [CIcon.logo],
-              ));
+            padding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
+            child: Column(
+              children: [CIcon.logo],
+            ));
         },
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,25 +9,16 @@ import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    List<MFormItem> listFormItem = [
-      MFormItem(
-        name: 'username',
-        hintText: 'pages.login.login.Email address'.tr(),
-        icon: 'assets/form/mail.svg',
-      ),
-      MFormItem(
-        name: 'password',
-        hintText: 'pages.login.login.Password'.tr(),
-        icon: 'assets/form/password.svg',
-        password: true,
-      )
-    ];
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -36,16 +26,16 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: CSpace.height - 502,
+              height: CSpace.height - 523,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [CIcon.logoLogin],
               ),
             ),
             Container(
-              height: 482,
-              padding: const EdgeInsets.all(CSpace.superLarge),
-              margin: const EdgeInsets.all(CSpace.mediumSmall),
+              height: 510,
+              padding: const EdgeInsets.all(CSpace.xl5),
+              margin: const EdgeInsets.all(CSpace.base),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(33),
@@ -58,14 +48,15 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.only(bottom: CSpace.superLarge),
+                    padding: EdgeInsets.only(bottom: CSpace.xl5),
                     child: Text(
+                      key: ValueKey("Đăng nhập"),
                       'Đăng nhập',
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.title1),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.xl3),
                     ),
                   ),
-                  WForm<MUser>(list: listFormItem),
-                  const SizedBox(height: CSpace.small),
+                  WForm<MUser>(list: _listFormItem),
+                  const SizedBox(height: CSpace.sm),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -91,13 +82,13 @@ class LoginPage extends StatelessWidget {
                               const SizedBox(width: 10),
                               Text(
                                 'pages.login.login.Remember me'.tr(),
-                                style: TextStyle(fontSize: CFontSize.footnote, color: CColor.black.shade300),
+                                style: TextStyle(fontSize: CFontSize.sm, color: CColor.black.shade300),
                               ),
                             ],
                           )),
                       TextButton(
                         onPressed: () => context.goNamed(CRoute.forgotPassword),
-                        child: Text('${'pages.login.login.Forgot password'.tr()}?'),
+                        child: Text('${'pages.login.login.Forgot password'.tr()}?', style: const TextStyle(fontSize: CFontSize.sm)),
                       )
                     ],
                   ),
@@ -105,49 +96,56 @@ class LoginPage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              const TextSpan(text: 'Bằng cách đăng nhập, bạn đã đồng ý với các\n'),
-                              TextSpan(
-                                text: ' Điều khoản dịch vụ',
-                                style: TextStyle(color: CColor.primary, fontSize: CFontSize.footnote),
+                        const SizedBox(height: CSpace.xl3),
+                        Column(
+                          children: [
+                            Text("Bằng cách đăng nhập, bạn đã đồng ý với các", style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm)),
+                            SizedBox(
+                              height: 24,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.all(CSpace.xs),
+                                    ),
+                                    onPressed: () => {},
+                                    child: const Text('Điều khoản dịch vụ', style: TextStyle(fontSize: CFontSize.sm)),
+                                  ),
+                                  Text("và", style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm, height: 1.3)),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.all(CSpace.xs),
+                                    ),
+                                    onPressed: () => {},
+                                    child: const Text('Điều kiện bảo mật', style: TextStyle(fontSize: CFontSize.sm)),
+                                  ),
+                                ],
                               ),
-                              const TextSpan(text: ' và '),
-                              TextSpan(
-                                text: 'Điều kiện bảo mật ',
-                                style: TextStyle(color: CColor.primary, fontSize: CFontSize.footnote),
-                              ),
-                              const TextSpan(text: 'của ứng dụng Uberental')
-                            ],
-                          ),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: CFontSize.footnote),
+                            ),
+                            Text("của ứng dụng Uberental", style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm)),
+                          ],
                         ),
-                        const SizedBox(height: CSpace.large * 2),
+                        const SizedBox(height: CSpace.xl3 * 2),
                         BlocConsumer<BlocC<MUser>, BlocS<MUser>>(
                             listenWhen: (context, state) => state.status == AppStatus.success,
                             listener: (context, state) => GoRouter.of(context).go(CRoute.home),
                             builder: (context, state) => ElevatedButton(
-                                onPressed: () => context.read<BlocC<MUser>>().submit(
-                                    notification: false,
-                                    api: (value, page, size, sort) =>
-                                        RepositoryProvider.of<Api>(context).auth.login(body: value),
-                                    submit: (data) => context.read<AuthC>().save(data: data)),
-                                child: Text('pages.login.login.Log in'.tr()))),
-                        const SizedBox(height: CSpace.large * 2),
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                              text: "pages.login.login.You don't have an account yet?".tr(),
-                              children: [
-                                TextSpan(
-                                    text: 'pages.login.login.Register'.tr(),
-                                    style: TextStyle(color: CColor.primary),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.pushNamed(CRoute.register))
-                              ],
-                              style: TextStyle(color: CColor.black.shade300)),
+                              onPressed: () => context.read<BlocC<MUser>>().submit(
+                                notification: false,
+                                format: MUser.fromJson,
+                                api: (value, page, size, sort) => RepositoryProvider.of<Api>(context).auth.login(body: value),
+                                submit: (data) => context.read<AuthC>().save(data: data, context: context)),
+                              child: Text('pages.login.login.Log in'.tr()))),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("pages.login.login.You don't have an account yet?".tr(), style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm)),
+                            TextButton(
+                              onPressed: () => context.pushNamed(CRoute.register),
+                              child: Text('${'pages.login.login.Register'.tr()}?', style: const TextStyle(fontSize: CFontSize.sm)),
+                            )
+                          ],
                         ),
                       ],
                     ),
@@ -159,5 +157,20 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
+  List<MFormItem> _listFormItem = [];
+  Future<void> _init() async {
+    _listFormItem = [
+      MFormItem(name: 'username', hintText: 'pages.login.login.Email address'.tr(), icon: 'assets/form/mail.svg', keyBoard: EFormItemKeyBoard.email),
+      MFormItem(name: 'password', hintText: 'pages.login.login.Password'.tr(), icon: 'assets/form/password.svg', password: true)
+    ];
   }
 }

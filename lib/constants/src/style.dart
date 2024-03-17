@@ -9,30 +9,30 @@ class CStyle {
   static const double radius = 5;
 
   static ButtonStyle button = ButtonStyle(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.medium)),
+      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.xl2)),
       elevation: const MaterialStatePropertyAll(0),
       padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
       backgroundColor: MaterialStatePropertyAll(CColor.primary),
       foregroundColor: const MaterialStatePropertyAll(Colors.white),
       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: CColor.primary))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w400)));
+      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
 
   static ButtonStyle buttonSmall = button.copyWith(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.small)),
+      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.base)),
       shape: const MaterialStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w400)));
+      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
 
   static ButtonStyle buttonFill({required Color backgroundColor}) => ButtonStyle(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.medium)),
+      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.xl2)),
       elevation: const MaterialStatePropertyAll(0),
       padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
       backgroundColor: MaterialStatePropertyAll(backgroundColor),
       foregroundColor: const MaterialStatePropertyAll(Colors.white),
       shape: const MaterialStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w400)));
+      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
 
   static ButtonStyle buttonWhite = button.copyWith(
     shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
@@ -87,29 +87,26 @@ class CStyle {
       shape: const MaterialStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))));
 
-  static TextStyle title = TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w600, color: CColor.black);
+  static TextStyle title = TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w600, color: CColor.black);
 
-  static TextStyle padding1 = TextStyle(fontSize: CFontSize.paragraph1, color: CColor.black);
+  static TextStyle padding1 = TextStyle(fontSize: CFontSize.sm, color: CColor.black);
 
   static TextStyle padding1Medium = TextStyle(
-    fontSize: CFontSize.paragraph1,
+    fontSize: CFontSize.sm,
     color: CColor.black,
     fontWeight: FontWeight.w600,
   );
 
-  static TextStyle headline4 = TextStyle(fontSize: CFontSize.headline4, color: CColor.black);
+  static TextStyle headline4 = TextStyle(fontSize: CFontSize.base, color: CColor.black);
 
   static TextStyle headline4Bold = TextStyle(
-    fontSize: CFontSize.headline4,
+    fontSize: CFontSize.base,
     color: CColor.black,
     fontWeight: FontWeight.w600,
   );
 
-  static TextStyle caption({TextStyle? style}) =>
-      TextStyle(height: CFontSize.lineHeight(style?.fontSize ?? CFontSize.subhead)).merge(style);
-
   static TextStyle base({TextStyle? style}) => TextStyle(
-        fontSize: CFontSize.paragraph1,
+        fontSize: CFontSize.sm,
         fontWeight: FontWeight.w400,
         color: CColor.black,
       ).merge(style);

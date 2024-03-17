@@ -10,12 +10,12 @@ class DescriptionTextWidget extends StatefulWidget {
   final TextAlign? textAlign;
 
   const DescriptionTextWidget({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
     this.trim = 100,
     this.textAlign,
-  }) : super(key: key);
+  });
 
   @override
   State<DescriptionTextWidget> createState() => _DescriptionTextWidgetState();

@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '/models/index.dart';
-import '/core/index.dart';
 import '/cubit/index.dart';
 import '/constants/index.dart';
 import '/utils/index.dart';
+import '../form/src/input.dart';
+import '../line.dart';
+import '../spacer.dart';
 
 part '_address_point.dart';
 part '_map_picker.dart';
@@ -29,7 +30,7 @@ class WMap<T> extends StatefulWidget {
   final bool onlyPoint;
   final String name;
 
-  const WMap({Key? key, this.latLn, required this.address, required this.fullScreen, required this.name, required this.onlyPoint}) : super(key: key);
+  const WMap({super.key, this.latLn, required this.address, required this.fullScreen, required this.name, required this.onlyPoint});
 
   @override
   State<WMap> createState() => WMapState<T>();
@@ -151,9 +152,10 @@ class WMapState<T> extends State<WMap> {
                   : BlocBuilder<BlocC<T>, BlocS<T>>(
                       builder: (context, state) {
                         if (value[widget.name].isEmpty) return Container();
-                        return GestureDetector(
+                        return InkWell(
+                          splashColor: CColor.primary.shade100,
                           onTap: () async {
-                            var check = await context.pushNamed<List>(CRoute.map, queryParams: {
+                            var check = await context.pushNamed<List>(CRoute.map, queryParameters: {
                               'latLn': [_position.target.latitude, _position.target.longitude]
                                   .map((e) => e.toString())
                                   .toList()
@@ -199,11 +201,13 @@ class WMapState<T> extends State<WMap> {
                   children: [
                     _FloatingButton(
                       location: () async {
-                        Position pos = await UrlLauncher().determinePosition();
-                        LatLng newLatLng = LatLng(pos.latitude, pos.longitude);
-                        _controller.animateCamera(
-                          CameraUpdate.newCameraPosition(CameraPosition(target: newLatLng, zoom: 15)),
-                        );
+                        if (await UrlLauncher().checkAndRequestPermission()) {
+                          final pos = await UrlLauncher().determinePosition();
+                          LatLng newLatLng = LatLng(pos.latitude, pos.longitude);
+                          _controller.animateCamera(
+                            CameraUpdate.newCameraPosition(CameraPosition(target: newLatLng, zoom: 15)),
+                          );
+                        }
                       },
                       zoomIn: () => _controller.moveCamera(CameraUpdate.zoomIn()),
                       zoomOut: () => _controller.moveCamera(CameraUpdate.zoomOut()),
@@ -251,12 +255,6 @@ class WMapState<T> extends State<WMap> {
     _streamController.close();
     super.dispose();
   }
-
-  // Future<void> location() async {
-  //   Position position = await determinePosition();
-  //   _globalKeyMapPicker.currentState?.showMapPicker();
-  //   moveCamera([position.latitude, position.longitude]);
-  // }
 
   Future<void> moveCamera(List latLn) async {
     _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(

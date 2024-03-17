@@ -5,10 +5,10 @@ class LocateOption<T> extends StatefulWidget {
   final Function(double x, double y) getLocate;
 
   const LocateOption({
-    Key? key,
+    super.key,
     required this.name,
     required this.getLocate,
-  }) : super(key: key);
+  });
 
   @override
   State<LocateOption> createState() => LocateOptionState<T>();
@@ -49,7 +49,7 @@ class LocateOptionState<T> extends State<LocateOption> {
                         decoration: positioning() == null ? null : TextDecoration.underline,
                       ),
                     ),
-                    const HSpacer(CSpace.superSmall),
+                    const HSpacer(CSpace.xs),
                     state.value[widget.name].isNotEmpty ? const Icon(Icons.edit, size: 18) : Container()
                   ],
                 ),
@@ -69,20 +69,15 @@ class LocateOptionState<T> extends State<LocateOption> {
           InkWell(
             borderRadius: BorderRadius.circular(20),
             onTap: () async {
-              Position position;
-              try {
-                position = await UrlLauncher().determinePosition();
-                await widget.getLocate(position.latitude, position.longitude);
-              } catch (e) {
-                UDialog().showError(text: 'Không thể lấy được vị trí hiện tại');
-                return;
+              if (await UrlLauncher().checkAndRequestPermission()) {
+                try {
+                  final position = await UrlLauncher().determinePosition();
+                  await widget.getLocate(position.latitude, position.longitude);
+                } catch (e) {
+                  UDialog().showError(text: 'Không thể lấy được vị trí hiện tại');
+                  return;
+                }
               }
-              UDialog().showSuccess(text: 'Lấy vị trí hiện tại thành công');
-              setState(() {
-                _x = position.latitude.toString();
-                _y = position.longitude.toString();
-                _edit = false;
-              });
             },
             child: Icon(
               Icons.radio_button_checked,
@@ -90,7 +85,7 @@ class LocateOptionState<T> extends State<LocateOption> {
               color: CColor.primary,
             ),
           ),
-          const HSpacer(CSpace.small),
+          const HSpacer(CSpace.sm),
           Expanded(
             child: Column(
               children: [

@@ -30,38 +30,38 @@ class OnTapFilter {
           return AlertDialog(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            insetPadding: const EdgeInsets.symmetric(vertical: CSpace.superLarge * 2),
+            insetPadding: const EdgeInsets.symmetric(vertical: CSpace.xl5 * 2),
             contentPadding: EdgeInsets.zero,
             content: Container(
               height: CSpace.height * 0.8,
-              width: CSpace.width - 2 * CSpace.large,
+              width: CSpace.width - 2 * CSpace.xl3,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(CRadius.large),
+                borderRadius: BorderRadius.circular(CSpace.xl3),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    height: CHeight.medium,
+                    height: CHeight.xl2,
                     decoration: BoxDecoration(
                       color: CColor.primary,
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(CRadius.large)),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(CSpace.xl3)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const SizedBox(width: CSpace.superLarge),
+                        const SizedBox(width: CSpace.xl5),
                         Text(
                           title,
                           style: const TextStyle(
-                            fontSize: CFontSize.headline4,
+                            fontSize: CFontSize.base,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
                         IconButton(
-                            splashRadius: CRadius.large,
+                            splashRadius: CSpace.xl3,
                             onPressed: () => context.pop(),
                             icon: const Icon(Icons.close_rounded, color: Colors.white))
                       ],
@@ -85,7 +85,7 @@ class OnTapFilter {
                               child: Column(
                                 children: [
                                   Padding(
-                                      padding: const EdgeInsets.all(CSpace.large),
+                                      padding: const EdgeInsets.all(CSpace.xl3),
                                       child: Row(
                                         children: [
                                           Container(
@@ -94,9 +94,9 @@ class OnTapFilter {
                                                   filter.color ?? (selected ? CColor.primary : CColor.black.shade300),
                                               shape: BoxShape.circle,
                                             ),
-                                            margin: const EdgeInsets.only(right: CSpace.mediumSmall),
-                                            height: CRadius.mediumSmall,
-                                            width: CRadius.mediumSmall,
+                                            margin: const EdgeInsets.only(right: CSpace.base),
+                                            height: CSpace.base,
+                                            width: CSpace.base,
                                           ),
                                           Expanded(
                                             child: Text(
@@ -111,19 +111,19 @@ class OnTapFilter {
                                             Icon(
                                               Icons.check_circle_outline,
                                               color: CColor.primary,
-                                              size: CFontSize.title3,
+                                              size: CFontSize.xl,
                                             )
                                         ],
                                       )),
                                   if (index < filters.length - 1)
-                                    line(margin: const EdgeInsets.symmetric(horizontal: CSpace.large))
+                                    line(margin: const EdgeInsets.symmetric(horizontal: CSpace.xl3))
                                 ],
                               ),
                             );
                           })),
                   if (filters.any((element) => element.value == value))
                     Padding(
-                      padding: const EdgeInsets.all(CSpace.large),
+                      padding: const EdgeInsets.all(CSpace.xl3),
                       child: ElevatedButton(
                         style: CStyle.buttonHint,
                         onPressed: () {
@@ -161,43 +161,43 @@ class OnTapFilter {
               return AlertDialog(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
-                insetPadding: const EdgeInsets.symmetric(vertical: CSpace.superLarge * 4, horizontal: 0),
+                insetPadding: const EdgeInsets.symmetric(vertical: CSpace.xl5 * 4, horizontal: 0),
                 contentPadding: EdgeInsets.zero,
                 content: Container(
                   height: size.height * 0.8,
-                  width: size.width - 2 * CSpace.large,
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(CRadius.large)),
+                  width: size.width - 2 * CSpace.xl3,
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(CSpace.xl3)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        height: CHeight.medium - 3,
+                        height: CHeight.xl2 - 3,
                         decoration: BoxDecoration(
                           color: CColor.primary,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(CRadius.large)),
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(CSpace.xl3)),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const SizedBox(width: CSpace.superLarge),
+                            const SizedBox(width: CSpace.xl5),
                             Text(
                               title,
                               style: const TextStyle(
-                                fontSize: CFontSize.headline4,
+                                fontSize: CFontSize.base,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                             ),
                             IconButton(
-                                splashRadius: CRadius.large,
+                                splashRadius: CSpace.xl3,
                                 onPressed: () => context.pop(),
                                 icon: const Icon(Icons.close_rounded, color: Colors.white))
                           ],
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: CSpace.large),
-                        margin: const EdgeInsets.symmetric(vertical: CSpace.large),
+                        padding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
+                        margin: const EdgeInsets.symmetric(vertical: CSpace.xl3),
                         child: BlocBuilder<BlocC, BlocS>(
                           builder: (context, state) {
                             return Form(
@@ -215,7 +215,7 @@ class OnTapFilter {
                                     ),
                                     value: check ? value[0] : state.value['toDate'],
                                   ),
-                                  const SizedBox(height: CSpace.medium),
+                                  const SizedBox(height: CSpace.xl),
                                   textFormField(
                                     context: context,
                                     label: 'Ngày kết thúc',
@@ -235,7 +235,7 @@ class OnTapFilter {
                       ),
                       Expanded(
                         child: Container(
-                          padding: const EdgeInsets.all(CSpace.large),
+                          padding: const EdgeInsets.all(CSpace.xl3),
                           alignment: Alignment.bottomCenter,
                           child: Row(
                             children: [
@@ -252,7 +252,7 @@ class OnTapFilter {
                                           });
                                         },
                                         child: Text('Đặt lại bộ lọc', style: TextStyle(color: CColor.primary)))),
-                              if (check) const HSpacer(CSpace.large),
+                              if (check) const HSpacer(CSpace.xl3),
                               Expanded(child: BlocBuilder<BlocC, BlocS>(builder: (context, state) {
                                 return ElevatedButton(
                                     onPressed: () {
@@ -315,7 +315,7 @@ class OnTapFilter {
                       context.pop(args.value);
                     },
                   ))),
-          contentPadding: const EdgeInsets.all(CSpace.small),
+          contentPadding: const EdgeInsets.all(CSpace.sm),
         );
       },
     );
@@ -330,11 +330,11 @@ class OnTapFilter {
   }) {
     final TextEditingController textEditingController = TextEditingController();
     final OutlineInputBorder borderStyle = OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(CSpace.medium)),
+      borderRadius: const BorderRadius.all(Radius.circular(CSpace.xl)),
       borderSide: BorderSide(color: CColor.primary.shade200.withOpacity(0.2), width: 3),
     );
     final OutlineInputBorder errorBorderStyle = OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(CSpace.medium)),
+      borderRadius: const BorderRadius.all(Radius.circular(CSpace.xl)),
       borderSide: BorderSide(color: CColor.danger.shade200, width: 3),
     );
     if (value != null) {
@@ -344,7 +344,7 @@ class OnTapFilter {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(color: CColor.black.shade400)),
-        const SizedBox(height: CSpace.medium),
+        const SizedBox(height: CSpace.xl),
         TextFormField(
           controller: textEditingController,
           onTap: () async {
@@ -366,7 +366,7 @@ class OnTapFilter {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             hintText: 'dd/MM/YYYY',
-            hintStyle: TextStyle(color: CColor.black.shade400, fontSize: CFontSize.paragraph1),
+            hintStyle: TextStyle(color: CColor.black.shade400, fontSize: CFontSize.sm),
             suffixIcon: Icon(Icons.calendar_month_rounded, color: CColor.primary),
             border: borderStyle,
             enabledBorder: borderStyle,

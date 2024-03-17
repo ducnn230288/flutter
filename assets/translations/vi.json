@@ -1,5 +1,7 @@
 {
   "CPref": {
+    "ALL": "Tất cả",
+    "ADMIN": "Quản trị hệ thống",
     "REJECTED": "Từ chối",
     "WFA": "Chờ duyệt",
     "WAIT_CONFIRM": "Chờ duyệt",

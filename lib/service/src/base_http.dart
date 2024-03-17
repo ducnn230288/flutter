@@ -24,6 +24,7 @@ class BaseHttp {
     required dynamic data,
     required dynamic queryParameters,
     required EHttpType type,
+    required dynamic headers,
   }) async {
     try {
       http.Response result = await fetch;
@@ -59,6 +60,7 @@ class BaseHttp {
       data: body,
       queryParameters: null,
       type: EHttpType.post,
+      headers: headers,
     ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
@@ -81,6 +83,7 @@ class BaseHttp {
       data: body,
       queryParameters: null,
       type: EHttpType.put,
+      headers: headers,
     ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
@@ -106,6 +109,7 @@ class BaseHttp {
       data: null,
       queryParameters: queryParameters,
       type: EHttpType.get,
+      headers: headers,
     ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
@@ -126,35 +130,37 @@ class BaseHttp {
       data: null,
       queryParameters: null,
       type: EHttpType.delete,
+      headers: headers,
     ).timeout(Duration(seconds: timeOut), onTimeout: () {
       return http.Response('TIME_OUT', 504);
     });
   }
 
-  static void _dump(String url, http.Response response, {queryParameters, data, type}) {
-    AppConsole.dump('|***************************<<< START:$type >>>***************************');
-    AppConsole.dump(url, name: "URL");
+  static void _dump(String url, http.Response response, {queryParameters, data, type, headers}) {
+    AppConsole.dump('|***************************<<< START:$type >>>***************************', line: false);
+    AppConsole.dump(url, name: "URL", line: false);
+    AppConsole.dump(headers, name: "headers", line: false);
     if (queryParameters != null) {
-      AppConsole.dump(queryParameters, name: "PARAM");
+      AppConsole.dump(queryParameters, name: "PARAM", line: false);
     }
     if (data != null) {
-      AppConsole.dump(data, name: "DATA");
+      AppConsole.dump(data, name: "DATA", line: false);
     }
-    AppConsole.dump(response.body, name: 'RESPONSE');
-    AppConsole.dump(response.statusCode, name: 'CODE');
-    AppConsole.dump('***************************<<< END:$type >>>*****************************|');
+    AppConsole.dump(response.body, name: 'RESPONSE', line: false);
+    AppConsole.dump(response.statusCode, name: 'CODE', line: false);
+    AppConsole.dump('***************************<<< END:$type >>>*****************************|', line: false);
   }
 
   static void _dumpError(String url, String error, {queryParameters, data, type}) {
-    AppConsole.dump('|***************************<<< ERROR_START:$type >>>***************************');
-    AppConsole.dump(url, name: "URL");
+    AppConsole.dump('|***************************<<< ERROR_START:$type >>>***************************', line: false);
+    AppConsole.dump(url, name: "URL", line: false);
     if (queryParameters != null) {
-      AppConsole.dump(queryParameters, name: "PARAM");
+      AppConsole.dump(queryParameters, name: "PARAM", line: false);
     }
     if (data != null) {
-      AppConsole.dump(data, name: "DATA");
+      AppConsole.dump(data, name: "DATA", line: false);
     }
-    AppConsole.dump(error, name: 'ERROR_MESSAGE');
-    AppConsole.dump('***************************<<< Error_END:$type >>>*****************************|');
+    AppConsole.dump(error, name: 'ERROR_MESSAGE', line: false);
+    AppConsole.dump('***************************<<< Error_END:$type >>>*****************************|', line: false);
   }
 }

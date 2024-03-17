@@ -1,9 +1,6 @@
 import 'dart:convert';
-
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart';
 
-import '/constants/index.dart';
 import '/models/index.dart';
 import 'base_http.dart';
 
@@ -14,15 +11,13 @@ class SUser {
 
   SUser(this.endpoint, this.headers, this.checkAuth);
 
-  Future<MApi?> get({Map<String, dynamic> filter = const {}, int page = 1, int size = 20}) async => checkAuth(
+  Future<MApi?> get({Map<String, dynamic> filter = const {}, int page = 1, int size = 20,bool isEmployee = false}) async => checkAuth(
           result: await BaseHttp.get(
         url: '$endpoint/idm/users',
         headers: headers,
         queryParameters: {
           'filter': jsonEncode({
-            'isEmployee': GoRouter.of(rootNavigatorKey.currentState!.context).location.contains(CRoute.internalUser)
-                ? true
-                : false,
+            'isEmployee': isEmployee,
             ...filter
           }),
           'page': page.toString(),

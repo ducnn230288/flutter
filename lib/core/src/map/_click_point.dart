@@ -6,11 +6,11 @@ class ClickPoint extends StatefulWidget {
   final bool onlyPoint;
 
   const ClickPoint({
-    Key? key,
+    super.key,
     required this.close,
     required this.latLn,
     required this.onlyPoint,
-  }) : super(key: key);
+  });
 
   @override
   State<ClickPoint> createState() => ClickPointState();
@@ -88,12 +88,12 @@ class ClickPointState extends State<ClickPoint> with TickerProviderStateMixin {
               ),
             ),
           ),
-          const HSpacer(CSpace.small),
+          const HSpacer(CSpace.sm),
           InkWell(
             onTap: () async {
               if (widget.onlyPoint) { context.pop(_latLnInfo); }
-              else {
-                Position position = await UrlLauncher().determinePosition();
+              else if (await UrlLauncher().checkAndRequestPermission()) {
+                final position = await UrlLauncher().determinePosition();
                 String mapOptions =
                 ['${position.latitude},${position.longitude}', '${_latLnInfo[0]},${_latLnInfo[1]}'].join('/');
                 final url = 'https://www.google.com/maps/dir/$mapOptions';

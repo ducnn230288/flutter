@@ -18,7 +18,7 @@ _dateTitle({required String title, required String date, required Function() onP
                       margin: const EdgeInsets.only(left: 4),
                       child: Text(
                         title,
-                        style: TextStyle(fontSize: CFontSize.caption2, color: CColor.black.shade300),
+                        style: TextStyle(fontSize: CFontSize.xs, color: CColor.black.shade300),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -38,7 +38,7 @@ _dateTitle({required String title, required String date, required Function() onP
               ],
             ),
           ),
-          line(margin: const EdgeInsets.symmetric(horizontal: CSpace.medium))
+          line(margin: const EdgeInsets.symmetric(horizontal: CSpace.xl))
         ],
       ),
     ));

@@ -20,27 +20,27 @@ itemList(
                 color: CColor.black.shade100,
               )))
             : const BoxDecoration(),
-        padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+        padding: const EdgeInsets.symmetric(vertical: CSpace.xl),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             leading != null
                 ? SizedBox(
-                    width: CHeight.mediumSmall * 1.8,
+                    width: CHeight.lg * 1.8,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(CSpace.small),
+                      borderRadius: BorderRadius.circular(CSpace.sm),
                       // Image border
                       child: leading,
                     ),
                   )
                 : const SizedBox(),
-            leading != null ? const SizedBox(width: CSpace.medium) : const SizedBox(),
+            leading != null ? const SizedBox(width: CSpace.xl) : const SizedBox(),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   title,
-                  const SizedBox(height: CSpace.superSmall / 2),
+                  const SizedBox(height: CSpace.xs / 2),
                   content ?? const SizedBox(),
                 ],
               ),

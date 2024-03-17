@@ -74,34 +74,26 @@ class UDialog {
         context: context,
         builder: (context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.large)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.xl3)),
               title: Text(
                 title ?? 'Thông báo',
-                style: TextStyle(fontSize: CFontSize.body, color: titleColor),
+                style: TextStyle(fontSize: CFontSize.base, color: titleColor),
                 textAlign: TextAlign.center,
               ),
-              titlePadding: const EdgeInsets.fromLTRB(CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
-              contentPadding: const EdgeInsets.fromLTRB(CSpace.large, CSpace.large, CSpace.large, 0),
+              titlePadding: const EdgeInsets.fromLTRB(CSpace.xl4, CSpace.xl4, CSpace.xl4, 0),
+              contentPadding: const EdgeInsets.fromLTRB(CSpace.xl3, CSpace.xl3, CSpace.xl3, 0),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (text != null) Text(text, textAlign: TextAlign.center),
                   line(margin: const EdgeInsets.only(top: 23)),
-                  InkWell(
-                    splashColor: CColor.primary.shade100,
-                    onTap: () => context.pop(),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+                  TextButton(
+                    onPressed: () => context.pop(),
+                    child: SizedBox(
                       width: 300,
-                      child: Text(
-                        textButton,
-                        style: TextStyle(
-                          color: CColor.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      child: Text(textButton, style: const TextStyle(fontSize: CFontSize.sm),
                         textAlign: TextAlign.center,
-                      ),
-                    ),
+                      )),
                   )
                 ],
               ));
@@ -130,16 +122,16 @@ class UDialog {
         context: context,
         builder: (context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.large)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.xl3)),
               title: showTitle
                   ? Text(
                       title ?? 'Thông báo',
-                      style: const TextStyle(fontSize: CFontSize.body),
+                      style: const TextStyle(fontSize: CFontSize.base),
                       textAlign: TextAlign.center,
                     )
                   : null,
-              titlePadding: const EdgeInsets.fromLTRB(CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
-              contentPadding: const EdgeInsets.fromLTRB(CSpace.large, CSpace.large, CSpace.large, 0),
+              titlePadding: const EdgeInsets.fromLTRB(CSpace.xl4, CSpace.xl4, CSpace.xl4, 0),
+              contentPadding: const EdgeInsets.fromLTRB(CSpace.xl3, CSpace.xl3, CSpace.xl3, 0),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -153,7 +145,7 @@ class UDialog {
                           onTap: btnCancelOnPress ?? () => context.pop(),
                           highlightColor: Colors.white,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+                            padding: const EdgeInsets.symmetric(vertical: CSpace.xl),
                             child: Text(
                               btnCancelText,
                               style: TextStyle(color: CColor.black.shade300),
@@ -168,7 +160,7 @@ class UDialog {
                           onTap: btnOkOnPress ?? () => context.pop(),
                           highlightColor: Colors.white,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+                            padding: const EdgeInsets.symmetric(vertical: CSpace.xl),
                             child: Text(
                               btnOkText,
                               style: TextStyle(
@@ -204,21 +196,21 @@ class UDialog {
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.large)),
-            title: Text(title, style: const TextStyle(fontSize: CFontSize.body), textAlign: TextAlign.center),
-            titlePadding: const EdgeInsets.fromLTRB(CSpace.xlarge, CSpace.xlarge, CSpace.xlarge, 0),
-            contentPadding: const EdgeInsets.fromLTRB(CSpace.large, CSpace.large, CSpace.large, 0),
-            insetPadding: const EdgeInsets.symmetric(horizontal: CSpace.large),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.xl3)),
+            title: Text(title, style: const TextStyle(fontSize: CFontSize.base), textAlign: TextAlign.center),
+            titlePadding: const EdgeInsets.fromLTRB(CSpace.xl4, CSpace.xl4, CSpace.xl4, 0),
+            contentPadding: const EdgeInsets.fromLTRB(CSpace.xl3, CSpace.xl3, CSpace.xl3, 0),
+            insetPadding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
             content: BlocProvider(
               create: (context) => BlocC(),
               child: Container(
                 width: CSpace.width,
-                padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall),
+                padding: const EdgeInsets.symmetric(vertical: CSpace.base),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     WForm(list: formItem),
-                    const VSpacer(CSpace.large),
+                    const VSpacer(CSpace.xl3),
                     BlocBuilder<BlocC, BlocS>(
                       builder: (context, state) {
                         return BlocListener<BlocC, BlocS>(
@@ -238,7 +230,7 @@ class UDialog {
                         );
                       },
                     ),
-                    const VSpacer(CSpace.mediumSmall),
+                    const VSpacer(CSpace.base),
                   ],
                 ),
               ),

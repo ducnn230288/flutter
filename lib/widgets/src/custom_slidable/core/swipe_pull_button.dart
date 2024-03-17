@@ -7,6 +7,7 @@ import 'cell.dart';
 import 'events.dart';
 import 'store.dart';
 import 'swipe_data.dart';
+import '/constants/index.dart';
 
 ///The normal swipe action button
 class SwipePullButton extends StatefulWidget {
@@ -15,11 +16,11 @@ class SwipePullButton extends StatefulWidget {
   final double widthIcon;
 
   const SwipePullButton({
-    Key? key,
+    super.key,
     required this.actionIndex,
     required this.trailing,
     this.widthIcon = 10,
-  }) : super(key: key);
+  });
 
   @override
   SwipePullButtonState createState() {
@@ -178,7 +179,7 @@ class SwipePullButtonState extends State<SwipePullButton> with TickerProviderSta
         assert(action.nestedAction!.nestedWidth! >= data.totalActionWidth,
             "Your nested width must be larger than the width of all action button");
       } catch (e) {
-        // print(e.toString());
+        //
       }
     }
 
@@ -231,7 +232,8 @@ class SwipePullButtonState extends State<SwipePullButton> with TickerProviderSta
       }
     }
 
-    return GestureDetector(
+    return InkWell(
+      splashColor: CColor.primary.shade100,
       onTap: () {
         if (data.parentState.ignoreActionButtonHit) {
           return;

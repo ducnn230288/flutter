@@ -8,3 +8,4 @@ export 'src/select.dart';
 export 'src/select_multiple.dart';
 export 'src/time.dart';
 export 'src/upload.dart';
+export 'src/map.dart';

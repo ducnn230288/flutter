@@ -233,8 +233,8 @@ Widget listImageNetwork(
                                       },
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.all(CSpace.small / 2),
-                                      margin: const EdgeInsets.only(bottom: CSpace.mediumSmall),
+                                      padding: const EdgeInsets.all(CSpace.sm / 2),
+                                      margin: const EdgeInsets.only(bottom: CSpace.base),
                                       color: CColor.black.withOpacity(0.7),
                                       child: BlocBuilder<BlocC, BlocS>(
                                         builder: (context, state) {
@@ -256,12 +256,12 @@ Widget listImageNetwork(
                                               width: 95,
                                               height: 35,
                                               margin:
-                                                  const EdgeInsets.only(bottom: CSpace.superSmall, right: CSpace.small),
+                                                  const EdgeInsets.only(bottom: CSpace.xs, right: CSpace.sm),
                                               child: TextButton(
                                                 style: ButtonStyle(
                                                     shape: MaterialStatePropertyAll(
                                                       RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(CSpace.small)),
+                                                          borderRadius: BorderRadius.circular(CSpace.sm)),
                                                     ),
                                                     backgroundColor: MaterialStatePropertyAll(CColor.black.shade300)),
                                                 onPressed: () => UDialog().showForm(
@@ -297,15 +297,15 @@ Widget listImageNetwork(
                                                               ? Icons.note_add
                                                               : Icons.edit,
                                                           color: Colors.white,
-                                                          size: CFontSize.footnote,
+                                                          size: CFontSize.xs,
                                                         );
                                                       },
                                                     ),
-                                                    const HSpacer(CSpace.small),
+                                                    const HSpacer(CSpace.sm),
                                                     const Text(
                                                       'Chú thích',
                                                       style:
-                                                          TextStyle(fontSize: CFontSize.footnote, color: Colors.white),
+                                                          TextStyle(fontSize: CFontSize.xs, color: Colors.white),
                                                     )
                                                   ],
                                                 ),
@@ -320,13 +320,13 @@ Widget listImageNetwork(
                                               }
                                               return Container(
                                                 width: CSpace.width,
-                                                padding: const EdgeInsets.all(CSpace.large),
+                                                padding: const EdgeInsets.all(CSpace.xl3),
                                                 color: CColor.black.withOpacity(0.7),
                                                 child: DescriptionTextWidget(
                                                   text: state.value['description$index'] ??
                                                       listUrl[index - 1].description,
                                                   style: const TextStyle(
-                                                      fontSize: CFontSize.footnote, color: Colors.white),
+                                                      fontSize: CFontSize.xs, color: Colors.white),
                                                   trim: 200,
                                                 ),
                                               );
@@ -344,7 +344,7 @@ Widget listImageNetwork(
                               builder: (context, state) {
                                 if (!state) return Container();
                                 return Container(
-                                  padding: const EdgeInsets.all(CSpace.large),
+                                  padding: const EdgeInsets.all(CSpace.xl3),
                                   color: Colors.white,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -357,7 +357,7 @@ Widget listImageNetwork(
                                               return Expanded(child: Text(state));
                                             },
                                           ),
-                                          const HSpacer(2 * CSpace.superLarge),
+                                          const HSpacer(2 * CSpace.xl5),
                                           BlocBuilder<BlocC, BlocS>(
                                             builder: (context, state) {
                                               if (state.value['progress'] == null) return Container();
@@ -375,16 +375,16 @@ Widget listImageNetwork(
                                               return Text('$downloaded $unit/$total $unit  $progress%');
                                             },
                                           ),
-                                          const HSpacer(CSpace.mediumSmall),
+                                          const HSpacer(CSpace.base),
                                           Icon(Icons.download_for_offline,
-                                              size: CSpace.superLarge, color: CColor.primary),
+                                              size: CSpace.xl5, color: CColor.primary),
                                         ],
                                       ),
-                                      const VSpacer(CSpace.large),
+                                      const VSpacer(CSpace.xl3),
                                       Stack(
                                         children: [
                                           Container(
-                                            height: CSpace.small,
+                                            height: CSpace.sm,
                                             width: CSpace.width,
                                             color: CColor.blue.shade300,
                                           ),
@@ -392,7 +392,7 @@ Widget listImageNetwork(
                                             selector: (state) => state.value['progress'],
                                             builder: (context, state) {
                                               return Container(
-                                                height: CSpace.small,
+                                                height: CSpace.sm,
                                                 width: CSpace.width * (state / 100),
                                                 color: CColor.blue,
                                               );
@@ -446,10 +446,10 @@ _downloadImage(
         }
       },
       child: const Padding(
-        padding: EdgeInsets.only(top: 8, right: CSpace.medium),
+        padding: EdgeInsets.only(top: 8, right: CSpace.sm),
         child: Text(
           'Tải xuống',
-          style: TextStyle(fontSize: CFontSize.body, color: Colors.white),
+          style: TextStyle(fontSize: CFontSize.base, color: Colors.white),
         ),
       ),
     );

@@ -52,27 +52,22 @@ class BlocC<T> extends Cubit<BlocS<T>> {
       {required int size,
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       required Function format}) async {
-    try {
-      inProcess();
-      MApi? result = await api(
-        state.value,
-        1,
-        size,
-        state.sort,
-      );
-      if (result != null) {
-        MData<T> data = MData<T>.fromJson(result.data, format);
-        emit(state.copyWith(size: size, data: data, status: AppStatus.success));
-      }
-    } catch (e) {
-      AppConsole.dump(e.toString(), name: 'Try Catch Error: ');
+    inProcess();
+    MApi? result = await api(
+      state.value,
+      1,
+      size,
+      state.sort,
+    );
+    if (result != null) {
+      MData<T> data = MData<T>.fromJson(result.data, format);
+      emit(state.copyWith(size: size, data: data, status: AppStatus.success));
     }
   }
 
-  Future<void> refreshPage({required Future<MApi?> apiId, required int index, required Function(dynamic json) format}) async {
+  Future<void> refreshPage({required Future<MApi?> apiId, required int index, required Function(Map<String, dynamic> json) format}) async {
     inProcess();
     MApi? result = await apiId;
-    // //Lấy totalElements mới nhất
     if (result != null) {
       MData<T>? newData;
       if (result.code != 404) {
@@ -90,21 +85,17 @@ class BlocC<T> extends Cubit<BlocS<T>> {
   Future<void> setPage(
       {required int page,
       required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
-      Function(dynamic)? format}) async {
-    try {
-      inProcess();
-      MApi? result = await api(
-        state.value,
-        page,
-        state.size,
-        state.sort,
-      );
-      if (result != null) {
-        MData<T> data = MData<T>.fromJson(result.data, format);
-        emit(state.copyWith(page: page, data: data, status: AppStatus.success));
-      }
-    } catch (e) {
-      AppConsole.dump(e.toString(), name: 'Try Catch Error: ');
+      Function(Map<String, dynamic>)? format}) async {
+    inProcess();
+    MApi? result = await api(
+      state.value,
+      page,
+      state.size,
+      state.sort,
+    );
+    if (result != null) {
+      MData<T> data = MData<T>.fromJson(result.data, format);
+      emit(state.copyWith(page: page, data: data, status: AppStatus.success));
     }
   }
 
@@ -118,24 +109,20 @@ class BlocC<T> extends Cubit<BlocS<T>> {
   Future<void> increasePage(
       {required Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api,
       required Function format}) async {
-    try {
-      MApi? result = await api(
-        state.value,
-        state.page + 1,
-        state.size,
-        state.sort,
-      );
-      if (result != null) {
-        MData<T> data = MData<T>.fromJson(result.data, format);
-        if (data.content.isNotEmpty) {
-          for (var i = 0; i < data.content.length; i++) {
-            state.data.content.add(data.content[i]);
-          }
-          emit(state.copyWith(status: AppStatus.success, data: state.data, page: state.page + 1));
+    MApi? result = await api(
+      state.value,
+      state.page + 1,
+      state.size,
+      state.sort,
+    );
+    if (result != null) {
+      MData<T> data = MData<T>.fromJson(result.data, format);
+      if (data.content.isNotEmpty) {
+        for (var i = 0; i < data.content.length; i++) {
+          state.data.content.add(data.content[i]);
         }
+        emit(state.copyWith(status: AppStatus.success, data: state.data, page: state.page + 1));
       }
-    } catch (e) {
-      AppConsole.dump(e.toString(), name: 'Try Catch Error: ');
     }
   }
 
@@ -186,16 +173,12 @@ class BlocC<T> extends Cubit<BlocS<T>> {
       if (result != null) {
         if (!getData || onlyApi) {
           if (notification && result.message != '') {
-            if (result.code == 404 && !result.isSuccess) {
-              dialogs.showError(text: result.message);
-            } else {
-              dialogs.showSuccess(
-                  text: result.message,
-                  onDismiss: (context) {
-                    emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
-                    if (submit != null) submit(result.data);
-                  });
-            }
+            dialogs.showSuccess(
+                text: result.message,
+                onDismiss: (context) {
+                  emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
+                  if (submit != null) submit(result.data);
+                });
           } else {
             emit(state.copyWith(status: AppStatus.success, key: GlobalKey<FormState>()));
             if (submit != null) submit(result.data);

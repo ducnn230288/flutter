@@ -20,7 +20,7 @@ class WTime<T> extends StatefulWidget {
   final double? width;
 
   const WTime({
-    Key? key,
+    super.key,
     this.label = '',
     this.value = '',
     this.subtitle = '',
@@ -34,7 +34,7 @@ class WTime<T> extends StatefulWidget {
     this.hintText,
     this.height,
     this.width,
-  }) : super(key: key);
+  });
 
   @override
   State<WTime> createState() => _WTimeState<T>();
@@ -70,7 +70,7 @@ class _WTimeState<T> extends State<WTime> {
         if (pickedTime != null && widget.onChanged != null && context.mounted) {
           if (context.mounted) {
             timeOfDay = pickedTime;
-            final String dateTime = DateFormat('hh:mm').parse(pickedTime.format(context)).toIso8601String();
+            final String dateTime = DateFormat('HH:mm').parse(pickedTime.format(context)).toIso8601String();
             widget.controller.text = Convert.hours(dateTime);
             widget.onChanged!(dateTime);
           }

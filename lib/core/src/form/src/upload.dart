@@ -22,6 +22,7 @@ class FUpload<T> extends FormField<List> {
     required bool required,
     UploadType uploadType = UploadType.multiple,
     required List list,
+    Function? onDelete,
     String label = '',
     bool space = true,
     int maxQuantity = 1,
@@ -43,6 +44,7 @@ class FUpload<T> extends FormField<List> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   WUpload(
+                      onDelete: onDelete,
                       uploadType: uploadType,
                       list: list,
                       label: label,
@@ -51,6 +53,7 @@ class FUpload<T> extends FormField<List> {
                       minQuantity: minQuantity,
                       docType: docType,
                       prefix: prefix,
+                      required: required,
                       maxCount: maxCount,
                       onChanged: (dynamic value) {
                         state.didChange(value);
@@ -59,10 +62,10 @@ class FUpload<T> extends FormField<List> {
                       }),
                   state.hasError
                       ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: CSpace.medium),
+                          padding: const EdgeInsets.symmetric(horizontal: CSpace.xl),
                           child: Text(
                             state.errorText!,
-                            style: TextStyle(fontSize: CFontSize.caption2, color: CColor.danger),
+                            style: TextStyle(fontSize: CFontSize.xs, color: CColor.danger),
                           ),
                         )
                       : const SizedBox()
@@ -88,7 +91,7 @@ class WUpload extends StatefulWidget {
   final UploadType uploadType;
 
   const WUpload({
-    Key? key,
+    super.key,
     this.label = '',
     this.space = true,
     this.isDescription = true,
@@ -103,7 +106,7 @@ class WUpload extends StatefulWidget {
     this.uploadType = UploadType.multiple,
     this.maxCount,
     this.required = true,
-  }) : super(key: key);
+  });
 
   @override
   WUploadState createState() => WUploadState();
@@ -131,28 +134,28 @@ class WUploadState extends State<WUpload> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BlocBuilder<BlocC<MUpload>, BlocS<MUpload>>(
+          widget.label != '' ? BlocBuilder<BlocC<MUpload>, BlocS<MUpload>>(
             builder: (context, state) => Row(
               children: [
                 Flexible(
                   child: Text(
                     "${widget.label}${widget.maxCount != null ? " (${state.data.content.length}/${widget.maxCount})" : ''}",
                     style: const TextStyle(
-                      fontSize: CFontSize.body,
+                      fontSize: CFontSize.lg,
                       fontWeight: FontWeight.w600,
-                      height: 22 / CFontSize.body,
+                      height: 22 / CFontSize.base,
                     ),
                   ),
                 ),
                 if (widget.required)
                   Container(
                     height: 19,
-                    margin: const EdgeInsets.only(left: CSpace.superSmall),
+                    margin: const EdgeInsets.only(left: CSpace.xs),
                     child: Text('*', style: TextStyle(color: CColor.danger, fontSize: 20)),
                   )
               ],
             ),
-          ),
+          ) : const SizedBox(height: CSpace.sm,),
           BlocConsumer<BlocC<MUpload>, BlocS<MUpload>>(listener: (_, state) {
             if (state.status == AppStatus.inProcess) {
               USnackBar.smallSnackBar(title: 'Đang tải ảnh lên...', isInfiniteTime: true);
@@ -165,17 +168,18 @@ class WUploadState extends State<WUpload> {
             List<MUpload> listImage =
                 (state.data.content).map((dynamic e) => MUpload.fromJson(jsonDecode(jsonEncode(e)))).toList();
             return GridView.builder(
-                padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall),
+                padding: const EdgeInsets.symmetric(vertical: CSpace.base),
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: count,
-                  crossAxisSpacing: CSpace.medium,
-                  mainAxisSpacing: CSpace.medium,
+                  crossAxisSpacing: CSpace.xl,
+                  mainAxisSpacing: CSpace.xl,
                 ),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: state.data.content.length + 1,
                 itemBuilder: (_, index) {
+                  if (index == state.data.content.length && widget.maxQuantity > 0 && widget.maxQuantity == state.data.content.length) return Container();
                   if (index == state.data.content.length) return addItem(context);
                   return Stack(
                     clipBehavior: Clip.none,
@@ -187,7 +191,7 @@ class WUploadState extends State<WUpload> {
                         listUrl: listImage,
                         url: listImage[index].fileUrl,
                         fit: BoxFit.cover,
-                        borderRadius: BorderRadius.circular(CSpace.small),
+                        borderRadius: BorderRadius.circular(CSpace.sm),
                         onChangedDescription: !widget.isDescription
                             ? null
                             : (description, idx) {
@@ -206,10 +210,10 @@ class WUploadState extends State<WUpload> {
                               },
                       ),
                       Positioned(
-                        right: -CSpace.small,
-                        top: -CSpace.small,
-                        width: CHeight.medium / 2,
-                        height: CHeight.medium / 2,
+                        right: -CSpace.sm,
+                        top: -CSpace.sm,
+                        width: CHeight.xl2 / 2,
+                        height: CHeight.xl2 / 2,
                         child: InkWell(
                           onTap: () => UDialog().showConfirm(
                               title: 'Xóa ảnh đã chọn',
@@ -231,10 +235,10 @@ class WUploadState extends State<WUpload> {
                                 context.pop();
                               }),
                           child: Container(
-                            padding: const EdgeInsets.all(CSpace.small),
+                            padding: const EdgeInsets.all(CSpace.sm),
                             decoration: BoxDecoration(
                               color: CColor.danger,
-                              borderRadius: const BorderRadius.all(Radius.circular(CSpace.small)),
+                              borderRadius: const BorderRadius.all(Radius.circular(CSpace.sm)),
                             ),
                             child: CIcon.closeWhite,
                           ),
@@ -244,7 +248,7 @@ class WUploadState extends State<WUpload> {
                   );
                 });
           }),
-          SizedBox(height: widget.space ? CSpace.small : 0),
+          SizedBox(height: widget.space ? CSpace.sm : 0),
         ],
       ),
     );
@@ -260,13 +264,13 @@ class WUploadState extends State<WUpload> {
                   onTap: () => _showModal(context),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(CRadius.small),
+                      borderRadius: BorderRadius.circular(CSpace.sm),
                       color: CColor.black.shade200.withOpacity(0.4),
                     ),
                     child: Icon(
                       Icons.add,
                       color: CColor.black.shade400.withOpacity(0.8),
-                      size: CFontSize.largeTitle * 1.5,
+                      size: CFontSize.xl4 * 1.5,
                     ),
                   ),
                 )
@@ -311,7 +315,7 @@ class WUploadState extends State<WUpload> {
           titlePadding: const EdgeInsets.all(0),
           actionsPadding: const EdgeInsets.symmetric(vertical: 0.0),
           contentPadding: const EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.basic)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.xs)),
           content: SizedBox(
             width: CSpace.width * 0.9,
             child: GridView.builder(
@@ -326,8 +330,8 @@ class WUploadState extends State<WUpload> {
               itemCount: imageFileList!.length,
               itemBuilder: (context, index) => ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: index == 0 ? const Radius.circular(CRadius.basic) : const Radius.circular(0),
-                  topRight: index == 1 ? const Radius.circular(CRadius.basic) : const Radius.circular(0),
+                  topLeft: index == 0 ? const Radius.circular(CSpace.xs) : const Radius.circular(0),
+                  topRight: index == 1 ? const Radius.circular(CSpace.xs) : const Radius.circular(0),
                 ),
                 child: ExtendedImage.file(File(imageFileList[index].path), fit: BoxFit.cover),
               ),
@@ -376,7 +380,7 @@ class WUploadState extends State<WUpload> {
         'prefix': widget.prefix ?? widget.docType,
       });
       if (data != null) {
-        if (widget.onAdd != null) widget.onAdd!(data);
+        if (widget.onAdd != null) widget.onAdd!(data, cubit);
         list.add(data);
         count++;
       }
@@ -399,7 +403,7 @@ class WUploadState extends State<WUpload> {
       context: context,
       builder: (_) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
+          padding: const EdgeInsets.symmetric(horizontal: CSpace.sm),
           child: Wrap(
             children: [
               listTile(

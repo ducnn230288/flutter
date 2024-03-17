@@ -257,47 +257,46 @@ class MUser {
 
   String get createdOnDate => _createdOnDate ?? '';
 
-  // @override
-  // Map<String, dynamic> toJson() {
-  //   final map = <String, dynamic>{};
-  //   if (_listRole != null) {
-  //     map['listRole'] = _listRole?.map((v) => v.toJson()).toList();
-  //   }
-  //   if (_role != null) {
-  //     map['role'] = _role?.toJson();
-  //   }
-  //   map['totalClinic'] = _totalClinic;
-  //   map['totalOrder'] = _totalOrder;
-  //   // if (_profileFarmer != null) {
-  //   //   map['profileFarmer'] = _profileFarmer?.toJson();
-  //   // }
-  //   map['id'] = _id;
-  //   map['userName'] = _userName;
-  //   map['name'] = _name;
-  //   map['phoneNumber'] = _phoneNumber;
-  //   map['countryCode'] = _countryCode;
-  //   map['gender'] = _gender;
-  //   map['genderString'] = _genderString;
-  //   map['email'] = _email;
-  //   map['avatarUrl'] = _avatarUrl;
-  //   map['bankAccountNo'] = _bankAccountNo;
-  //   map['bankName'] = _bankName;
-  //   map['bankUsername'] = _bankUsername;
-  //   map['birthdate'] = _birthdate;
-  //   map['lastActivityDate'] = _lastActivityDate;
-  //   map['isLockedOut'] = _isLockedOut;
-  //   map['isActive'] = _isActive;
-  //   map['activeDate'] = _activeDate;
-  //   map['level'] = _level;
-  //   map['facebookUserId'] = _facebookUserId;
-  //   map['googleUserId'] = _googleUserId;
-  //   map['emailVerifyToken'] = _emailVerifyToken;
-  //   map['isEmailVerified'] = _isEmailVerified;
-  //   map['roleListCode'] = _roleListCode;
-  //   map['profileType'] = _profileType;
-  //   map['createdOnDate'] = _createdOnDate;
-  //   return map;
-  // }
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (_listRole != null) {
+      map['listRole'] = _listRole?.map((v) => v.toJson()).toList();
+    }
+    if (_role != null) {
+      map['role'] = _role?.toJson();
+    }
+    map['totalClinic'] = _totalClinic;
+    map['totalOrder'] = _totalOrder;
+    // if (_profileFarmer != null) {
+    //   map['profileFarmer'] = _profileFarmer?.toJson();
+    // }
+    map['id'] = _id;
+    map['userName'] = _userName;
+    map['name'] = _name;
+    map['phoneNumber'] = _phoneNumber;
+    map['countryCode'] = _countryCode;
+    map['gender'] = _gender;
+    map['genderString'] = _genderString;
+    map['email'] = _email;
+    map['avatarUrl'] = _avatarUrl;
+    map['bankAccountNo'] = _bankAccountNo;
+    map['bankName'] = _bankName;
+    map['bankUsername'] = _bankUsername;
+    map['birthdate'] = _birthdate;
+    map['lastActivityDate'] = _lastActivityDate;
+    map['isLockedOut'] = _isLockedOut;
+    map['isActive'] = _isActive;
+    map['activeDate'] = _activeDate;
+    map['level'] = _level;
+    map['facebookUserId'] = _facebookUserId;
+    map['googleUserId'] = _googleUserId;
+    map['emailVerifyToken'] = _emailVerifyToken;
+    map['isEmailVerified'] = _isEmailVerified;
+    map['roleListCode'] = _roleListCode;
+    map['profileType'] = _profileType;
+    map['createdOnDate'] = _createdOnDate;
+    return map;
+  }
 }
 
 class MRole {

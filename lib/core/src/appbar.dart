@@ -27,7 +27,7 @@ appBar({
       if (leading == null) {
         if (hasDrawer) {
           leading = Padding(
-            padding: const EdgeInsets.only(left: CSpace.small),
+            padding: const EdgeInsets.only(left: CSpace.sm),
             child: InkWell(
               splashColor: CColor.primary.shade100,
               child: Container(
@@ -41,6 +41,7 @@ appBar({
           );
         } else if (context.canPop() && !isHideLeading) {
           leading = InkWell(
+            key: const ValueKey("back_screen"),
             splashColor: CColor.primary.shade100,
             child: Container(
               width: 40,
@@ -62,7 +63,7 @@ appBar({
       return AppBar(
         toolbarHeight: toolbarHeight,
         title: Text(title,
-            style: const TextStyle(fontSize: CFontSize.body, fontWeight: FontWeight.w600, color: Colors.white)
+            style: const TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w600, color: Colors.white)
                 .merge(titleStyle)),
         centerTitle: true,
         leadingWidth: leadingWidth ?? (50),

@@ -7,25 +7,28 @@ import '/constants/index.dart';
 import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
-import '/pages/index.dart';
 import '/utils/index.dart';
 import '/widgets/index.dart';
+import 'create.dart';
 
 part '_end_drawer.dart';
 part '_popup.dart';
 
 class User extends StatefulWidget {
-  const User({Key? key}) : super(key: key);
+  const User({super.key});
 
   @override
   State<User> createState() => _UserState();
 }
 
 class _UserState extends State<User> with TickerProviderStateMixin {
-  double _height = 123.0;
 
+  double _height = 123.0;
+  late final _user = RepositoryProvider.of<Api>(context).user;
   @override
   Widget build(BuildContext context) {
+    final bool isInternalUser = GoRouterState.of(context).uri.toString().contains(CRoute.internalUser);
+
     return Scaffold(
       appBar: appBar(
         title: 'Tài khoản ${isInternalUser ? 'nội bộ' : 'người dùng'}',
@@ -59,17 +62,17 @@ class _UserState extends State<User> with TickerProviderStateMixin {
             duration: const Duration(milliseconds: 200),
             height: _height,
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: CSpace.medium),
+            padding: const EdgeInsets.symmetric(vertical: CSpace.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextSearch<MUser>(
-                  margin: const EdgeInsets.symmetric(horizontal: CSpace.large),
-                  api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
+                  margin: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
+                  api: (filter, page, size, sort) => _user.get(filter: filter, page: page, size: size),
                   format: MUser.fromJson,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall, horizontal: CSpace.large),
+                  padding: const EdgeInsets.symmetric(vertical: CSpace.base, horizontal: CSpace.xl3),
                   child: WidgetFilter<MUser>(
                     filter: [
                       MFilter(label: 'Tất cả', value: ''),
@@ -87,7 +90,7 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: CSpace.large),
+                  padding: const EdgeInsets.only(right: CSpace.xl3),
                   child: totalElementTitle<MUser>(suffix: 'tài khoản'),
                 ),
               ],
@@ -102,31 +105,12 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                 }
               },
               item: (data, int index) {
-                final cubit = context.read<BlocC<MUser>>();
-                final content = cubit.state.data.content.cast<MUser>().toList();
-                String? createdOnDate = DateTime.tryParse(content[index].createdOnDate) != null
-                    ? Convert.date(content[index].createdOnDate)
-                    : null;
-                if (index > 0 &&
-                    DateTime.tryParse(content[index].createdOnDate) != null &&
-                    DateTime.tryParse(content[index - 1].createdOnDate) != null) {
-                  final DateTime current = DateTime.parse(content[index].createdOnDate);
-                  final DateTime before = DateTime.parse(content[index - 1].createdOnDate);
-                  Duration timeDifference = before.difference(current);
-                  if (timeDifference.isNegative) {
-                    timeDifference = timeDifference.abs();
-                  }
-                  if (timeDifference.inDays > 0 || (timeDifference.inHours < 24 && current.day < before.day)) {
-                    createdOnDate = Convert.date(current.toIso8601String());
-                  } else {
-                    createdOnDate = null;
-                  }
-                }
+                String? createdOnDate = Convert.getGroupDate(context.read<BlocC<MUser>>(), index, 'createdOnDate');
                 const double widthSpace = 35;
                 void refresh() {
                   context.read<BlocC<MUser>>().refreshPage(
                         index: index,
-                        apiId: user.details(id: data.id),
+                        apiId: _user.details(id: data.id),
                         format: MUser.fromJson,
                       );
                 }
@@ -134,13 +118,13 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (index == 0) const VSpacer(CSpace.large),
+                    if (index == 0) const VSpacer(CSpace.xl3),
                     if (createdOnDate != null)
                       Padding(
-                        padding: const EdgeInsets.only(left: CSpace.large, bottom: CSpace.mediumSmall),
+                        padding: const EdgeInsets.only(left: CSpace.xl3, bottom: CSpace.base),
                         child: Text(
                           createdOnDate,
-                          style: TextStyle(fontSize: CFontSize.footnote, color: CColor.black.shade300),
+                          style: TextStyle(fontSize: CFontSize.sm, color: CColor.black.shade300),
                         ),
                       ),
                     SwipeActionCell(
@@ -150,21 +134,21 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                               const SwipeAction(widthSpace: 20, color: Colors.transparent),
                               SwipeAction(
                                 widthSpace: widthSpace,
-                                content: button(child: Icon(Icons.key, color: CColor.warning)),
+                                content: _button(child: Icon(Icons.key, color: CColor.warning)),
                                 color: Colors.transparent,
                                 onTap: (handler) {
                                   context.pushNamed(CRoute.createCustomerUser,
-                                      queryParams: {'formType': FormType.password.name}, extra: data);
+                                      queryParameters: {'formType': FormType.password.name}, extra: data);
                                 },
                               ),
                               SwipeAction(
                                 widthSpace: widthSpace,
-                                content: button(child: Icon(Icons.edit_square, color: CColor.primary)),
+                                content: _button(child: Icon(Icons.edit_square, color: CColor.primary)),
                                 color: Colors.transparent,
                                 onTap: (handler) async {
                                   await context.pushNamed(
                                     CRoute.createCustomerUser,
-                                    queryParams: {'formType': FormType.edit.name},
+                                    queryParameters: {'formType': FormType.edit.name},
                                     extra: data,
                                   );
                                   refresh();
@@ -172,7 +156,7 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                               ),
                               SwipeAction(
                                 widthSpace: widthSpace,
-                                content: button(child: Icon(Icons.delete_forever_outlined, color: CColor.danger)),
+                                content: _button(child: Icon(Icons.delete_forever_outlined, color: CColor.danger)),
                                 color: Colors.transparent,
                                 onTap: (handler) {
                                   UDialog().showConfirm(
@@ -185,7 +169,7 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                                               context.pop();
                                               refresh();
                                             },
-                                            api: (_, __, ___, ____) => user.delete(id: data.id),
+                                            api: (_, __, ___, ____) => _user.delete(id: data.id),
                                           );
                                     },
                                   );
@@ -194,11 +178,11 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                             ]
                           : [],
                       child: Container(
-                        padding: const EdgeInsets.all(CSpace.large),
-                        margin: const EdgeInsets.only(left: 2.5 * CSpace.superLarge, right: CSpace.large),
+                        padding: const EdgeInsets.all(CSpace.xl3),
+                        margin: const EdgeInsets.only(left: 2.5 * CSpace.xl5, right: CSpace.xl3),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(CRadius.basic),
+                          borderRadius: BorderRadius.circular(CSpace.xs),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,10 +191,10 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                               Container(
                                 height: 6,
                                 width: 6,
-                                margin: const EdgeInsets.only(top: 5, right: CSpace.medium),
+                                margin: const EdgeInsets.only(top: 5, right: CSpace.xl),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: data.isEmailVerified ? CColor.danger : isNotActiveColor,
+                                  color: data.isEmailVerified ? CColor.danger : CColor.black.shade200,
                                 ),
                               ),
                             Expanded(
@@ -234,27 +218,27 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                                             if (data.isLockedOut)
                                               Padding(
                                                 padding: const EdgeInsets.only(right: 5),
-                                                child: Icon(Icons.lock, color: CColor.danger, size: CFontSize.subhead),
+                                                child: Icon(Icons.lock, color: CColor.danger, size: CFontSize.base),
                                               ),
                                           ],
                                         ),
                                       ),
-                                      if (!isInternalUser) active(data)
+                                      if (!isInternalUser) _active(data)
                                     ],
                                   ),
-                                  const VSpacer(CSpace.small),
+                                  const VSpacer(CSpace.sm),
                                   Row(
                                     children: [
                                       Expanded(
                                         child: Container(
                                           alignment: Alignment.centerLeft,
-                                          height: CFontSize.callOut,
+                                          height: CFontSize.base,
                                           child: FittedBox(
                                             child: Text(
                                               data.userName,
                                               style: TextStyle(
                                                 color: CColor.black.shade300,
-                                                fontSize: CFontSize.footnote,
+                                                fontSize: CFontSize.sm,
                                               ),
                                             ),
                                           ),
@@ -264,7 +248,7 @@ class _UserState extends State<User> with TickerProviderStateMixin {
                                         width: isInternalUser ? 60 : 75,
                                         child: Text(
                                           CPref.statusTitle(data.roleListCode[0]),
-                                          style: TextStyle(color: CColor.primary, fontSize: CFontSize.footnote),
+                                          style: TextStyle(color: CColor.primary, fontSize: CFontSize.sm),
                                           textAlign: TextAlign.right,
                                         ),
                                       )
@@ -287,12 +271,12 @@ class _UserState extends State<User> with TickerProviderStateMixin {
               },
               onTap: (data) => context.pushNamed(
                 isInternalUser ? CRoute.internalUserDetails : CRoute.customerUserDetails,
-                queryParams: {'id': data.id, 'title': data.name},
+                queryParameters: {'id': data.id, 'title': data.name},
               ),
-              separator: const VSpacer(CSpace.medium),
+              separator: const VSpacer(CSpace.sm),
               format: MUser.fromJson,
-              api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
-              apiId: (item) => user.details(id: item.id),
+              api: (filter, page, size, sort) => _user.get(filter: filter, page: page, size: size, isEmployee: isInternalUser),
+              apiId: (item) => _user.details(id: item.id),
             ),
           ),
         ],
@@ -302,31 +286,29 @@ class _UserState extends State<User> with TickerProviderStateMixin {
         onPressed: () async {
           var check = await context.pushNamed(
             isInternalUser ? CRoute.createInternalUser : CRoute.createCustomerUser,
-            queryParams: {'formType': FormType.create.name},
+            queryParameters: {'formType': FormType.create.name},
           );
           if (check == true) {
-            getData();
+            _getData();
           }
         },
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
-      endDrawer: const _EndDrawer<MUser>(
+      endDrawer: _EndDrawer<MUser>(
         format: MUser.fromJson,
+        isCustomer: isInternalUser
       ),
     );
   }
 
-  late final user = RepositoryProvider.of<Api>(context).user;
-  final Color isNotActiveColor = CColor.black.shade200;
-  final bool isInternalUser =
-      GoRouter.of(rootNavigatorKey.currentState!.context).location.contains(CRoute.internalUser);
 
-  void getData() => context.read<BlocC<MUser>>().setPage(
-      api: (filter, page, size, sort) => user.get(filter: filter, page: page, size: size),
+
+  void _getData() => context.read<BlocC<MUser>>().setPage(
+      api: (filter, page, size, sort) => _user.get(filter: filter, page: page, size: size),
       format: MUser.fromJson,
       page: 1);
 
-  Widget active(MUser data) {
+  Widget _active(MUser data) {
     const double size = 17;
     return Stack(
       alignment: Alignment.centerRight,
@@ -351,13 +333,13 @@ class _UserState extends State<User> with TickerProviderStateMixin {
           height: size,
           width: size,
           decoration:
-              BoxDecoration(shape: BoxShape.circle, color: data.isEmailVerified ? CColor.danger : isNotActiveColor),
+              BoxDecoration(shape: BoxShape.circle, color: data.isEmailVerified ? CColor.danger : CColor.black.shade200),
         ),
       ],
     );
   }
 
-  Widget button({required Widget child}) => Container(
+  Widget _button({required Widget child}) => Container(
         padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
           color: Colors.white,

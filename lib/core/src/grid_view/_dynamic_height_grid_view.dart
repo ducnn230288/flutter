@@ -5,7 +5,7 @@ part of 'index.dart';
 /// Usage is almost same as [GridView.count]
 class DynamicHeightGridView extends HookWidget {
   const DynamicHeightGridView({
-    Key? key,
+    super.key,
     required this.builder,
     required this.itemCount,
     required this.crossAxisCount,
@@ -15,7 +15,7 @@ class DynamicHeightGridView extends HookWidget {
     this.controller,
     this.shrinkWrap = false,
     this.physics,
-  }) : super(key: key);
+  });
   final IndexedWidgetBuilder builder;
   final int itemCount;
   final int crossAxisCount;
@@ -60,7 +60,7 @@ class DynamicHeightGridView extends HookWidget {
 /// Use this for [CustomScrollView]
 class SliverDynamicHeightGridView extends HookWidget {
   const SliverDynamicHeightGridView({
-    Key? key,
+    super.key,
     required this.builder,
     required this.itemCount,
     required this.crossAxisCount,
@@ -68,7 +68,7 @@ class SliverDynamicHeightGridView extends HookWidget {
     this.mainAxisSpacing = 8,
     this.rowCrossAxisAlignment = CrossAxisAlignment.start,
     this.controller,
-  }) : super(key: key);
+  });
   final IndexedWidgetBuilder builder;
   final int itemCount;
   final int crossAxisCount;
@@ -108,7 +108,6 @@ class SliverDynamicHeightGridView extends HookWidget {
 
 class _GridRow extends HookWidget {
   const _GridRow({
-    Key? key,
     required this.columnIndex,
     required this.builder,
     required this.itemCount,
@@ -116,7 +115,7 @@ class _GridRow extends HookWidget {
     required this.crossAxisSpacing,
     required this.mainAxisSpacing,
     required this.crossAxisAlignment,
-  }) : super(key: key);
+  });
   final IndexedWidgetBuilder builder;
   final int itemCount;
   final int crossAxisCount;

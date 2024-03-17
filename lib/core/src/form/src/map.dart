@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
@@ -15,12 +17,12 @@ class WInputMap<T> extends StatefulWidget {
 
 
   const WInputMap({
-    Key? key,
+    super.key,
     this.label = '',
     this.value,
     this.name = '',
     this.onCondition,
-  }) : super(key: key);
+  });
 
   @override
   State<WInputMap> createState() => WInputMapState<T>();
@@ -59,15 +61,17 @@ class WInputMapState<T> extends State<WInputMap> {
           cubit.setValue(value: {...value, widget.name: [locations[0].latitude, locations[0].longitude], '${widget.name}fullAddress': fromAddress});
         } catch (e) {
           cubit.setValue(value: {...value, '${widget.name}fullAddress': fromAddress});
-          USnackBar.smallSnackBar(title: 'Không tìm thấy địa chỉ phù hợp', width: 195);
+          USnackBar.smallSnackBar(title: 'Không tìm thấy địa chỉ phù hợp', width: 210);
         }
       }
     }
   }
 
+  late Timer _t;
   void setAddress(Map<String, TextEditingController> listController) {
     if (widget.onCondition != null && widget.onCondition!(listController) != null) {
-        Delay(milliseconds: 200).run(() { getAddress(listController); });
+      _t.cancel();
+      _t = Timer(const Duration(milliseconds: 200), () { getAddress(listController); });
     } else {
       final cubit = context.read<BlocC<T>>();
       cubit.setValue(value: {widget.name: [], '${widget.name}fullAddress': null});
@@ -77,5 +81,6 @@ class WInputMapState<T> extends State<WInputMap> {
   @override
   void initState() {
     super.initState();
+    _t = Timer(const Duration(milliseconds: 0), () {});
   }
 }

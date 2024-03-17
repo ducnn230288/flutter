@@ -43,7 +43,7 @@ class CIcon {
   static final arrowRight = SvgPicture.asset(
     'assets/svgs/arrow-right.svg',
     semanticsLabel: 'arrow left',
-    width: CFontSize.headline4,
+    width: CFontSize.base,
     colorFilter: ColorFilter.mode(CColor.primary, BlendMode.srcIn),
   );
   static final close = SvgPicture.asset(
@@ -55,19 +55,19 @@ class CIcon {
   static final closeWhite = SvgPicture.asset(
     'assets/svgs/close.svg',
     semanticsLabel: 'Close',
-    width: CFontSize.paragraph2,
+    width: CFontSize.xs,
     colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
   );
   static final copy = SvgPicture.asset(
     'assets/svgs/copy.svg',
     semanticsLabel: 'Copy',
-    width: CFontSize.paragraph2,
+    width: CFontSize.xs,
     colorFilter: ColorFilter.mode(CColor.primary, BlendMode.srcIn),
   );
   static final search = SvgPicture.asset(
     'assets/svgs/search.svg',
     semanticsLabel: 'Search',
-    width: CFontSize.headline4,
+    width: CFontSize.base,
     colorFilter: ColorFilter.mode(CColor.black.shade400, BlendMode.srcIn),
   );
 }

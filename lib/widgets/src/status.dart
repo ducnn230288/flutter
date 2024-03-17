@@ -24,19 +24,17 @@ status(
         width: width,
         alignment: Alignment.center,
         margin: margin,
-        padding: padding ?? const EdgeInsets.symmetric(horizontal: CSpace.small + 1, vertical: CSpace.superSmall / 2),
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: CSpace.sm + 1, vertical: CSpace.xs / 2),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(borderRadius ?? 0),
         ),
         child: Text(
           convertStatus,
-          style: CStyle.caption(
-            style: TextStyle(
-              color: textColor ?? Colors.white,
-              fontSize: CFontSize.caption2,
-              fontWeight: fontWeight,
-            ),
+          style: TextStyle(
+            color: textColor ?? Colors.white,
+            fontSize: CFontSize.xs,
+            fontWeight: fontWeight,
           ),
           overflow: TextOverflow.ellipsis,
         ),

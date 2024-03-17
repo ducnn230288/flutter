@@ -13,12 +13,12 @@ class SelectDate extends StatefulWidget {
   final Function(String fromDate, String toDate) onChanged;
 
   const SelectDate({
-    Key? key,
+    super.key,
     this.margin,
     required this.onChanged,
     this.initialFromDate,
     this.initialToDate,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectDate> createState() => _SelectDateState();

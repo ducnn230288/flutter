@@ -21,22 +21,22 @@ class USnackBar {
           children: [
             if (showLoading)
               Container(
-                height: CFontSize.paragraph1,
-                width: CFontSize.paragraph1,
-                margin: const EdgeInsets.only(right: CSpace.mediumSmall),
+                height: CFontSize.sm,
+                width: CFontSize.sm,
+                margin: const EdgeInsets.only(right: CSpace.base),
                 child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 1.5),
               ),
-            Text(title, style: const TextStyle(color: Colors.white, fontSize: CFontSize.footnote)),
+            Text(title, style: const TextStyle(color: Colors.white, fontSize: CFontSize.sm)),
           ],
         ),
       ),
       width: width,
       elevation: 0,
       duration: isInfiniteTime ? const Duration(minutes: 1) : duration ?? const Duration(seconds: 2),
-      padding: const EdgeInsets.symmetric(vertical: CSpace.mediumSmall, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: CSpace.base, horizontal: 0),
       behavior: SnackBarBehavior.floating,
       backgroundColor: CColor.black.shade300,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CRadius.small)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.sm)),
     ));
   }
 

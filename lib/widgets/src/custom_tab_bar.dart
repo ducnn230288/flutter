@@ -25,12 +25,12 @@ class CustomTabBar extends StatefulWidget {
   final int? onChangeIndex;
 
   const CustomTabBar(
-      {Key? key,
+      {super.key,
       this.height = 38,
       this.width,
       this.stroke = 1,
       this.radius = 5,
-      this.fontSize = CFontSize.body,
+      this.fontSize = CFontSize.base,
       this.fontColor,
       this.borderColor,
       required this.title,
@@ -44,8 +44,7 @@ class CustomTabBar extends StatefulWidget {
       this.code,
       this.initial,
       this.margin,
-      this.onChangeIndex})
-      : super(key: key);
+      this.onChangeIndex});
 
   @override
   State<CustomTabBar> createState() => _CustomTabBarState();

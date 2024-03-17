@@ -17,12 +17,13 @@ class MData<T> {
   }
 
   MData.fromJson(dynamic json, dynamic format) {
-    _page = json['page'];
-    _totalPages = json['totalPages'];
-    _size = json['size'];
-    _numberOfElements = json['numberOfElements'];
-    _totalElements = json['totalElements'];
-    dynamic data = json['data'] ?? json['content'] ?? json;
+    _page = json is List || !json.containsKey('page') ? 1 : json['page'];
+    _totalPages = json is List || !json.containsKey('totalPages')? 1 : json['totalPages'];
+    _size = json is List || !json.containsKey('size') ? 1 : json['size'];
+    _numberOfElements = json is List || !json.containsKey('numberOfElements') ? json.length : json['numberOfElements'];
+    _totalElements = json is List || !json.containsKey('totalElements') ? json.length : json['totalElements'];
+    dynamic data = json is List || (!json.containsKey('content') && !json.containsKey('data')) ? json : json.containsKey('content') ? json['content'] : json['data'];
+
     if (format != null) {
       if (data != null && data is List) {
         _content = [];

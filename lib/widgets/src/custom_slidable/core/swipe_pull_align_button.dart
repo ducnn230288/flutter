@@ -13,7 +13,7 @@ class SwipePullAlignButton extends StatefulWidget {
   final int actionIndex;
   final bool trailing;
 
-  const SwipePullAlignButton({Key? key, required this.actionIndex, required this.trailing}) : super(key: key);
+  const SwipePullAlignButton({super.key, required this.actionIndex, required this.trailing});
 
   @override
   SwipePullAlignButtonState createState() => SwipePullAlignButtonState();
@@ -155,7 +155,7 @@ class SwipePullAlignButtonState extends State<SwipePullAlignButton> with TickerP
             "Your nested width must be larger than the width of all action buttons"
             "\n 你的nestedWidth必须要大于或者等于所有按钮的总长度，否则下面的按钮会显现出来");
       } catch (e) {
-        // print(e.toString());
+        //
       }
     }
 

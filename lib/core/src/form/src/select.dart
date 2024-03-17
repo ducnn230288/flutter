@@ -22,7 +22,7 @@ class WSelect<T> extends StatefulWidget {
   final String? icon;
   final Function(dynamic json)? format;
   final Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort) api;
-  final Function(dynamic content, int index) itemSelect;
+  final Function(dynamic content, int index, bool selected) itemSelect;
   final bool showSearch;
   final Function selectLabel;
   final Function selectValue;
@@ -34,7 +34,7 @@ class WSelect<T> extends StatefulWidget {
   final double? width;
 
   const WSelect({
-    Key? key,
+    super.key,
     this.label = '',
     this.value = '',
     this.subtitle,
@@ -59,7 +59,7 @@ class WSelect<T> extends StatefulWidget {
     this.onTap,
     this.height,
     this.width,
-  }) : super(key: key);
+  });
 
   @override
   State<WSelect> createState() => _WSelectState<T>();
@@ -110,19 +110,19 @@ class _WSelectState<T> extends State<WSelect> {
                     children: [
                       if (widget.label != '' || widget.hintText != null)
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: CSpace.small),
+                          margin: const EdgeInsets.symmetric(vertical: CSpace.sm),
                           child: Text(
                             widget.hintText ?? (widget.label != '' ? widget.label : ''),
                             style: TextStyle(
                               color: CColor.black.shade700,
-                              fontSize: CFontSize.headline,
+                              fontSize: CFontSize.lg,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       if (widget.items == null && widget.showSearch)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
+                          padding: const EdgeInsets.symmetric(horizontal: CSpace.sm),
                           child: WInput(
                             hintText: 'widgets.form.select.Search'.tr(),
                             required: false,
@@ -144,40 +144,26 @@ class _WSelectState<T> extends State<WSelect> {
                       Expanded(
                         child: WList<dynamic>(
                             items: widget.items,
-                            item: widget.items == null
-                                ? (item, int index) {
-                                    final value = context.read<BlocC>().state.value;
-                                    final code = widget.items == null ? widget.selectValue(item) : item.value;
-                                    return Container(
-                                      color: value[widget.name] != null &&
-                                              value[widget.name].toString().toLowerCase() ==
-                                                  code.toString().toLowerCase()
-                                          ? CColor.primary.shade100
-                                          : Colors.transparent,
-                                      child: widget.itemSelect(item, index),
-                                    );
-                                  }
-                                : (item, int index) {
-                                    final value = context.read<BlocC>().state.value;
-                                    return Container(
-                                        color: value[widget.name] != null &&
-                                                value[widget.name].toString().toLowerCase() == item.value.toLowerCase()
-                                            ? CColor.primary.shade100
-                                            : Colors.transparent,
-                                        padding: const EdgeInsets.symmetric(horizontal: CSpace.small),
-                                        child: itemList(
-                                          title:
-                                              Text(item.label, style: const TextStyle(fontSize: CFontSize.paragraph1)),
-                                        ));
-                                  },
+                            item: (item, int index) {
+                              final code = widget.items == null ? widget.selectValue(item) : item.value;
+                              final selected = value[widget.name] != null &&
+                                  value[widget.name].toString().toLowerCase() ==
+                                      code.toString().toLowerCase();
+
+                              return Container(
+                                margin: const EdgeInsets.symmetric(horizontal: CSpace.lg),
+                                color: selected ? CColor.primary : Colors.transparent,
+                                child: widget.items == null
+                                    ? widget.itemSelect(item, index, selected)
+                                    : itemList(title: Text(item.label, style: TextStyle(fontSize: CFontSize.sm, color: selected ? Colors.white : Colors.black)))
+                              );
+                            },
                             format: widget.format,
                             onTap: (item) async {
                               widget.controller.text = widget.items == null ? widget.selectLabel(item) : item.label;
                               widget.onChanged(widget.items == null ? widget.selectValue(item) : item.value);
                               await UDialog().delay();
-                              if (context.mounted) {
-                                Navigator.of(context).pop();
-                              }
+                              if (context.mounted) Navigator.of(context).pop();
                             },
                             api: widget.api),
                       ),

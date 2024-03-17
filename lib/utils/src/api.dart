@@ -17,7 +17,7 @@ import '/utils/index.dart';
 class Api {
   SAuth get auth => SAuth(endpoint, headers, checkAuth);
 
-  SDrawer get drawer => SDrawer(endpoint, headers, checkAuth);
+  SNavigation get navigation => SNavigation(endpoint, headers, checkAuth);
 
   SAddress get address => SAddress(endpoint, headers, checkAuth);
 
@@ -26,25 +26,19 @@ class Api {
   final String endpoint = Environment.apiUrl;
   final Map<String, String> headers = {'Content-Type': 'application/json'};
 
-  Future<MApi?> checkAuth({required http.Response result, int? returnWithStatusCode}) async {
-    if (result.body.isEmpty) {
-      return null;
-    }
+  Future<MApi?> checkAuth({required http.Response result, int? returnWithStatusCode,List? arrayMore}) async {
+    if (result.body.isEmpty) return null;
     if (result.statusCode == 401) {
       rootNavigatorKey.currentState!.context.read<AuthC>().error();
       return null;
     }
-    MApi response = MApi.fromJson(jsonDecode(result.body));
-    if (returnWithStatusCode != null && response.code == returnWithStatusCode) {
-      return response;
-    }
-    if (result.statusCode == 404) {
-      return MApi(code: 404, message: response.message);
-    }
+    final body = jsonDecode(result.body);
+    if (arrayMore != null && result.body is! List) body['data']['content'] = [...body['data']['content'], ...arrayMore];
+    MApi response = MApi.fromJson(body);
+    if (returnWithStatusCode != null && response.code == returnWithStatusCode) return response;
+    if (result.statusCode == 404) return MApi(code: 404, message: response.message);
     if (response.isSuccess == false && response.message != null) {
-      Timer(const Duration(milliseconds: 50), () {
-        UDialog().showError(text: response.message);
-      });
+      Timer(const Duration(milliseconds: 50), () => UDialog().showError(text: response.message));
       return null;
     }
     if (response.data is List) {
@@ -62,6 +56,10 @@ class Api {
 
   Future setToken({required String token}) async {
     headers['Authorization'] = 'Bearer $token';
+  }
+
+  Future clearHeader({required String name}) async {
+    headers.remove(name);
   }
 
   Future setLanguage({required String language}) async {
@@ -93,7 +91,7 @@ class Api {
 
   Future<List<MUpload>> getAttachmentsTemplate({String entityType = 'post'}) async {
     http.Response result =
-        await http.get(Uri.parse('$endpoint/upload/$entityType/attachment-templates'), headers: headers);
+        await BaseHttp.get(url: '$endpoint/upload/$entityType/attachment-templates', headers: headers, queryParameters: {});
     List<MUpload> data = [];
     if (result.statusCode < 400) {
       List body = jsonDecode(result.body)['data'];

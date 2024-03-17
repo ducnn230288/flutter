@@ -62,10 +62,10 @@ class WCheckbox<T> extends FormField<bool> {
                   ),
                   state.hasError
                       ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: CSpace.medium),
+                          padding: const EdgeInsets.symmetric(horizontal: CSpace.xl),
                           child: Text(
                             state.errorText!,
-                            style: TextStyle(fontSize: CFontSize.caption2, color: CColor.danger),
+                            style: TextStyle(fontSize: CFontSize.xs, color: CColor.danger),
                           ),
                         )
                       : const SizedBox()

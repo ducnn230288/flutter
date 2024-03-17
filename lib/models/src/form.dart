@@ -21,11 +21,13 @@ class MFormItem {
     this.enabled = true,
     this.password = false,
     this.showClose = false,
+    this.readOnly = false,
     this.keyBoard,
     this.onTap,
     this.onCondition,
     this.onFind,
     this.onChange,
+    this.onDelete,
     this.onValidator,
     this.icon,
     this.suffix,
@@ -36,8 +38,8 @@ class MFormItem {
     this.showSearch = true,
     this.selectLabel,
     this.selectValue,
-    this.maxQuantity = 1,
-    this.minQuantity = 1,
+    this.maxQuantity,
+    this.minQuantity,
     this.prefix,
     this.child,
     this.dataType,
@@ -51,6 +53,7 @@ class MFormItem {
     this.description,
     this.mode = DateRangePickerSelectionMode.single,
     this.showTime = false,
+    this.view = DateRangePickerView.month
   });
 
   String name;
@@ -66,12 +69,14 @@ class MFormItem {
   bool required;
   bool show;
   bool showClose;
+  bool readOnly;
   bool enabled;
   bool password;
   EFormItemKeyBoard? keyBoard;
   Function(dynamic value)? onTap;
   Function(dynamic value)? onCondition;
   Function? onFind;
+  Function? onDelete;
   Function(dynamic value, Map<String, TextEditingController> listController)? onChange;
   Function(dynamic value, Map<String, TextEditingController> listController)? onValidator;
   String? icon;
@@ -79,12 +84,12 @@ class MFormItem {
   List<MOption>? items;
   Function(dynamic json)? format;
   Function(Map<String, dynamic> value, int page, int size, Map<String, dynamic> sort)? api;
-  Function(dynamic content, int index)? itemSelect;
+  Function(dynamic content, int index, bool selected)? itemSelect;
   bool? showSearch;
   Function? selectLabel;
   Function? selectValue;
-  int minQuantity;
-  int maxQuantity;
+  int? minQuantity;
+  int? maxQuantity;
   String? prefix;
   Widget? child;
   DataType? dataType;
@@ -98,6 +103,7 @@ class MFormItem {
   String? description;
   DateRangePickerSelectionMode mode;
   bool showTime;
+  DateRangePickerView view;
 
   factory MFormItem.fromJson(Map<String, dynamic> json) => MFormItem(
         name: json["name"] ?? '',
@@ -115,11 +121,13 @@ class MFormItem {
         enabled: json["enabled"] ?? true,
         password: json["password"] ?? false,
         showClose: json["showClose"] ?? false,
+        readOnly: json["readOnly"] ?? false,
         keyBoard: json["keyBoard"],
         bold: json["bold"] ?? false,
         onTap: json["onTap"],
         onCondition: json["onCondition"],
         onFind: json["onFind"],
+        onDelete: json["onDelete"],
         onChange: json["onChange"],
         onValidator: json["onValidator"],
         icon: json["icon"],
@@ -164,10 +172,12 @@ class MFormItem {
         "bold": bold,
         "password": password,
         "showClose": showClose,
+        "readOnly": readOnly,
         "keyBoard": keyBoard,
         "onTap": onTap,
         "onCondition": onCondition,
         "onFind": onFind,
+        "onDelete": onDelete,
         "onChange": onChange,
         "onValidator": onValidator,
         "icon": icon,

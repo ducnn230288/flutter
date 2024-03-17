@@ -18,13 +18,13 @@ class DataDetails extends StatelessWidget {
   final bool showBorder;
 
   const DataDetails({
-    Key? key,
+    super.key,
     required this.data,
     this.horizontalPadding,
     this.verticalPadding,
     this.fontSize,
     this.showBorder = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +32,12 @@ class DataDetails extends StatelessWidget {
       case DataType.separation:
         return Container(
           padding: const EdgeInsets.symmetric(
-              horizontal: CSpace.large, vertical: CSpace.medium),
+              horizontal: CSpace.xl3, vertical: CSpace.xl),
           color: CColor.black.shade100.withOpacity(0.2),
           alignment: Alignment.topLeft,
           child: Text(data.label,
               style: const TextStyle(
-                  fontWeight: FontWeight.w600, fontSize: CFontSize.body)),
+                  fontWeight: FontWeight.w600, fontSize: CFontSize.base)),
         );
       case DataType.image:
         if (data.value.runtimeType != List<MUpload>) {
@@ -48,30 +48,30 @@ class DataDetails extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.symmetric(
             vertical:
-                data.label != '' ? verticalPadding ?? CSpace.superSmall : 0,
-            horizontal: horizontalPadding ?? CSpace.large,
+                data.label != '' ? verticalPadding ?? CSpace.xs : 0,
+            horizontal: horizontalPadding ?? CSpace.xl3,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.only(top: CSpace.small),
+                margin: const EdgeInsets.only(top: CSpace.sm),
                 child: Text('${data.label}  ',
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: CFontSize.body,
+                      fontSize: CFontSize.base,
                     )),
               ),
               data.value.isNotEmpty
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: CSpace.mediumSmall),
+                          vertical: CSpace.base),
                       child: GridView.builder(
                         physics: const ScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
-                            crossAxisSpacing: CSpace.medium,
-                            mainAxisSpacing: CSpace.medium,
+                            crossAxisSpacing: CSpace.xl,
+                            mainAxisSpacing: CSpace.xl,
                             mainAxisExtent: CSpace.width / 3),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
@@ -80,7 +80,7 @@ class DataDetails extends StatelessWidget {
                           url: data.value[index].fileUrl,
                           fit: BoxFit.cover,
                           listUrl: data.value ?? [],
-                          borderRadius: BorderRadius.circular(CSpace.small),
+                          borderRadius: BorderRadius.circular(CSpace.sm),
                         ),
                       ),
                     )
@@ -111,13 +111,13 @@ class DataDetails extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: data.label != ''
-                                ? verticalPadding ?? CSpace.medium
+                                ? verticalPadding ?? CSpace.xl
                                 : 0,
-                            horizontal: horizontalPadding ?? CSpace.large,
+                            horizontal: horizontalPadding ?? CSpace.xl3,
                           ),
                           child: Container(
                             padding: const EdgeInsets.only(
-                                top: CSpace.small, right: CSpace.small),
+                                top: CSpace.sm, right: CSpace.sm),
                             child: SvgPicture.asset(
                               data.icon ?? '',
                               semanticsLabel: data.label,
@@ -128,12 +128,12 @@ class DataDetails extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(
                             top: data.label != ''
-                                ? verticalPadding ?? CSpace.large - 5
+                                ? verticalPadding ?? CSpace.xl3 - 5
                                 : 0,
                             bottom: data.label != ''
-                                ? verticalPadding ?? CSpace.large - 5
+                                ? verticalPadding ?? CSpace.xl3 - 5
                                 : 0,
-                            left: horizontalPadding ?? CSpace.large,
+                            left: horizontalPadding ?? CSpace.xl3,
                           ),
                           child: Text('${data.label}  ',
                               style: TextStyle(
@@ -150,10 +150,10 @@ class DataDetails extends StatelessWidget {
                               data: data,
                               fontSize: fontSize,
                               verticalPadding: data.label != ''
-                                  ? verticalPadding ?? CSpace.medium
+                                  ? verticalPadding ?? CSpace.xl
                                   : 0,
                               horizontalPadding:
-                                  horizontalPadding ?? CSpace.large,
+                                  horizontalPadding ?? CSpace.xl3,
                             ),
                           ),
                         )
@@ -199,12 +199,12 @@ class Content extends StatelessWidget {
   final double horizontalPadding;
 
   const Content({
-    Key? key,
+    super.key,
     required this.data,
     this.fontSize,
     required this.verticalPadding,
     required this.horizontalPadding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -234,10 +234,10 @@ class Content extends StatelessWidget {
     if (data.dataType == DataType.phone) {
       return Column(
         children: [
-          SizedBox(height: verticalPadding / 2),
+          SizedBox(height: verticalPadding / 3),
           Container(
-            width: 200,
-            height: CHeight.superSmall,
+            width: data.value.length.toDouble() * 15,
+            height: CHeight.sm,
             padding: EdgeInsets.only(right: horizontalPadding),
             child: InkWell(
               splashColor: CColor.primary.shade100,
@@ -259,8 +259,8 @@ class Content extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.phone_outlined,
-                          color: Colors.white, size: CFontSize.title3),
-                      const HSpacer(CSpace.small),
+                          color: Colors.white, size: CFontSize.xl),
+                      const HSpacer(CSpace.sm),
                       Text(
                         Convert.phoneNumber(data.value),
                         style: TextStyle(
@@ -278,9 +278,9 @@ class Content extends StatelessWidget {
     if (data.dataType == DataType.status) {
       return Padding(
           padding: EdgeInsets.only(
-              top: CSpace.mediumSmall + 1, right: horizontalPadding),
+              top: CSpace.xl + 1, right: horizontalPadding),
           child: status(data.value,
-              height: CHeight.mediumSmall / 2, fontSize: CFontSize.footnote));
+              height: CHeight.lg / 2, fontSize: CFontSize.xs));
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,7 +290,7 @@ class Content extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(
               right: data.dataType == DataType.copy
-                  ? CSpace.superSmall / 2
+                  ? CSpace.xs / 2
                   : horizontalPadding,
               top: verticalPadding,
               bottom: verticalPadding,
@@ -308,7 +308,7 @@ class Content extends StatelessWidget {
         ),
         if (data.dataType == DataType.copy)
           Container(
-            height: CFontSize.subhead,
+            height: CFontSize.base,
             width: 25,
             margin: EdgeInsets.only(
                 right: horizontalPadding * 0.8, top: verticalPadding),
