@@ -1,0 +1,18 @@
+version: '3.6'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: 'flutter'
+    depends_on:
+      - emulator
+
+  emulator:
+    image: us-docker.pkg.dev/android-emulator-268719/images/30-google-x64:30.1.2
+    expose:
+      - 8554/tcp
+      - 5555/tcp
+    devices:
+      - '/dev/kvm:/dev/kvm'
