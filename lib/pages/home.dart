@@ -24,9 +24,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
-            child: Column(
-              children: [CIcon.logo],
-            ));
+            child: CIcon.logo);
         },
       ),
     );

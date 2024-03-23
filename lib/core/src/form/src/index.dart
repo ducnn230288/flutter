@@ -126,7 +126,7 @@ class _WFormState<T> extends State<WForm> {
             child = item.show ? Container(
               margin: const EdgeInsets.only(bottom: CSpace.sm),
               alignment: Alignment.topLeft,
-              child: Text(item.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.xl2)),
+              child: Text(item.label, key: ValueKey(item.label), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.xl2)),
             ) : Container();
             break;
           case EFormItemType.checkbox:

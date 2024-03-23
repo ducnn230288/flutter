@@ -63,6 +63,7 @@ appBar({
       return AppBar(
         toolbarHeight: toolbarHeight,
         title: Text(title,
+            key: ValueKey(title),
             style: const TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w600, color: Colors.white)
                 .merge(titleStyle)),
         centerTitle: true,

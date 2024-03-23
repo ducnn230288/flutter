@@ -74,22 +74,22 @@
     },
     "form": {
       "input": {
-        "rulesRequired": "Vui lòng nhập {}",
-        "Please check": "Vui lòng chọn",
-        "Please choose file": "Vui lòng chọn tập tin",
+        "rulesRequired": "Xin vui lòng nhập {}",
+        "Please check": "Xin vui lòng chọn",
+        "Please choose file": "Xin vui lòng chọn tập tin",
         "Enter": "Nhập {}",
         "Choose": "Chọn {}"
       },
       "select": {
         "Search": "Tìm kiếm",
-        "rulesRequired": "Vui lòng chọn {}"
+        "rulesRequired": "Xin vui lòng chọn {}"
       },
       "date": {
         "Save": "Lưu lại",
         "Time from": "Giờ bắt đầu",
         "Time to": "Giờ kết thúc",
         "Error message": "Bạn chưa chọn đầy đủ ngày",
-        "rulesRequired": "Vui lòng chọn {}"
+        "rulesRequired": "Xin vui lòng chọn {}"
       },
       "upload": {
         "Upload": "Tải lên",
