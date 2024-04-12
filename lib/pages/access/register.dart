@@ -8,6 +8,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
+import '/widgets/index.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -32,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(height: CSpace.xl3 * 2),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
-              child: ElevatedButton(
+              child: WButton(
                   onPressed: () => context.read<BlocC<MUser>>().submit(
                       api: (value, page, size, sort) => RepositoryProvider.of<Api>(context).auth.register(body: value),
                       submit: (data) => context.goNamed(CRoute.login)),
@@ -42,7 +43,8 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("pages.login.register.Do you already have an account?".tr(), style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm)),
-                TextButton(
+                WButton(
+                  type: TextButton,
                   onPressed: () => Navigator.pop(context),
                   child: Text('pages.login.login.Log in'.tr(), style: const TextStyle(fontSize: CFontSize.sm)),
                 )

@@ -8,6 +8,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
+import '/widgets/index.dart';
 
 part '_account_info.dart';
 
@@ -34,7 +35,7 @@ class _MyAccountInfoState extends State<MyAccountInfo> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(CSpace.xl),
-          child: ElevatedButton(
+          child: WButton(
             onPressed: () => context.read<BlocC<MUser>>().submit(
               api: (value, _, __, ___) => RepositoryProvider.of<Api>(context).auth.updateProfile(body: value),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/widgets/index.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -53,7 +54,7 @@ class _CreateUserState extends State<CreateUser> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(CSpace.xl3),
-          child: ElevatedButton(onPressed: _onSubmit, child: Text(_titleButton)),
+          child: WButton(onPressed: _onSubmit, child: Text(_titleButton)),
         ),
       ),
     );

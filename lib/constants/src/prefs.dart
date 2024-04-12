@@ -36,6 +36,9 @@ class CPref {
         return 'CPref.DRAFT'.tr();
       case 'WAIT_CONFIRM':
         return 'CPref.WAIT_CONFIRM'.tr();
+
+      case 'FARMER':
+        return 'Farmer Side';
     }
     return status;
   }

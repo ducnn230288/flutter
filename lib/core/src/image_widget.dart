@@ -424,8 +424,8 @@ Widget listImageNetwork(
 _downloadImage(
         {required String url,
         required Function(int total, int downloaded, double progress, String name) downloadProgress}) =>
-    GestureDetector(
-      // splashColor: CColor.primary.shade100,
+    InkWell(
+      splashColor: CColor.primary.shade100,
       onTap: () async {
         try {
           await _requestPermission();

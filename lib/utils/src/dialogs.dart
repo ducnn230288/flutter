@@ -77,7 +77,7 @@ class UDialog {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CSpace.xl3)),
               title: Text(
                 title ?? 'Thông báo',
-                style: TextStyle(fontSize: CFontSize.base, color: titleColor),
+                style: TextStyle(fontSize: CFontSize.xl, fontWeight: FontWeight.w600, color: titleColor),
                 textAlign: TextAlign.center,
               ),
               titlePadding: const EdgeInsets.fromLTRB(CSpace.xl4, CSpace.xl4, CSpace.xl4, 0),
@@ -118,7 +118,7 @@ class UDialog {
     Widget? body,
   }) async {
     final BuildContext context = rootNavigatorKey.currentState!.context;
-    return showDialog(
+    return await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -126,7 +126,7 @@ class UDialog {
               title: showTitle
                   ? Text(
                       title ?? 'Thông báo',
-                      style: const TextStyle(fontSize: CFontSize.base),
+                      style: const TextStyle(fontSize: CFontSize.xl, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.center,
                     )
                   : null,
@@ -176,11 +176,7 @@ class UDialog {
                   )
                 ],
               ));
-        }).then((value) {
-      if (onDismiss != null) {
-        onDismiss(context);
-      }
-    });
+        }).then((value) { if (onDismiss != null) onDismiss(context); });
   }
 
   Future<void> showForm({

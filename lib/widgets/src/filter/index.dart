@@ -6,6 +6,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
+import 'button.dart';
 
 class WidgetFilter<T> extends StatefulWidget {
   final List<MFilter> filter;
@@ -55,9 +56,9 @@ class _WidgetFilterState<T> extends State<WidgetFilter> {
                   ? (state.value[keyValue]?['label'] ?? '')
                   : filter.label;
 
-              return InkWell(
-                splashColor: CColor.primary.shade100,
-                onTap: () async {
+              return WFilterButton(
+                selected: selected,
+                onPressed: () async {
                   if (filter.onTap != null) {
                     filter.onTap!();
                   } else {
@@ -68,33 +69,25 @@ class _WidgetFilterState<T> extends State<WidgetFilter> {
                     UDialog().stopLoading();
                   }
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: selected ? CColor.primary.shade100 : CColor.black.shade100.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: CSpace.base),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (filter.icon != null)
-                        Container(
-                          margin: const EdgeInsets.only(right: CSpace.sm),
-                          child: Icon(filter.icon, color: CColor.primary, size: CFontSize.base),
-                        ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (filter.icon != null)
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: CSpace.sm),
-                        child: Text(
-                          label,
-                          style: TextStyle(
-                            fontSize: CFontSize.xs,
-                            fontWeight: selected ? FontWeight.w600 : null,
-                            fontFamily: 'SFTextPro',
-                          ),
+                        margin: const EdgeInsets.only(right: CSpace.sm),
+                        child: Icon(filter.icon, color: CColor.primary, size: CFontSize.base),
+                      ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: CSpace.sm),
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          fontSize: CFontSize.xs,
+                          fontWeight: selected ? FontWeight.w600 : null,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             },

@@ -9,14 +9,9 @@ void main() async {
   testWidgets('Login', (WidgetTester tester) async {
     await initAppWidgetTest(tester);
 
-    await tester.tap(find.widgetWithText(TextButton, 'Tiếp tục'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Tiếp tục'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Bắt đầu'));
-    // await pumpUntilFound(tester, find.byKey(const ValueKey("Đăng nhập")));
-    await tester.pumpAndSettle();
-
+    await tapButtonPump(tester, 'Tiếp tục', type: TextButton);
+    await tapButtonPump(tester, 'Tiếp tục', type: TextButton);
+    await tapButtonPump(tester, 'Bắt đầu', type: TextButton);
 
     expect(find.byKey(const ValueKey("Đăng nhập")), findsOneWidget);
     expect(find.byKey(const ValueKey("Địa chỉ Email")), findsOneWidget);
@@ -28,20 +23,17 @@ void main() async {
     expect(find.widgetWithText(TextButton, "Điều kiện bảo mật"), findsOneWidget);
     expect(find.widgetWithText(TextButton, "Đăng ký?"), findsOneWidget);
 
-    await tester.tap(find.widgetWithText(ElevatedButton, "Đăng nhập"));
-    await tester.pumpAndSettle();
-    expect(find.text("Xin vui lòng nhập địa chỉ email"), findsOneWidget);
-    expect(find.text("Xin vui lòng nhập mật khẩu"), findsOneWidget);
+    await tapButtonPump(tester, 'Đăng nhập');
+    expect(find.descendant(of: find.byKey(const ValueKey("Địa chỉ Email")), matching: find.text('Xin vui lòng nhập địa chỉ email')), findsOneWidget);
+    expect(find.descendant(of: find.byKey(const ValueKey("Mật khẩu")), matching: find.text('Xin vui lòng nhập mật khẩu')), findsOneWidget);
 
     await tester.enterText(find.byKey(const ValueKey("Địa chỉ Email")), 'random@gmail.com');
     await tester.enterText(find.byKey(const ValueKey("Mật khẩu")), '123123');
 
     await SystemChannels.textInput.invokeMethod('TextInput.hide');
     await tester.pumpAndSettle(const Duration(milliseconds: 300));
-
     await tester.tap(find.widgetWithText(ElevatedButton, "Đăng nhập"));
     await pumpUntilFound(tester, find.text("Tài khoản random@gmail.com không tồn tại trong hệ thống. Vui lòng đăng ký mới."));
-
 
     expect(find.text("Tài khoản random@gmail.com không tồn tại trong hệ thống. Vui lòng đăng ký mới."), findsOneWidget);
     await tester.tap(find.widgetWithText(TextButton, "Thoát"));
@@ -52,8 +44,7 @@ void main() async {
 
     await SystemChannels.textInput.invokeMethod('TextInput.hide');
     await tester.pumpAndSettle(const Duration(milliseconds: 300));
-
-    await tester.tap(find.widgetWithText(ElevatedButton, "Đăng nhập"));
+    await tapButtonPump(tester, 'Đăng nhập');
     await pumpUntilFound(tester, find.text("Sai mật khẩu cho tài khoản admin@gmail.com"));
 
 
@@ -66,8 +57,7 @@ void main() async {
 
     await SystemChannels.textInput.invokeMethod('TextInput.hide');
     await tester.pumpAndSettle(const Duration(milliseconds: 300));
-
-    await tester.tap(find.widgetWithText(ElevatedButton, "Đăng nhập"));
+    await tapButtonPump(tester, 'Đăng nhập');
     await pumpUntilFound(tester, find.text("Home"));
 
     expect(find.text("Home"), findsOneWidget);

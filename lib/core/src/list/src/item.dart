@@ -10,6 +10,7 @@ itemList(
         VoidCallback? onTap,
         bool borderShow = true}) =>
     InkWell(
+      splashColor: CColor.primary.shade100,
       onTap: onTap,
       child: Container(
         decoration: borderShow

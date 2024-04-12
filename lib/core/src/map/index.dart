@@ -66,8 +66,6 @@ class WMapState<T> extends State<WMap> {
               mapType: _mapType,
               zoomGesturesEnabled: true,
               zoomControlsEnabled: false,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
               mapToolbarEnabled: true,
               onCameraMove: _updateCameraPosition,
               onCameraMoveStarted: () {

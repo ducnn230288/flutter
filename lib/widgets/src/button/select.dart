@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../filter/button.dart';
 import '/constants/index.dart';
 import '/cubit/index.dart';
 
@@ -22,24 +23,16 @@ buttonSelect({
         }
       }
 
-      return SizedBox(
-        height: 32,
-        width: width,
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
-            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                side: BorderSide(width: selected ? 1 : 0.00001, color: CColor.primary))),
-          ),
-          onPressed: onPressed,
-          child: FittedBox(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: selected ? CColor.primary : CColor.black,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-              ),
+      return WFilterButton(
+        onPressed: onPressed,
+        selected: selected,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: CSpace.sm),
+          child: Text(
+            title,
+            style: TextStyle(
+                fontSize: CFontSize.xs,
+                fontWeight: selected ? FontWeight.w600 : null,
             ),
           ),
         ),

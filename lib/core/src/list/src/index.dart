@@ -18,7 +18,6 @@ class WList<T> extends StatefulWidget {
   final Function(Map<String, dynamic> json)? format;
   final Function(T content)? onTap;
   final Function(T content, BuildContext context)? onTapMultiple;
-  final CrossAxisAlignment crossAxisAlignment;
   final List? items;
   final AppStatus status;
   final InputDisplayType inputDisplayType;
@@ -43,7 +42,6 @@ class WList<T> extends StatefulWidget {
     this.inputDisplayType = InputDisplayType.outside,
     this.separator,
     this.onTapMultiple,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
     this.physics,
     this.flex = 1,
     this.padding,
@@ -71,6 +69,7 @@ class _WListState<T> extends State<WList<T>> {
                   : 1;
           if (state.status == AppStatus.inProcess) return const WLoading();
           return RefreshIndicator(
+            key: const ValueKey('list'),
             notificationPredicate: widget.items == null ? (_) => true : (_) => false,
             onRefresh: () async {
               if (widget.items == null) {
@@ -87,7 +86,7 @@ class _WListState<T> extends State<WList<T>> {
               color: widget.backgroundColor ?? Colors.transparent,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: widget.crossAxisAlignment,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (widget.inputDisplayType == InputDisplayType.outside) widget.top ?? Container(),
                   state.data.content.isNotEmpty || widget.items != null
@@ -109,9 +108,7 @@ class _WListState<T> extends State<WList<T>> {
                                 );
                               }
                               final item = widget.items == null ? state.data.content[index] : widget.items![index];
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: widget.crossAxisAlignment,
+                              return WItem(
                                 children: [
                                   if (index == 0 && widget.inputDisplayType == InputDisplayType.inside)
                                     widget.top ?? Container(),
@@ -283,3 +280,16 @@ class _WListState<T> extends State<WList<T>> {
 
 //Tùy chỉnh cách hiển thị các input lẻ
 enum InputDisplayType { inside, outside }
+class WItem extends StatelessWidget {
+  final List<Widget> children;
+
+  const WItem({super.key, required this.children,});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children);
+  }
+}

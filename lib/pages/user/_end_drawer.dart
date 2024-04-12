@@ -58,7 +58,6 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                       },
                     ),
                     _status(),
-                    const VSpacer(CSpace.xl5),
                     _active(),
                   ],
                 );
@@ -149,7 +148,6 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const VSpacer(CSpace.xl5),
         Text('Trạng thái', style: CStyle.title),
         const VSpacer(CSpace.xl3),
         Wrap(
@@ -159,7 +157,8 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
             buttonSelect(title: 'Đã xác thực', key: 'isEmailVerified', value: true, width: 120),
             buttonSelect(title: 'Chưa xác thực', key: 'isEmailVerified', value: false, width: 130),
           ],
-        )
+        ),
+        const VSpacer(CSpace.xl3),
       ],
     );
   }

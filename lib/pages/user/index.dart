@@ -36,7 +36,9 @@ class _UserState extends State<User> with TickerProviderStateMixin {
           Builder(builder: (context) {
             return BlocBuilder<BlocC<MUser>, BlocS<MUser>>(
               builder: (context, state) {
-                return GestureDetector(
+                return InkWell(
+                  key: const ValueKey('filter'),
+                  splashColor: CColor.primary.shade100,
                   child: Container(
                     height: 40,
                     width: 40,
@@ -282,6 +284,7 @@ class _UserState extends State<User> with TickerProviderStateMixin {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        key: const ValueKey('add'),
         backgroundColor: CColor.danger,
         onPressed: () async {
           var check = await context.pushNamed(

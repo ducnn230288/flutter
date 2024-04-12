@@ -8,6 +8,7 @@ import '/core/index.dart';
 import '/cubit/index.dart';
 import '/models/index.dart';
 import '/utils/index.dart';
+import '/widgets/index.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -60,33 +61,35 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                          onPressed: () => context.read<BlocC<MUser>>().savedBool(name: 'rememberMe'),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: BlocBuilder<BlocC<MUser>, BlocS<MUser>>(
-                                  builder: (context, state) {
-                                    return Checkbox(
-                                      side: BorderSide(width: 1, color: CColor.primary),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                                      value: state.value['rememberMe'] != null && state.value['rememberMe'],
-                                      onChanged: (bool? value) =>
-                                          context.read<BlocC<MUser>>().savedBool(name: 'rememberMe'),
-                                    );
-                                  },
-                                ),
+                      WButton(
+                        type: TextButton,
+                        onPressed: () => context.read<BlocC<MUser>>().savedBool(name: 'rememberMe'),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: BlocBuilder<BlocC<MUser>, BlocS<MUser>>(
+                                builder: (context, state) {
+                                  return Checkbox(
+                                    side: BorderSide(width: 1, color: CColor.primary),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                                    value: state.value['rememberMe'] != null && state.value['rememberMe'],
+                                    onChanged: (bool? value) =>
+                                        context.read<BlocC<MUser>>().savedBool(name: 'rememberMe'),
+                                  );
+                                },
                               ),
-                              const SizedBox(width: 10),
-                              Text(
-                                'pages.login.login.Remember me'.tr(),
-                                style: TextStyle(fontSize: CFontSize.sm, color: CColor.black.shade300),
-                              ),
-                            ],
-                          )),
-                      TextButton(
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'pages.login.login.Remember me'.tr(),
+                              style: TextStyle(fontSize: CFontSize.sm, color: CColor.black.shade300),
+                            ),
+                          ],
+                        )),
+                      WButton(
+                        type: TextButton,
                         onPressed: () => context.goNamed(CRoute.forgotPassword),
                         child: Text('${'pages.login.login.Forgot password'.tr()}?', style: const TextStyle(fontSize: CFontSize.sm)),
                       )
@@ -105,7 +108,8 @@ class _LoginPageState extends State<LoginPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextButton(
+                                  WButton(
+                                    type: TextButton,
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.all(CSpace.xs),
                                     ),
@@ -113,7 +117,8 @@ class _LoginPageState extends State<LoginPage> {
                                     child: const Text('Điều khoản dịch vụ', style: TextStyle(fontSize: CFontSize.sm)),
                                   ),
                                   Text("và", style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm, height: 1.3)),
-                                  TextButton(
+                                  WButton(
+                                    type: TextButton,
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.all(CSpace.xs),
                                     ),
@@ -130,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                         BlocConsumer<BlocC<MUser>, BlocS<MUser>>(
                             listenWhen: (context, state) => state.status == AppStatus.success,
                             listener: (context, state) => GoRouter.of(context).go(CRoute.home),
-                            builder: (context, state) => ElevatedButton(
+                            builder: (context, state) => WButton(
                               onPressed: () => context.read<BlocC<MUser>>().submit(
                                 notification: false,
                                 format: MUser.fromJson,
@@ -141,7 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("pages.login.login.You don't have an account yet?".tr(), style: TextStyle(color: CColor.black.shade300, fontSize: CFontSize.sm)),
-                            TextButton(
+                            WButton(
+                              type: TextButton,
                               onPressed: () => context.pushNamed(CRoute.register),
                               child: Text('${'pages.login.login.Register'.tr()}?', style: const TextStyle(fontSize: CFontSize.sm)),
                             )

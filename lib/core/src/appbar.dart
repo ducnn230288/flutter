@@ -29,6 +29,7 @@ appBar({
           leading = Padding(
             padding: const EdgeInsets.only(left: CSpace.sm),
             child: InkWell(
+              key: const ValueKey("drawer_menu"),
               splashColor: CColor.primary.shade100,
               child: Container(
                 height: 40,

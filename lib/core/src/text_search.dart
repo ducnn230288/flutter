@@ -24,6 +24,7 @@ class _TextSearchState<T> extends State<TextSearch> {
       height: 44,
       margin: widget.margin ?? EdgeInsets.zero,
       child: TextFormField(
+        key: ValueKey(widget.hintText ?? 'Tìm kiếm'),
         controller: controller,
         style: TextStyle(color: CColor.primary, fontSize: CFontSize.base),
         onChanged: (text) {

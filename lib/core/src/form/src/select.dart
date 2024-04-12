@@ -151,7 +151,8 @@ class _WSelectState<T> extends State<WSelect> {
                                       code.toString().toLowerCase();
 
                               return Container(
-                                margin: const EdgeInsets.symmetric(horizontal: CSpace.lg),
+                                margin: const EdgeInsets.symmetric(horizontal: CSpace.base),
+                                padding: const EdgeInsets.symmetric(horizontal: CSpace.base),
                                 color: selected ? CColor.primary : Colors.transparent,
                                 child: widget.items == null
                                     ? widget.itemSelect(item, index, selected)

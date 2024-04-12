@@ -31,6 +31,7 @@ class DataDetails extends StatelessWidget {
     switch (data.dataType) {
       case DataType.separation:
         return Container(
+          key: ValueKey(data.label),
           padding: const EdgeInsets.symmetric(
               horizontal: CSpace.xl3, vertical: CSpace.xl),
           color: CColor.black.shade100.withOpacity(0.2),
@@ -147,6 +148,7 @@ class DataDetails extends StatelessWidget {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: Content(
+                              key: ValueKey(data.label),
                               data: data,
                               fontSize: fontSize,
                               verticalPadding: data.label != ''
@@ -162,6 +164,7 @@ class DataDetails extends StatelessWidget {
                   if (data.dataType == DataType.column)
                     data.value != ''
                         ? DescriptionTextWidget(
+                            key: ValueKey(data.label),
                             text: data.value,
                             style: TextStyle(
                               fontWeight:

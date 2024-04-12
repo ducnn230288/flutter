@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '/widgets/index.dart';
 import '/constants/index.dart';
 import '/core/index.dart';
 import '/cubit/index.dart';
@@ -36,7 +37,7 @@ class _MyAccountPassState extends State<MyAccountPass> {
                     },
                   ),
                   const VSpacer(CSpace.xl3 * 2),
-                  ElevatedButton(
+                  WButton(
                     onPressed: () {
                       context.read<BlocC<MUser>>().submit(
                         api: (value, _, __, ___) => RepositoryProvider.of<Api>(context).auth.updatePassword(body: value),
