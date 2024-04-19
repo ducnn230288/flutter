@@ -89,7 +89,7 @@ class UrlLauncher {
     } else if (contactsPermission == PermissionStatus.denied) {
       bool check = false;
       await UDialog().showConfirm(
-        title: 'Cần có danh bạ của bạn',
+        title: 'Sử dụng danh bạ của bạn',
         text: "Khi bật dịch vụ danh bạ, bạn có thể lấy được danh sách danh bạ điện thoai hiện tại của mình ngay lập tức, từ đó bạn đó có thể lấy nhanh thông tin tên và số điện thoại từ danh bạ của mình ra.",
         btnOkText: 'Bật danh bạ',
         btnCancelText: 'Khi khác',
@@ -111,8 +111,8 @@ class UrlLauncher {
     } else if (locationPermission == LocationPermission.denied) {
       bool check = false;
       await UDialog().showConfirm(
-        title: 'Cần có vị trí của bạn',
-        text: "Khi bật dịch vụ định vị, bạn có thể lấy được vị trí hiện tại của mình ngay lập tức, từ đó chỉ đường từ vị trí hiện tại của mình tới vị trí mục tiêu.",
+        title: 'Sử dụng vị trí của bạn',
+        text: "Để nhắm lấy nhanh kinh độ và vĩ độ của bạn, hãy cho phép ứng dụng sử dụng vị trí của bạn mọi lúc, ứng dụng sẽ sử dụng vị trí ở chế độ nền để chỉ đường bằng bản đồ google tới một vị trí cụ thể.",
         btnOkText: 'Bật vị trí',
         btnCancelText: 'Khi khác',
         btnOkOnPress: () async {

@@ -22,7 +22,7 @@ class DataDetails extends StatelessWidget {
     required this.data,
     this.horizontalPadding,
     this.verticalPadding,
-    this.fontSize,
+    this.fontSize = CFontSize.sm,
     this.showBorder = true,
   });
 
@@ -239,7 +239,7 @@ class Content extends StatelessWidget {
         children: [
           SizedBox(height: verticalPadding / 3),
           Container(
-            width: data.value.length.toDouble() * 15,
+            width: data.value.length.toDouble() * 17.5,
             height: CHeight.sm,
             padding: EdgeInsets.only(right: horizontalPadding),
             child: InkWell(
@@ -262,7 +262,7 @@ class Content extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.phone_outlined,
-                          color: Colors.white, size: CFontSize.xl),
+                          color: Colors.white, size: CFontSize.base),
                       const HSpacer(CSpace.sm),
                       Text(
                         Convert.phoneNumber(data.value),
