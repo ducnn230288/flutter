@@ -16,7 +16,6 @@ class Contracts extends StatefulWidget {
 }
 
 class _ContractsState extends State<Contracts> with TickerProviderStateMixin {
-
   double _height = 87.0;
 
   @override
@@ -58,7 +57,11 @@ class _ContractsState extends State<Contracts> with TickerProviderStateMixin {
                       setState(() => _height = height);
                     }
                   },
-                  items: cubit.state.data.content.where((i) => cubit.state.value['fullTextSearch'] == null || i.displayName.toUpperCase().contains(cubit.state.value['fullTextSearch'].toUpperCase())).toList(),
+                  items: cubit.state.data.content
+                      .where((i) =>
+                          cubit.state.value['fullTextSearch'] == null ||
+                          i.displayName.toUpperCase().contains(cubit.state.value['fullTextSearch'].toUpperCase()))
+                      .toList(),
                   item: (data, int index) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +126,6 @@ class _ContractsState extends State<Contracts> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     getData();
     super.initState();
   }
@@ -134,9 +136,7 @@ class _ContractsState extends State<Contracts> with TickerProviderStateMixin {
     for (var e in contacts) {
       listContent.add(e.toJson());
     }
-    MData<Contact> data = MData<Contact>.fromJson(MApi
-        .fromJson(listContent)
-        .data, Contact.fromJson);
+    MData<Contact> data = MData<Contact>.fromJson(MApi.fromJson(listContent).data, Contact.fromJson);
     context.read<BlocC<Contact>>().setData(data: data);
   }
 }

@@ -1,44 +1,44 @@
 class MTinh {
   MTinh({
-    num? maTinh,
-    String? tenTinh,
+    num? provinceCode,
+    String? provinceName,
     num? totalDistrictShipDelay,
     num? totalDistrictShipStop,
   }) {
-    _maTinh = maTinh;
-    _tenTinh = tenTinh;
+    _provinceCode = provinceCode;
+    _provinceName = provinceName;
     _totalDistrictShipDelay = totalDistrictShipDelay;
     _totalDistrictShipStop = totalDistrictShipStop;
   }
 
   MTinh.fromJson(dynamic json) {
-    _maTinh = json['maTinh'];
-    _tenTinh = json['tenTinh'];
+    _provinceCode = json['provinceCode'];
+    _provinceName = json['provinceName'];
     _totalDistrictShipDelay = json['totalDistrictShipDelay'];
     _totalDistrictShipStop = json['totalDistrictShipStop'];
   }
 
-  num? _maTinh;
-  String? _tenTinh;
+  num? _provinceCode;
+  String? _provinceName;
   num? _totalDistrictShipDelay;
   num? _totalDistrictShipStop;
 
   MTinh copyWith({
-    num? maTinh,
-    String? tenTinh,
+    num? provinceCode,
+    String? provinceName,
     num? totalDistrictShipDelay,
     num? totalDistrictShipStop,
   }) =>
       MTinh(
-        maTinh: maTinh ?? _maTinh,
-        tenTinh: tenTinh ?? _tenTinh,
+        provinceCode: provinceCode ?? _provinceCode,
+        provinceName: provinceName ?? _provinceName,
         totalDistrictShipDelay: totalDistrictShipDelay ?? _totalDistrictShipDelay,
         totalDistrictShipStop: totalDistrictShipStop ?? _totalDistrictShipStop,
       );
 
-  num get maTinh => _maTinh ?? 0;
+  num get provinceCode => _provinceCode ?? 0;
 
-  String get tenTinh => _tenTinh ?? '';
+  String get provinceName => _provinceName ?? '';
 
   num? get totalDistrictShipDelay => _totalDistrictShipDelay;
 
@@ -46,8 +46,8 @@ class MTinh {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['maTinh'] = _maTinh;
-    map['tenTinh'] = _tenTinh;
+    map['provinceCode'] = _provinceCode;
+    map['provinceName'] = _provinceName;
     map['totalDistrictShipDelay'] = _totalDistrictShipDelay;
     map['totalDistrictShipStop'] = _totalDistrictShipStop;
     return map;

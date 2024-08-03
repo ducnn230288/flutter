@@ -10,7 +10,6 @@ class _EndDrawer<T> extends StatefulWidget {
 }
 
 class _EndDrawerState<T> extends State<_EndDrawer> {
-
   int _count = 0;
   @override
   Widget build(BuildContext context) {
@@ -72,8 +71,8 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                     Expanded(
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
-                          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                          backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: const BorderRadius.all(Radius.circular(0)),
                               side: BorderSide(width: 1.0, color: CColor.primary))),
                         ),
@@ -95,7 +94,7 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
                     Expanded(
                       child: ElevatedButton(
                         style: const ButtonStyle(
-                          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                           )),
                         ),
@@ -120,27 +119,28 @@ class _EndDrawerState<T> extends State<_EndDrawer> {
       ),
     );
   }
+
   void _getData(Map<String, dynamic>? newValue) {
     context.read<BlocC<T>>().submit(
-      getData: true,
-      api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).user.get(
-            filter: newValue ?? filter,
-            page: page,
-            size: size,
-          ),
-      format: widget.format,
-      submit: (_) {
-        context.pop();
-        if (newValue != null) {
-          context.read<BlocC<T>>().removeKey(name: 'isLockedOut');
-          context.read<BlocC<T>>().removeKey(name: 'dateRange');
-          context.read<BlocC<T>>().removeKey(name: 'fromDate');
-          context.read<BlocC<T>>().removeKey(name: 'toDate');
-          if (widget.isCustomer) {
-            context.read<BlocC<T>>().removeKey(name: 'isEmailVerified');
+        getData: true,
+        api: (filter, page, size, sort) => RepositoryProvider.of<Api>(context).user.get(
+              filter: newValue ?? filter,
+              page: page,
+              size: size,
+            ),
+        format: widget.format,
+        submit: (_) {
+          context.pop();
+          if (newValue != null) {
+            context.read<BlocC<T>>().removeKey(name: 'isLockedOut');
+            context.read<BlocC<T>>().removeKey(name: 'dateRange');
+            context.read<BlocC<T>>().removeKey(name: 'fromDate');
+            context.read<BlocC<T>>().removeKey(name: 'toDate');
+            if (widget.isCustomer) {
+              context.read<BlocC<T>>().removeKey(name: 'isEmailVerified');
+            }
           }
-        }
-      });
+        });
   }
 
   Widget _status() {

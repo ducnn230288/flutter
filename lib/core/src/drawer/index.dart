@@ -69,7 +69,7 @@ class DrawerState extends State<CDrawer> with TickerProviderStateMixin {
                                       SizedBox(
                                         height: widthImage,
                                         width: widthImage,
-                                        child: CIcon.logo,
+                                        child: CIcon.logoLogin,
                                       ),
                                       state.status == AppStatus.success
                                           ? Column(

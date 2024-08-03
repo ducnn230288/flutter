@@ -255,15 +255,14 @@ Widget listImageNetwork(
                                             Container(
                                               width: 95,
                                               height: 35,
-                                              margin:
-                                                  const EdgeInsets.only(bottom: CSpace.xs, right: CSpace.sm),
+                                              margin: const EdgeInsets.only(bottom: CSpace.xs, right: CSpace.sm),
                                               child: TextButton(
                                                 style: ButtonStyle(
-                                                    shape: MaterialStatePropertyAll(
+                                                    shape: WidgetStatePropertyAll(
                                                       RoundedRectangleBorder(
                                                           borderRadius: BorderRadius.circular(CSpace.sm)),
                                                     ),
-                                                    backgroundColor: MaterialStatePropertyAll(CColor.black.shade300)),
+                                                    backgroundColor: WidgetStatePropertyAll(CColor.black.shade300)),
                                                 onPressed: () => UDialog().showForm(
                                                   title: 'Thêm chú thích cho ảnh',
                                                   formItem: [
@@ -304,8 +303,7 @@ Widget listImageNetwork(
                                                     const HSpacer(CSpace.sm),
                                                     const Text(
                                                       'Chú thích',
-                                                      style:
-                                                          TextStyle(fontSize: CFontSize.xs, color: Colors.white),
+                                                      style: TextStyle(fontSize: CFontSize.xs, color: Colors.white),
                                                     )
                                                   ],
                                                 ),
@@ -325,8 +323,7 @@ Widget listImageNetwork(
                                                 child: DescriptionTextWidget(
                                                   text: state.value['description$index'] ??
                                                       listUrl[index - 1].description,
-                                                  style: const TextStyle(
-                                                      fontSize: CFontSize.xs, color: Colors.white),
+                                                  style: const TextStyle(fontSize: CFontSize.xs, color: Colors.white),
                                                   trim: 200,
                                                 ),
                                               );
@@ -376,8 +373,7 @@ Widget listImageNetwork(
                                             },
                                           ),
                                           const HSpacer(CSpace.base),
-                                          Icon(Icons.download_for_offline,
-                                              size: CSpace.xl5, color: CColor.primary),
+                                          Icon(Icons.download_for_offline, size: CSpace.xl5, color: CColor.primary),
                                         ],
                                       ),
                                       const VSpacer(CSpace.xl3),

@@ -9,82 +9,82 @@ class CStyle {
   static const double radius = 5;
 
   static ButtonStyle button = ButtonStyle(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.xl2)),
-      elevation: const MaterialStatePropertyAll(0),
-      padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
-      backgroundColor: MaterialStatePropertyAll(CColor.primary),
-      foregroundColor: const MaterialStatePropertyAll(Colors.white),
-      shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+      minimumSize: const WidgetStatePropertyAll((Size(double.infinity, CHeight.xl2))),
+      elevation: const WidgetStatePropertyAll(0),
+      padding: const WidgetStatePropertyAll(EdgeInsets.all(0.0)),
+      backgroundColor: WidgetStatePropertyAll(CColor.primary),
+      foregroundColor: const WidgetStatePropertyAll(Colors.white),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: CColor.primary))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
+      textStyle: const WidgetStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
 
   static ButtonStyle buttonSmall = button.copyWith(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.base)),
-      shape: const MaterialStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
+      minimumSize: const WidgetStatePropertyAll(Size(double.infinity, CHeight.base)),
+      shape:
+          const WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))),
+      textStyle: const WidgetStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
 
   static ButtonStyle buttonFill({required Color backgroundColor}) => ButtonStyle(
-      minimumSize: const MaterialStatePropertyAll(Size(double.infinity, CHeight.xl2)),
-      elevation: const MaterialStatePropertyAll(0),
-      padding: const MaterialStatePropertyAll(EdgeInsets.all(0.0)),
-      backgroundColor: MaterialStatePropertyAll(backgroundColor),
-      foregroundColor: const MaterialStatePropertyAll(Colors.white),
-      shape: const MaterialStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))),
-      textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
+      minimumSize: const WidgetStatePropertyAll(Size(double.infinity, CHeight.xl2)),
+      elevation: const WidgetStatePropertyAll(0),
+      padding: const WidgetStatePropertyAll(EdgeInsets.all(0.0)),
+      backgroundColor: WidgetStatePropertyAll(backgroundColor),
+      foregroundColor: const WidgetStatePropertyAll(Colors.white),
+      shape:
+          const WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))),
+      textStyle: const WidgetStatePropertyAll(TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w400)));
 
   static ButtonStyle buttonWhite = button.copyWith(
-    shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
-    elevation: const MaterialStatePropertyAll(0),
-    backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
-    foregroundColor: MaterialStatePropertyAll(CColor.black),
-    shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
+    shadowColor: WidgetStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
+    elevation: const WidgetStatePropertyAll(0),
+    backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+    foregroundColor: WidgetStatePropertyAll(CColor.black),
+    shape: const WidgetStatePropertyAll(RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: Colors.transparent))),
   );
 
   static ButtonStyle buttonOutline = button.copyWith(
-    shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
-    elevation: const MaterialStatePropertyAll(0),
-    backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
-    foregroundColor: MaterialStatePropertyAll(CColor.primary),
-    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+    shadowColor: WidgetStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
+    elevation: const WidgetStatePropertyAll(0),
+    backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+    foregroundColor: WidgetStatePropertyAll(CColor.primary),
+    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
         borderRadius: const BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: CColor.primary))),
   );
 
   static ButtonStyle buttonOutlinePrimary = buttonOutline.copyWith(
-    backgroundColor: MaterialStatePropertyAll(CColor.primary),
+    backgroundColor: WidgetStatePropertyAll(CColor.primary),
   );
 
   static ButtonStyle buttonHint = button.copyWith(
-      backgroundColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
-      elevation: const MaterialStatePropertyAll(0),
-      shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
+      backgroundColor: WidgetStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
+      elevation: const WidgetStatePropertyAll(0),
+      shape: const WidgetStatePropertyAll(RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(radius)),
       )));
 
   static ButtonStyle buttonDanger = button.copyWith(
-    elevation: const MaterialStatePropertyAll(0),
-    shadowColor: MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
-    backgroundColor: MaterialStatePropertyAll(CColor.danger),
-    foregroundColor: const MaterialStatePropertyAll(Colors.white),
-    shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
+    elevation: const WidgetStatePropertyAll(0),
+    shadowColor: WidgetStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
+    backgroundColor: WidgetStatePropertyAll(CColor.danger),
+    foregroundColor: const WidgetStatePropertyAll(Colors.white),
+    shape: const WidgetStatePropertyAll(RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: Colors.transparent))),
   );
 
   static ButtonStyle buttonStyle({ButtonStyle? buttonStyle}) => button
       .copyWith(
-        shadowColor: buttonStyle?.shadowColor ?? MaterialStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
-        backgroundColor: buttonStyle?.backgroundColor ?? MaterialStatePropertyAll(CColor.danger),
-        foregroundColor: buttonStyle?.foregroundColor ?? const MaterialStatePropertyAll(Colors.white),
+        shadowColor: buttonStyle?.shadowColor ?? WidgetStatePropertyAll(CColor.black.shade100.withOpacity(0.2)),
+        backgroundColor: buttonStyle?.backgroundColor ?? WidgetStatePropertyAll(CColor.danger),
+        foregroundColor: buttonStyle?.foregroundColor ?? const WidgetStatePropertyAll(Colors.white),
         shape: buttonStyle?.shape ??
-            const MaterialStatePropertyAll(RoundedRectangleBorder(
+            const WidgetStatePropertyAll(RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius)), side: BorderSide(color: Colors.transparent))),
       )
       .merge(buttonStyle);
 
   static ButtonStyle buttonIcon = button.copyWith(
-      shape: const MaterialStatePropertyAll(
+      shape: const WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius)))));
 
   static TextStyle title = TextStyle(fontSize: CFontSize.base, fontWeight: FontWeight.w600, color: CColor.black);
