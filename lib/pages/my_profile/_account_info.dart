@@ -10,7 +10,6 @@ class _AccountInfo extends StatefulWidget {
 }
 
 class _AccountInfoState extends State<_AccountInfo> {
-
   final double _widthImage = CSpace.width * 0.3;
   @override
   Widget build(BuildContext context) {
@@ -22,19 +21,13 @@ class _AccountInfoState extends State<_AccountInfo> {
           slivers: [
             SliverToBoxAdapter(
               child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [CColor.primary.shade600, CColor.primary],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-                child: Column(
+                padding: const EdgeInsets.all(CSpace.xl3),
+                child: Row(
                   children: [
                     Container(
                       height: _widthImage,
                       width: _widthImage,
-                      padding: const EdgeInsets.all(CSpace.xl),
+                      padding: const EdgeInsets.all(CSpace.xl3),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.white, width: 2),
                         color: CColor.primary,
@@ -48,12 +41,12 @@ class _AccountInfoState extends State<_AccountInfo> {
                         ),
                       ),
                     ),
+                    const HSpacer(CSpace.xl3),
                     _buildCommonInfo(),
                   ],
                 ),
               ),
             ),
-
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
@@ -69,53 +62,34 @@ class _AccountInfoState extends State<_AccountInfo> {
                           style: CStyle.buttonDanger,
                           onPressed: () {
                             UDialog().showConfirm(
-                              title: 'Xóa tài khoản',
-                              text: 'Bạn có muốn xoá tài khoản này không?',
-                              btnOkOnPress: () {
-                                context.read<BlocC>().submit(
-                                  onlyApi: true,
-                                  notification: false,
-                                  api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context).auth.delete(),
-                                  submit: (_) async {
-                                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                                    sharedPreferences.clear();
-                                    await UDialog().delay();
-                                    context.goNamed(CRoute.login);
-                                  });
-                              });
+                                title: 'Xóa tài khoản',
+                                text: 'Bạn có muốn xoá tài khoản này không?',
+                                btnOkOnPress: () {
+                                  context.read<BlocC>().submit(
+                                      onlyApi: true,
+                                      notification: false,
+                                      api: (_, __, ___, ____) => RepositoryProvider.of<Api>(context).auth.delete(),
+                                      submit: (_) async {
+                                        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                        sharedPreferences.clear();
+                                        await UDialog().delay();
+                                        context.goNamed(CRoute.login);
+                                      });
+                                });
                           },
                           child: const Text('Xoá tài khoản'),
                         ),
                       ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: CSpace.sm),
+                      child:
+                          Text('Chỉnh sửa chi tiết', style: TextStyle(fontSize: CFontSize.lg, color: CColor.primary)),
+                    ),
                     const VSpacer(CSpace.xl3),
                     items['name'] ?? const SizedBox.shrink(),
                     items['gender'] ?? const SizedBox.shrink(),
                     items['phoneNumber'] ?? const SizedBox.shrink(),
-                  ],
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: CSpace.xl3),
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: CSpace.xl3, top: CSpace.sm / 2),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Thông tin ngân hàng',
-                            style: TextStyle(fontWeight: FontWeight.w400, color: CColor.black.shade300),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(child: line())
-                        ],
-                      ),
-                    ),
-                    _buildBankInfo(items),
-                    const VSpacer(CSpace.xl),
+                    items['note'] ?? const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -153,34 +127,49 @@ class _AccountInfoState extends State<_AccountInfo> {
         items: opts,
       ),
       MFormItem(name: 'phoneNumber', label: 'Số điện thoại', value: widget.user.phoneNumber),
-      MFormItem(name: 'bankName', label: 'Tên ngân hàng', value: widget.user.bankName),
-      MFormItem(name: 'bankAccountNo', label: 'Số tài khoản ngân hàng', value: widget.user.bankAccountNo),
-      MFormItem(name: 'bankUsername', label: 'Tên chủ tài khoản', value: widget.user.bankUsername),
+      MFormItem(name: 'note', label: 'Giới thiệu bản thân', maxLines: 4),
     ];
   }
 
   Widget _buildCommonInfo() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const VSpacer(CSpace.xl),
-        Text(
-          widget.user.userName,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.base, color: Colors.white),
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: CSpace.sm),
-          child: Text(widget.user.profileType, style: const TextStyle(color: Colors.white)),
+          child: Text(widget.user.name,
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: CFontSize.xl, color: CColor.primary)),
         ),
-      ],
-    );
-  }
-
-  Widget _buildBankInfo(Map<String, Widget> items) {
-    return Column(
-      children: [
-        items['bankName'] ?? const SizedBox.shrink(),
-        items['bankAccountNo'] ?? const SizedBox.shrink(),
-        items['bankUsername'] ?? const SizedBox.shrink(),
+        Text(
+          widget.user.userName,
+          style: TextStyle(color: CColor.primary),
+        ),
+        const VSpacer(CSpace.lg),
+        Row(
+          children: [
+            const Text(
+              'Thành viên từ:',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const HSpacer(CSpace.base),
+            Text(
+              Convert.dateTime(widget.user.createdOnDate),
+            ),
+          ],
+        ),
+        const VSpacer(CSpace.base),
+        const Row(
+          children: [
+            Text(
+              'Bộ dữ liệu:',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            HSpacer(CHeight.base),
+            Text(
+              '0',
+            ),
+          ],
+        )
       ],
     );
   }

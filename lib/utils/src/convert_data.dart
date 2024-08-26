@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,6 +9,13 @@ import 'package:flutter/material.dart';
 import 'snack_bar.dart';
 
 class Convert {
+  static String getFileSizeString({required int bytes, int decimals = 0}) {
+    const suffixes = ["b", "kb", "mb", "gb", "tb"];
+    if (bytes == 0) return '0${suffixes[0]}';
+    var i = (log(bytes) / log(1024)).floor();
+    return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) + suffixes[i];
+  }
+
   static String dateTime(String dateTime, {String separator = '/', bool returnTime = true}) {
     if (DateTime.tryParse(dateTime) == null) return '';
     return DateFormat('${returnTime ? 'HH:mm' : ''} dd${separator}MM${separator}yyyy', 'vi')
@@ -108,7 +116,8 @@ class Convert {
 
   static String price(num price, {String unit = 'đ'}) {
     final double convertPrice = double.parse(price.toStringAsFixed(0));
-    return '${NumberFormat.decimalPatternDigits(locale: 'vi_vn').format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'.replaceAll(',', '.');
+    return '${NumberFormat.decimalPatternDigits(locale: 'vi_vn').format(double.parse(convertPrice.toStringAsFixed(2)))} $unit'
+        .replaceAll(',', '.');
   }
 
   static String phoneNumber(String number) {

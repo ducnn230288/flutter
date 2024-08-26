@@ -26,7 +26,7 @@ class Api {
   final String endpoint = Environment.apiUrl;
   final Map<String, String> headers = {'Content-Type': 'application/json'};
 
-  Future<MApi?> checkAuth({required http.Response result, int? returnWithStatusCode,List? arrayMore}) async {
+  Future<MApi?> checkAuth({required http.Response result, int? returnWithStatusCode, List? arrayMore}) async {
     if (result.body.isEmpty) return null;
     if (result.statusCode == 401) {
       rootNavigatorKey.currentState!.context.read<AuthC>().error();
@@ -84,14 +84,18 @@ class Api {
       return http.Response('Error', 408);
     });
     if (res.statusCode == 413) UDialog().showError(text: 'Dung lượng tệp được tải lên quá lớn');
-    if (res.statusCode > 300) return null;
+    if (res.statusCode > 300) {
+      AppConsole.dump(res.body);
+      AppConsole.dump(request);
+      return null;
+    }
     dynamic data = {...jsonDecode(res.body)['data'], ...obj};
     return MUpload.fromJson(data);
   }
 
   Future<List<MUpload>> getAttachmentsTemplate({String entityType = 'post'}) async {
-    http.Response result =
-        await BaseHttp.get(url: '$endpoint/upload/$entityType/attachment-templates', headers: headers, queryParameters: {});
+    http.Response result = await BaseHttp.get(
+        url: '$endpoint/upload/$entityType/attachment-templates', headers: headers, queryParameters: {});
     List<MUpload> data = [];
     if (result.statusCode < 400) {
       List body = jsonDecode(result.body)['data'];
